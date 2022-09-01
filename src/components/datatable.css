@@ -1,0 +1,32 @@
+/* DataTableDemo.css */
+
+.datatable-doc .p-paginator .p-paginator-current {
+    margin-left: auto;
+}
+.datatable-doc .p-progressbar {
+    height: 0.5rem;
+    background-color: #d8dadc;
+}
+.datatable-doc .p-progressbar .p-progressbar-value {
+    background-color: #607d8b;
+}
+.datatable-doc .p-datepicker {
+    min-width: 25rem;
+}
+.datatable-doc .p-datepicker td {
+    font-weight: 400;
+}
+.datatable-doc .p-datatable.p-datatable-customers .p-datatable-header {
+    padding: 1rem;
+    text-align: left;
+    font-size: 1.5rem;
+}
+.datatable-doc .p-datatable.p-datatable-customers .p-paginator {
+    padding: 1rem;
+}
+.datatable-doc .p-datatable.p-datatable-customers .p-datatable-thead > tr > th {
+    text-align: left;
+}
+.datatable-doc .p-datatable.p-datatable-customers .p-dropdown-label:not(.p-placeholder) {
+    text-transform: uppercase;
+}
