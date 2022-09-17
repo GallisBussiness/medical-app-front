@@ -19,7 +19,7 @@ const schema = yup.object({
 
 const UpdateUserModal = ({ isOpen, onResolve, onReject,user }) => {
 
-    const defaultValues = {nom: user.nom, prenom: user.prenom,email: user.email, password: user.password, role: user.role};
+    const defaultValues = {nom: user?.nom, prenom: user?.prenom,email: user?.email, password: user?.password, role: user?.role};
     const {control,setValue, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
       defaultValues

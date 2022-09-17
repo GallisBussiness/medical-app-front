@@ -1,8 +1,9 @@
 import { BsGearWideConnected } from 'react-icons/bs';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
-import Departement from './components-params/Departement';
-import Etablissement from './components-params/Etablissement';
-import Formation from './components-params/Formation';
+import {Departement} from './components-params/Departement';
+import {Etablissement} from './components-params/Etablissement';
+import {Formation} from './components-params/Formation';
+import {Niveau} from './components-params/Niveau';
 import { Ufr } from './components-params/Ufr';
 
 const Paramettre = () => {
@@ -31,7 +32,7 @@ const Paramettre = () => {
         <div className="flex flex-wrap -mx-3">
           <div className="max-w-full px-3 lg:w-1/2 lg:flex-none">
             <div className="flex items-center justify-center h-full">
-              <h5 className="font-bold text-3xl">Paramettrage</h5>
+              <h5 className="font-bold text-3xl">Parametrage</h5>
               <img className="relative z-20 w-32 pt-6 h-32" src="/imgs/paramettre.svg" alt="paramettre" />
             </div>
           </div>
@@ -63,6 +64,9 @@ const Paramettre = () => {
       <Link to="formations" className={getClassTab('formations')} >FORMATION</Link>
     </li>
     <li className="mr-2">
+      <Link to="niveau" className={getClassTab('niveau')} >NIVEAU</Link>
+    </li>
+    <li className="mr-2">
       <Link to="etablissements" className={getClassTab('etablissements')} >ETABLISSEMENT</Link>
     </li>
   </ul>
@@ -73,6 +77,7 @@ const Paramettre = () => {
        <Route path="ufrs" element={<Ufr/>}/>
        <Route path="departements" element={<Departement/>}/>
        <Route path="formations" element={<Formation/>} />
+       <Route path="niveau" element={<Niveau/>} />
        <Route path="etablissements" element={<Etablissement/>} />
      </Routes>
 

@@ -1,5 +1,5 @@
 import { AuthProvider, useIsAuthenticated } from 'react-auth-kit';
-import { Routes, Route, Navigate, BrowserRouter } from 'react-router-dom';
+import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom';
 import {QueryClient,QueryClientProvider } from 'react-query'
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
