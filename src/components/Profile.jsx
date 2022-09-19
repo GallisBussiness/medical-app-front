@@ -36,7 +36,7 @@ const Profile = ({auth}) => {
             <div className="max-w-full px-3 lg:w-1/2 lg:flex-none">
               <div className="flex items-center justify-center h-full">
                 <h5 className="font-bold text-3xl">Mon Profil</h5>
-                <img className="relative z-20 w-32 pt-6 h-32" src="/img/profil.svg" alt="User" />
+                <img className="relative z-20 w-32 pt-6 h-32" src="/imgs/users.svg" alt="Profil" />
               </div>
             </div>
             <div className="max-w-full h-40 px-3 mt-12  text-center lg:mt-0 lg:w-5/12 hidden lg:block">
