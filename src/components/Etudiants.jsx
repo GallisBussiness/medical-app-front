@@ -9,17 +9,19 @@ import { MdDelete } from 'react-icons/md'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import ModalContainer from 'react-modal-promise'
 import { InputText } from 'primereact/inputtext'
-import { BsPencilSquare } from 'react-icons/bs'
+import { BsEye, BsPencilSquare } from 'react-icons/bs'
 import CreateEtudiantModal from './modals/CreateEtudiantModal'
 import UpdateEtudiantModal from './modals/UpdateEtudiantModal'
 import './datatable.css'
 import { createEtudiant, getEtudiants, removeEtudiant, updateEtudiant } from '../services/etudiantservice'
 import {FaUserGraduate } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom'
 
 function Etudiants() {
 
   const [selectedEtudiants, setSelectedEtudiants] = useState(null);
     const qc = useQueryClient()
+    const navigate = useNavigate()
     const toast = useRef();
     const [filters, setFilters] = useState({
         'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -88,6 +90,9 @@ function Etudiants() {
         }));
     }
 
+    const handleViewEtudiant = (d) => {
+      navigate(`${d._id}`)
+  }
     const handleCreateEtudiant = () => {
         CreateEtudiantModal().then(create);
     }
@@ -113,6 +118,7 @@ function Etudiants() {
     const actionBodyTemplate = (rowData) => {
         return <div className="flex items-center justify-center space-x-1">
         <button type="button" onClick={() => handleUpdateEtudiant(rowData)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><BsPencilSquare className="text-white inline"/></button>
+        <button type="button" onClick={() => handleViewEtudiant(rowData)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-700 to-blue-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><BsEye className="text-white inline"/></button>
         </div>;
         
     }

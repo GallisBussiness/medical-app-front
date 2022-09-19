@@ -8,6 +8,7 @@ import Profile from "./Profile";
 import { useState } from "react";
 import Users from "./Users";
 import Etudiants from "./Etudiants";
+import Etudiant from "./Etudiant";
 
 const Dashboard = () => {
   const [visible,setVisible] = useState()
@@ -34,7 +35,7 @@ const Dashboard = () => {
    <div className="px-5 flex items-center justify-between bg-white py-1">
     <button className="menu-icon dw dw-menu" onClick={() => setVisible(true)}></button>
     <div className="hidden w-full md:block md:w-auto">
-  <ul className="flex flex-col bg-gray-50  md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium  md:bg-white dark:bg-gray-800 md:dark:bg-gray-900">
+  <ul className="flex flex-col  md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium  md:bg-white">
     <li>
       <Link to="users" className="block py-2 pr-4 pl-3 text-black hover:text-green-600 rounded md:bg-transparent md:p-0">Utilisateurs</Link>
     </li>
@@ -86,6 +87,7 @@ const Dashboard = () => {
        <Route path="profil" element={<Profile auth={data}/>}/>
        <Route path="users" element={<Users auth={data}/>}/>
        <Route path="etudiants" element={<Etudiants/>}/>
+       <Route path="etudiants/:id/*" element={<Etudiant/>}/>
        <Route path="parametre/*" element={<Paramettre auth={data}/>} />
      </Routes>
   </div>
