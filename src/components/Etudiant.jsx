@@ -25,7 +25,7 @@ function Etudiant() {
     const {data} = useQuery(key, () => getEtudiantById(id))
 
     const makeChip = (str,cls='') => {
-        return str?.split(',').map(s => <Chip label={s} className={`mr-2 mb-2 ${cls}`} />) ?? ''
+        return str?.split(',').map((s,i) => <Chip label={s} key={i} className={`mr-2 mb-2 ${cls}`} />) ?? ''
     }
   return (
     <>
