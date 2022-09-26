@@ -66,7 +66,7 @@ function Etudiant() {
       </div>
     </div>
 
-    {data?.dossier ? <div className="p-4 flex items-center justify-center">
+    {data?.dossier && (Object.keys(data?.dossier).length > 3) ? <div className="p-4 flex items-center justify-center">
       <ul className="flex flex-col mb-0 rounded-lg w-full">
       <li className="relative block px-4 py-2 pt-0 pl-0 leading-normal bg-white border-0 rounded-t-lg text-sm text-inherit"><strong className="text-slate-700">Groupe Sanguin:</strong> &nbsp; {data?.dossier?.groupe_sanguin}</li>
         <li className="relative block px-4 py-2 pt-0 pl-0 leading-normal bg-white border-0 rounded-t-lg text-sm text-inherit"><strong className="text-slate-700">Poids:</strong> &nbsp; {data?.dossier?.poids} kg</li>
@@ -78,7 +78,7 @@ function Etudiant() {
       </ul>
     </div> : <h1 className="font-bold text-5xl"> Dossier Vide</h1>} 
         </div>
-        <div className="mx-auto">
+        <div className="mx-5 w-full">
         <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
   <ul className="flex flex-wrap">
     <li className="mr-2">
@@ -91,9 +91,9 @@ function Etudiant() {
 </div>
 
 <Routes>
-       <Route path="" element={<Consultations/>} />
-       <Route path="consultations" element={<Consultations/>} />
-       <Route path="pris-en-charges" element={<PrisEnCharges/>}/>
+       <Route path="" element={<Consultations etudiant={data}/>} />
+       <Route path="consultations" element={<Consultations etudiant={data}/>} />
+       <Route path="pris-en-charges" element={<PrisEnCharges etudiant={data}/>}/>
      </Routes>
         </div>
     </div>

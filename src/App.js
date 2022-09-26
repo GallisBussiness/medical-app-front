@@ -36,7 +36,7 @@ function App() {
   return (
     <>
   <QueryClientProvider client={queryClient}>
-    <AuthProvider authType = {'localstorage'}
+    <AuthProvider authType = {'sessionstorage'}
                   authName={env.tokenStorageName}
                   cookieDomain={window.location.hostname}
     cookieSecure={window.location.protocol === "https:"}>

@@ -15,8 +15,12 @@ import CreateConsultationModal from './modals/CreateConsultationModal'
 import UpdateConsultationModal from './modals/UpdateConsultationModal'
 import './datatable.css'
 import { createConsultation, getConsultations, removeConsultation, updateConsultation } from '../services/consultationservice'
+import { useAuthUser } from 'react-auth-kit'
+import { FaRegEye } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
 function Consultations({etudiant}) {
-
+    const auth = useAuthUser()();
+    const navigate = useNavigate()
   const [selectedConsultations, setSelectedConsultations] = useState(null);
   const qc = useQueryClient()
   const toast = useRef();
@@ -37,6 +41,7 @@ function Consultations({etudiant}) {
   const qk = ['get_Consultations',etudiant?._id]
 
   const {data: Consultations, isLoading } = useQuery(qk, () => getConsultations());
+  console.log(Consultations)
 
   const {mutate: create} = useMutation((data) => createConsultation(data), {
       onSuccess: (_) => {
@@ -86,7 +91,7 @@ function Consultations({etudiant}) {
   }
 
   const handleCreateConsultation = () => {
-      CreateConsultationModal().then(create);
+      CreateConsultationModal({idEtudiant: etudiant?._id,idAuth: auth?.id}).then(create);
   }
 
   const handleDelete = () => {
@@ -98,7 +103,7 @@ function Consultations({etudiant}) {
   const renderHeader = () => {
       return (
           <div className="flex justify-between items-center">
-              <h5 className="m-0">Liste des Consultations</h5>
+              <h5 className="m-0">Mes Consultations</h5>
               <span className="p-input-icon-left">
                   <i className="pi pi-search" />
                   <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Rechercher ..." />
@@ -109,10 +114,13 @@ function Consultations({etudiant}) {
 
   const actionBodyTemplate = (rowData) => {
       return <div className="flex items-center justify-center space-x-1">
+         <button type="button" onClick={() => navigate(`/dashboard/consultations/${rowData._id}`)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-700 to-blue-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><FaRegEye className="text-white inline"/></button>
       <button type="button" onClick={() => handleUpdateConsultation(rowData)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><BsPencilSquare className="text-white inline"/></button>
       </div>;
       
   }
+    
+
 
   const header = renderHeader();
 
@@ -128,11 +136,9 @@ function Consultations({etudiant}) {
                     globalFilterFields={['nom', 'prenom']} emptyMessage="Aucun Consultation trouvé"
                     currentPageReportTemplate="Voir {first} de {last} à {totalRecords} consultations">
                     <Column selectionMode="multiple" headerStyle={{ width: '3em' }}></Column>
-                    <Column field="prenom" header="Prenom" sortable style={{ minWidth: '14rem' }} />
-                    <Column field="nom" header="Nom" sortable style={{ minWidth: '14rem' }} />
-                    
-                    <Column field="email" header="Email" sortable  style={{ minWidth: '8rem' }}/>
-                    <Column field="role" header="Role" sortable  style={{ minWidth: '8rem' }}/>
+                    <Column field="dateDeConsultation" header="Date" sortable style={{ minWidth: '14rem' }} />
+                    <Column field="type" header="Type de Consultation" sortable style={{ minWidth: '14rem' }} />
+                    <Column field="poids" header="Poids" sortable style={{ minWidth: '14rem' }} />
                     <Column headerStyle={{ width: '4rem', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} body={actionBodyTemplate} />
                 </DataTable>
             </div>

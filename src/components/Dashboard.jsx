@@ -9,6 +9,7 @@ import { useState } from "react";
 import Users from "./Users";
 import Etudiants from "./Etudiants";
 import Etudiant from "./Etudiant";
+import Consultation from "./Consultation";
 
 const Dashboard = () => {
   const [visible,setVisible] = useState()
@@ -86,6 +87,7 @@ const Dashboard = () => {
        <Route path="" element={<Profile auth={data}/>} />
        <Route path="profil" element={<Profile auth={data}/>}/>
        <Route path="users" element={<Users auth={data}/>}/>
+       <Route path="consultations/:id" element={<Consultation/>} />
        <Route path="etudiants" element={<Etudiants/>}/>
        <Route path="etudiants/:id/*" element={<Etudiant/>}/>
        <Route path="parametre/*" element={<Paramettre auth={data}/>} />
