@@ -1,4 +1,3 @@
-
 import { FilterMatchMode } from 'primereact/api'
 import { Column } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
@@ -14,10 +13,12 @@ import { BsPencilSquare } from 'react-icons/bs'
 import CreateConsultationModal from './modals/CreateConsultationModal'
 import UpdateConsultationModal from './modals/UpdateConsultationModal'
 import './datatable.css'
-import { createConsultation, getConsultations, removeConsultation, updateConsultation } from '../services/consultationservice'
+import { createConsultation, getConsultationByEtudiant, removeConsultation, updateConsultation } from '../services/consultationservice'
 import { useAuthUser } from 'react-auth-kit'
 import { FaRegEye } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
+import { format, parseISO } from 'date-fns'
+import { fr } from 'date-fns/locale'
 function Consultations({etudiant}) {
     const auth = useAuthUser()();
     const navigate = useNavigate()
@@ -40,8 +41,7 @@ function Consultations({etudiant}) {
 
   const qk = ['get_Consultations',etudiant?._id]
 
-  const {data: Consultations, isLoading } = useQuery(qk, () => getConsultations());
-  console.log(Consultations)
+  const {data: Consultations, isLoading } = useQuery(qk, () => getConsultationByEtudiant(etudiant?._id));
 
   const {mutate: create} = useMutation((data) => createConsultation(data), {
       onSuccess: (_) => {
@@ -84,7 +84,7 @@ function Consultations({etudiant}) {
 
 
   const handleUpdateConsultation = (d) => {
-      UpdateConsultationModal({Consultation: d}).then((d => {
+      UpdateConsultationModal({idEtudiant: etudiant?._id,idAuth: auth?.id,consultation: d}).then((d => {
           const {_id,...rest} = d;
           update({_id,data: rest});
       }));
@@ -99,7 +99,7 @@ function Consultations({etudiant}) {
          deleteD(selectedConsultations[i]?._id);
       }
   }
-
+const dateTemplate = (row) => format(parseISO(row.dateDeConsultation), 'dd-MMMM-yyyy H:m:s',  {locale: fr});
   const renderHeader = () => {
       return (
           <div className="flex justify-between items-center">
@@ -136,7 +136,7 @@ function Consultations({etudiant}) {
                     globalFilterFields={['nom', 'prenom']} emptyMessage="Aucun Consultation trouvé"
                     currentPageReportTemplate="Voir {first} de {last} à {totalRecords} consultations">
                     <Column selectionMode="multiple" headerStyle={{ width: '3em' }}></Column>
-                    <Column field="dateDeConsultation" header="Date" sortable style={{ minWidth: '14rem' }} />
+                    <Column field="dateDeConsultation" header="Date" body={dateTemplate} sortable style={{ minWidth: '14rem' }} />
                     <Column field="type" header="Type de Consultation" sortable style={{ minWidth: '14rem' }} />
                     <Column field="poids" header="Poids" sortable style={{ minWidth: '14rem' }} />
                     <Column headerStyle={{ width: '4rem', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} body={actionBodyTemplate} />

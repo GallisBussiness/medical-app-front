@@ -76,7 +76,7 @@ function Etudiant() {
         <li className="relative block px-4 py-2 pl-0 leading-normal bg-white border-0 border-t-0 text-sm text-inherit"><strong className="text-slate-700">Antécédants Médicaux:</strong> &nbsp; {makeChip(data?.dossier?.antecedant_medicaux,'bg-gray-600 text-white')}</li>
 
       </ul>
-    </div> : <h1 className="font-bold text-5xl"> Dossier Vide</h1>} 
+    </div> : <div className="flex items-center jsutify-center"><h1 className="font-bold text-5xl p-10"> Dossier Vide</h1> </div> } 
         </div>
         <div className="mx-5 w-full">
         <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">

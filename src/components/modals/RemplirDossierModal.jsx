@@ -59,31 +59,31 @@ function RemplirDossierModal({ isOpen, onResolve, onReject,dossier }) {
               )} />
               {getFormErrorMessage('poids')} 
             </div>
-            <div className="mb-3 space-x-5">
+            <div className="mb-3 flex flex-col space-y-2">
             <label htmlFor="handicap_particulier" className="form-label">Handicaps particuliers : </label>
               <Controller control={control} name="handicap_particulier" render={({field}) => (
                  <Chips value={field.value} onChange={(e) => field.onChange(e.value)} separator="," />   
               )} />
               {getFormErrorMessage('handicap_particulier')} 
             </div>
-            <div className="mb-3 space-x-5">
+            <div className="mb-3 flex flex-col space-y-2">
             <label htmlFor="maladie_chronique" className="form-label">Maladies Chroniques : </label>
               <Controller control={control} name="maladie_chronique" render={({field}) => (
                  <Chips value={field.value} onChange={(e) => field.onChange(e.value)} separator="," />   
               )} />
               {getFormErrorMessage('maladie_chronique')} 
             </div>
-            <div className="mb-3 space-x-5">
+            <div className="mb-3 flex flex-col space-y-2">
             <label htmlFor="allergies" className="form-label">Allergies : </label>
               <Controller control={control} name="allergies" render={({field}) => (
                  <Chips value={field.value} onChange={(e) => field.onChange(e.value)} separator="," />   
               )} />
               {getFormErrorMessage('allergies')} 
             </div>
-            <div className="mb-3 space-x-5">
+            <div className="mb-3 flex flex-col space-y-2">
             <label htmlFor="antecedant_medicaux" className="form-label">Antécédants Médicaux : </label>
               <Controller control={control} name="antecedant_medicaux" render={({field}) => (
-                 <Chips value={field.value} onChange={(e) => field.onChange(e.value)} separator="," />   
+                 <Chips value={field.value} onChange={(e) => field.onChange(e.value)} separator=","/>   
               )} />
               {getFormErrorMessage('antecedant_medicaux')} 
             </div>

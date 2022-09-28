@@ -1,20 +1,22 @@
-import { useAuthUser, useSignOut } from "react-auth-kit";
+import { useAuthUser, useIsAuthenticated, useSignOut } from "react-auth-kit";
 import { useQuery, useQueryClient } from "react-query";
 import { Sidebar } from 'primereact/sidebar';
 import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import { getAuth } from "../services/authservice";
 import Paramettre from "./Paramettre";
 import Profile from "./Profile";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Users from "./Users";
 import Etudiants from "./Etudiants";
 import Etudiant from "./Etudiant";
 import Consultation from "./Consultation";
+import Bulletin from "./Bulletin";
 
 const Dashboard = () => {
   const [visible,setVisible] = useState()
   const qc = useQueryClient();
   const auth = useAuthUser()();
+  const hasAuth = useIsAuthenticated()()
   const navigate = useNavigate();
   const signOut = useSignOut()
 
@@ -31,6 +33,11 @@ const Dashboard = () => {
     }
   }
 
+  useEffect(() => {
+    if(!hasAuth) navigate("/login", {replace: true})
+    return () => null;
+  }, [hasAuth,navigate]);
+
   return (
     <>
    <div className="px-5 flex items-center justify-between bg-white py-1">
@@ -38,10 +45,10 @@ const Dashboard = () => {
     <div className="hidden w-full md:block md:w-auto">
   <ul className="flex flex-col  md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium  md:bg-white">
     <li>
-      <Link to="users" className="block py-2 pr-4 pl-3 text-black hover:text-green-600 rounded md:bg-transparent md:p-0">Utilisateurs</Link>
+      <Link to="users" className="block py-2 text-black hover:text-green-600 rounded md:bg-transparent md:p-0 uppercase font-bold">Utilisateurs</Link>
     </li>
     <li>
-      <Link to="etudiants" className="block py-2 pr-4 pl-3 text-black hover:text-green-600 rounded md:bg-transparent md:p-0">Etudiants</Link>
+      <Link to="etudiants" className="block py-2 text-black hover:text-green-600 rounded md:bg-transparent md:p-0 uppercase font-bold">Etudiants</Link>
     </li>
   </ul>
 </div>
@@ -88,6 +95,7 @@ const Dashboard = () => {
        <Route path="profil" element={<Profile auth={data}/>}/>
        <Route path="users" element={<Users auth={data}/>}/>
        <Route path="consultations/:id" element={<Consultation/>} />
+       <Route path="pris-en-charges/:id" element={<Bulletin/>} />
        <Route path="etudiants" element={<Etudiants/>}/>
        <Route path="etudiants/:id/*" element={<Etudiant/>}/>
        <Route path="parametre/*" element={<Paramettre auth={data}/>} />

@@ -6,7 +6,7 @@ import { create } from 'react-modal-promise'
 import {Calendar} from 'primereact/calendar'
 import { Dropdown } from 'primereact/dropdown';
 import RemplirTraitementModal from './RemplirTraitementModal';
-import { format } from 'date-fns'
+import { parseISO } from 'date-fns'
 
 const schema = yup.object({
     dateDeConsultation: yup.string()
@@ -32,7 +32,7 @@ const schema = yup.object({
 function CreateConsultationModal({ isOpen, onResolve, onReject,idEtudiant,idAuth }) {
 
     const defaultValues = {
-      dateDeConsultation: '',
+      dateDeConsultation: new Date().toISOString(),
       poids: '',
       tension: '',
       temperature: '',
@@ -41,7 +41,7 @@ function CreateConsultationModal({ isOpen, onResolve, onReject,idEtudiant,idAuth
       corps_cetonique: '',
       autres: '',
       bilan: '',
-      prochain_rv: '',
+      prochain_rv: new Date().toISOString(),
       reference: '',
       plainte_du_jour: '',
       type: 'generale',
@@ -90,7 +90,7 @@ function CreateConsultationModal({ isOpen, onResolve, onReject,idEtudiant,idAuth
     <div className="mb-3 flex flex-col space-y-2">
             <label htmlFor="dateDeConsultation" className="form-label">Date De Consultation </label>
             <Controller control={control} name="dateDeConsultation" render={({field}) => (
-            <Calendar id="dateDeConsultation" value={field.value} onChange={(e) => field.onChange(format (e.value, 'dd/MM/yyyy H:m:s'))} showTime showSeconds minDate={new Date()} dateFormat="dd/mm/yyyy"  placeholder="Date De Consultation"/>
+            <Calendar id="dateDeConsultation" value={parseISO(field.value)} onChange={(e) => field.onChange(e.value.toISOString())} showTime showSeconds minDate={new Date()} dateFormat="dd/mm/yyyy"  placeholder="Date De Consultation"/>
              )}/>
               {getFormErrorMessage('dateDeConsultation')} 
             </div>
@@ -177,7 +177,7 @@ function CreateConsultationModal({ isOpen, onResolve, onReject,idEtudiant,idAuth
             <div className="mb-3 flex flex-col space-y-2">
             <label htmlFor="prochain_rv" className="form-label">Prochain rendez-vous </label>
             <Controller control={control} name="prochain_rv" render={({field}) => (
-            <Calendar id="prochain_rv" value={field.value} onChange={(e) => field.onChange(format (e.value, 'dd/MM/yyyy H:m:s'))} showTime showSeconds minDate={new Date()} dateFormat="dd/mm/yyyy"  placeholder="Prochain rendez-vous"/>
+            <Calendar id="prochain_rv"  value={parseISO(field.value)} onChange={(e) => field.onChange(e.value.toISOString())} showTime showSeconds minDate={new Date()} dateFormat="dd/mm/yyyy"  placeholder="Prochain rendez-vous"/>
              )}/>
               {getFormErrorMessage('prochain_rv')} 
             </div>
