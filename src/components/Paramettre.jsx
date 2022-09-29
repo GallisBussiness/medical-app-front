@@ -52,7 +52,7 @@ const Paramettre = () => {
    <div className="my-5">
 
     
-<div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+<div className="text-sm font-medium text-cente border-b bg-white border-gray-200">
   <ul className="flex flex-wrap">
     <li className="mr-2">
       <Link to="ufrs" className={getClassTab('ufrs')} >UFR</Link>

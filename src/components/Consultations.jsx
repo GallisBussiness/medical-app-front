@@ -42,7 +42,6 @@ function Consultations({etudiant}) {
   const qk = ['get_Consultations',etudiant?._id]
 
   const {data: Consultations, isLoading } = useQuery(qk, () => getConsultationByEtudiant(etudiant?._id));
-
   const {mutate: create} = useMutation((data) => createConsultation(data), {
       onSuccess: (_) => {
       toast.current.show({severity: 'success', summary: 'Creation Consultation', detail: 'Création réussie !!'});

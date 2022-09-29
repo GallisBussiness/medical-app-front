@@ -1,0 +1,6 @@
+.bg-pattern {
+    background-color: #ffffff;
+    opacity: 1;
+    background: radial-gradient(circle, transparent 20%, #ffffff 20%, #ffffff 80%, transparent 80%, transparent), radial-gradient(circle, transparent 20%, #ffffff 20%, #ffffff 80%, transparent 80%, transparent) 10px 10px, linear-gradient(#45f77b 0.8px, transparent 0.8px) 0 -0.4px, linear-gradient(90deg, #45f77b 0.8px, #ffffff 0.8px) -0.4px 0;
+    background-size: 20px 20px, 20px 20px, 10px 10px, 10px 10px;
+}

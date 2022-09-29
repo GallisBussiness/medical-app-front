@@ -11,6 +11,7 @@ import Etudiants from "./Etudiants";
 import Etudiant from "./Etudiant";
 import Consultation from "./Consultation";
 import Bulletin from "./Bulletin";
+import "./bg.css"
 
 const Dashboard = () => {
   const [visible,setVisible] = useState()
@@ -88,7 +89,7 @@ const Dashboard = () => {
 </Sidebar>
  
 </div>
-<div>
+<div className="bg-pattern">
   <div>
   <Routes>
        <Route path="" element={<Profile auth={data}/>} />

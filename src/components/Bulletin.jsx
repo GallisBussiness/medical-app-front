@@ -1,6 +1,7 @@
 import { format, parseISO } from "date-fns"
 import { fr } from "date-fns/locale"
 import { Chip } from "primereact/chip"
+import { QRCodeSVG } from "qrcode.react"
 import { useQuery } from "react-query"
 import { useParams } from "react-router-dom"
 import { getBulletinById } from "../services/bulletinservice"
@@ -28,6 +29,11 @@ function Bulletin() {
       <li className="relative block px-4 py-2 pt-0 pl-0 leading-normal rounded-t-lg text-sm text-inherit"><strong className="text-slate-700">Service:</strong> &nbsp; {data?.service}</li>
       <li className="relative block px-4 py-2 pt-0 pl-0 leading-normal rounded-t-lg text-sm text-inherit"><strong className="text-slate-700">Examens Demandés:</strong> &nbsp; {data?.examensDemandes?.split(',').map((e,i) => <Chip key={i} label={e} className="bg-red-200"/>)}</li>
       <li className="relative block px-4 py-2 pt-0 pl-0 leading-normal rounded-t-lg text-sm text-inherit"><strong className="text-slate-700">Par :</strong> &nbsp;DR. {data?.user?.prenom} {data?.user?.nom}</li>
+      <li>
+      <div className="flex my-5">
+      <QRCodeSVG value={data?.code} fgColor="#25BE45"/>
+      </div>
+      </li>
       </ul>
     </div>} 
      </div>
