@@ -5,12 +5,18 @@ import { QRCodeSVG } from "qrcode.react"
 import { useQuery } from "react-query"
 import { useParams } from "react-router-dom"
 import { getBulletinById } from "../services/bulletinservice"
+import { BulletinPrint } from "./BulletinPrint"
+import ReactToPrint from 'react-to-print';
+import { useRef } from "react"
+import { AiFillPrinter } from "react-icons/ai"
 
 
 function Bulletin() {
     const {id} = useParams()
     const key = ['get_Bulletin',id]
     const {data} = useQuery(key, () => getBulletinById(id))
+    const componentRef = useRef();
+
   return (
     <>
      <div className="bg-white">
@@ -19,6 +25,10 @@ function Bulletin() {
         <div className="flex items-center  w-full md:w-8/12 md:flex-none">
           <h6 className="font-bold text-3xl">BULLETIN DE PRIS EN CHARGE</h6>
         </div>
+        <ReactToPrint
+        trigger={() => <button className="inline-block px-6 py-2 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" >IMPRIMER <AiFillPrinter className="h-6 w-6 text-white inline"/></button>}
+        content={() => componentRef.current}
+      />
       </div>
     </div>
      <div className="flex justify-between mx-10">
@@ -39,6 +49,10 @@ function Bulletin() {
      </div>
     
         </div>
+        <div className="hidden print:block">
+           {data && <BulletinPrint bulletin={data} ref={componentRef}/>}
+        </div>
+       
     </>
   )
 }

@@ -22,29 +22,33 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
 
   return (
     <div ref={ref}>
-    <div className="flex items-center justify-between py-5 my-5 mx-10 bg-white">
+    <div className="flex items-center justify-between py-5 mx-10 bg-white">
        <div className="flex flex-col items-center space-y-1">
         <div className="flex flex-col items-center">
             <h1 className="font-bold text-sm">REPUBLIQUE DU SENEGAL</h1>
-            <h1>***************</h1>
+            <h1>un peuple - un But - Une Foi</h1>
+            <h1>------------------</h1>
+            <img src="/imgs/drapeau.png" alt="logo" className="h-16 w-16 object-cover"/>
         </div>
         <div className="flex flex-col items-center">
             <h1 className="font-bold text-sm">MINISTERE DE L'ENSEIGNEMENT SUPPERIEUR <br /> DE LA RECHERCHE ET DE L'INNOVATION</h1>
-            <h1>***************</h1>
+            <h1>------------------</h1>
         </div>
         <div className="flex flex-col items-center">
             <h1 className="font-bold text-sm">CENTRE REGIONAL DES OEUVRES <br />
                         UNIVERSITAIRES SOCIALES DE ZIGUINCHOR</h1>
-            <h1 className="font-bold text-sm">--DIVISION MEDICAL--</h1>
+                        <img src="/imgs/logo_crousz.png" alt="logo" className="h-24 w-24 object-cover"/>
+            <h1 className="font-bold text-sm uppercase underline">DIVISION MEDICO SOCIALE</h1>
         </div>
        </div>
-       <div className="flex flex-col items-center space-y-3">
-       <div className="flex flex-col items-center">
+       <div className="flex flex-col space-y-3">
+       <div className="flex flex-col">
             <h1 className="font-bold text-sm">EFFECTUEE PAR : Dr. {consultation?.user?.prenom} {consultation?.user?.nom}</h1>
             <h1 className="font-bold text-sm">EXERCICE : {new Date().getFullYear()}</h1>
             {consultation?.dateDeConsultation && <h1 className="font-bold text-sm">DATE : {format(parseISO(consultation?.dateDeConsultation),'dd-MMMM-yyyy H:m:s', {locale: fr})}</h1>}
         </div>
         <QRCodeSVG value={consultation?.code} fgColor="#25BE45" size={100}/>
+        <h1>Ziguinchor, le </h1>
        </div>
     </div>
     <Divider/>
@@ -283,7 +287,7 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
                       <Column field="frequence" header="Frequence de prise" body={frequenceTemplate} style={{ minWidth: '14rem' }} />
                   </DataTable>
             </div>
-    <div className="flex items-center justify-center py-2">
+    <div className="flex items-center justify-center mt-10">
     <h1 className="font-bold text-sm">CENTRE REGIONAL DES OEUVRES UNIVERSITAIRES SOCIALES DE ZIGUINCHOR</h1>
     </div>
     </div>

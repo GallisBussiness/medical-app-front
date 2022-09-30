@@ -92,7 +92,7 @@ const Login = () => {
             </div>
           
             <div className="login-title flex items-center justify-center">
-              <h2 className="text-green-500">Se connecter à E-médical</h2>
+              <h2 className="text-green-500">Se connecter au DME</h2>
             </div>
             <form onSubmit={handleSubmit(onConnect)} method="POST">
               <div className="input-group custom">
