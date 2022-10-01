@@ -28,7 +28,7 @@ const Profile = ({auth}) => {
 
   return (
     <>
-     <div className="flex flex-wrap mt-6">
+     <div className="flex flex-wrap">
     <div className="w-full px-3 mb-6 lg:mb-0 lg:flex-none">
       <div className="relative flex flex-col h-40 min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
         <div className="flex-auto p-4">
@@ -42,7 +42,7 @@ const Profile = ({auth}) => {
             <div className="max-w-full h-40 px-3 mt-12  text-center lg:mt-0 lg:w-5/12 hidden lg:block">
               <div className="h-full bg-gradient-to-tl from-green-700 to-green-300 rounded-xl">
                 <div className="relative flex items-center justify-center h-full">
-                          <FaUserCircle className="h-32 w-32 bg-white rounded-full"/>
+                          <FaUserCircle className="h-32 w-32 bg-white text-green-500 rounded-full"/>
                 </div>
               </div>
             </div>
@@ -51,12 +51,12 @@ const Profile = ({auth}) => {
       </div>
     </div>
   </div>
- <div className="my-10 mx-5">
+ <div className="py-32 mx-5">
   <div className="flex flex-col h-full bg-white border-0 shadow-soft-xl rounded-2xl">
     <div className="p-4 bg-white border-b-0 rounded-t-2xl">
       <div className="flex">
         <div className="flex items-center w-full md:w-8/12 md:flex-none">
-          <h6 className="mb-0">Mes Informations</h6>
+          <h6 className="mb-0 font-bold text-3xl">Mes Informations</h6>
         </div>
       </div>
     </div>
@@ -68,8 +68,7 @@ const Profile = ({auth}) => {
         <li className="relative block px-4 py-2 pl-0 leading-normal bg-white border-0 border-t-0 text-sm text-inherit"><strong className="text-slate-700">Email:</strong> &nbsp; {auth?.email}</li>
         <li className="relative block px-4 py-2 pt-0 pl-0 leading-normal bg-white border-0 rounded-t-lg text-sm text-inherit"><strong className="text-slate-700">Role:</strong> &nbsp; {auth?.role}</li>
       </ul>
-      <button className="inline-block w-1/6 px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-green-700 to-green-500 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs">MODIFIER</button>
-    </div>
+  </div>
   </div>
 </div>
     </>

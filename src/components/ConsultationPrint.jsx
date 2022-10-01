@@ -287,7 +287,11 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
                       <Column field="frequence" header="Frequence de prise" body={frequenceTemplate} style={{ minWidth: '14rem' }} />
                   </DataTable>
             </div>
-    <div className="flex items-center justify-center mt-10">
+            <div className="flex items-center justify-around mt-5 mx-20">
+    <h1 className="font-bold text-sm">Le MEDECIN CHEF</h1>
+    <h1 className="font-bold text-sm">Le DIRECTEUR</h1>
+    </div>
+    <div className="flex items-center justify-center mt-32">
     <h1 className="font-bold text-sm">CENTRE REGIONAL DES OEUVRES UNIVERSITAIRES SOCIALES DE ZIGUINCHOR</h1>
     </div>
     </div>

@@ -15,6 +15,7 @@ import UpdateUserModal from './modals/UpdateUserModal'
 import './datatable.css'
 import { createUser, getUsers, removeUser, updateUser } from '../services/userservice'
 import { FaUsers } from 'react-icons/fa';
+import { Link } from 'react-router-dom'
 const Users = ({auth}) => {
 
     const [selectedUsers, setSelectedUsers] = useState(null);
@@ -120,11 +121,14 @@ const Users = ({auth}) => {
 
   return (
     <>
-     <div className="flex flex-wrap mt-6">
+     <div className="flex flex-wrap">
   <div className="w-full px-3 mb-6 lg:mb-0 lg:flex-none">
     <div className="relative flex flex-col h-40 min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
       <div className="flex-auto p-4">
         <div className="flex flex-wrap -mx-3">
+        <Link  to="/">
+        <img src="/imgs/logo_crousz.png" className="h-20 w-20 mx-auto object-cover" alt="logo" />
+      </Link>
           <div className="max-w-full px-3 lg:w-1/2 lg:flex-none">
             <div className="flex items-center justify-center h-full">
               <h5 className="font-bold text-3xl">Gestion des Utilisateurs</h5>
