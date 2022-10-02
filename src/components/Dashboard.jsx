@@ -12,6 +12,7 @@ import Etudiant from "./Etudiant";
 import Consultation from "./Consultation";
 import Bulletin from "./Bulletin";
 import "./bg.css"
+import Statistique from "./Statistique";
 
 const Dashboard = () => {
   const [visible,setVisible] = useState()
@@ -46,6 +47,9 @@ const Dashboard = () => {
     <div className="hidden w-full md:flex justify-end items-center mx-10 ">
   <ul className="flex flex-col  md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium  md:bg-white">
    {data?.role === 'admin' && <li>
+      <Link to="statistiques" className="block py-2 text-black hover:text-green-600 rounded md:bg-transparent md:p-0 uppercase font-bold">Statistiques</Link>
+    </li>}
+    {data?.role === 'admin' && <li>
       <Link to="users" className="block py-2 text-black hover:text-green-600 rounded md:bg-transparent md:p-0 uppercase font-bold">Utilisateurs</Link>
     </li>}
     <li>
@@ -71,7 +75,7 @@ const Dashboard = () => {
 
 <Sidebar visible={visible} onHide={() => setVisible(false)}>
 <div>
-    <div className="brand-logo mb-10">
+    <div className="brand-logo mb-2">
       <Link  to="/">
         <img src="/imgs/logo_crousz.png" className="h-20 w-20 mx-auto object-cover" alt="logo" />
       </Link>
@@ -79,9 +83,15 @@ const Dashboard = () => {
     <div className="menu-block customscroll">
       <div className="sidebar-menu">
         <ul id="accordion-menu">
-          <Link to="profil">
-            <div className="sidebar-small-cap">Mon Profil</div>
-          </Link>
+        {data?.role === 'admin' && <li>
+      <Link to="statistiques" className="block py-2 text-black hover:text-green-600 rounded md:bg-transparent md:p-0 uppercase font-bold">Statistiques</Link>
+    </li>}
+    {data?.role === 'admin' && <li>
+      <Link to="users" className="block py-2 text-black hover:text-green-600 rounded md:bg-transparent md:p-0 uppercase font-bold">Utilisateurs</Link>
+    </li>}
+    <li>
+      <Link to="etudiants" className="block py-2 text-black hover:text-green-600 rounded md:bg-transparent md:p-0 uppercase font-bold">Etudiants</Link>
+    </li>
         </ul>
       </div>
     </div>
@@ -95,6 +105,7 @@ const Dashboard = () => {
        <Route path="" element={<Profile auth={data}/>} />
        <Route path="profil" element={<Profile auth={data}/>}/>
       {data?.role === 'admin' && <Route path="users" element={<Users auth={data}/>}/>}
+      {data?.role === 'admin' && <Route path="statistiques" element={<Statistique auth={data}/>}/>}
        <Route path="consultations/:id" element={<Consultation/>} />
        <Route path="pris-en-charges/:id" element={<Bulletin/>} />
        <Route path="etudiants" element={<Etudiants/>}/>

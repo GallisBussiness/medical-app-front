@@ -140,8 +140,8 @@ export  const BulletinPrint = forwardRef(({bulletin},ref) => {
     <h1 className="font-semibold text-sm">Part à charge du CROUS/Z 5/5</h1>
     </div>
     <div className="flex items-center justify-around mt-5 mx-20">
-    <h1 className="font-bold text-sm">Le MEDECIN CHEF</h1>
-    <h1 className="font-bold text-sm">Le DIRECTEUR</h1>
+    <h1 className="font-bold text-sm">LE MEDECIN CHEF</h1>
+    <h1 className="font-bold text-sm">LE DIRECTEUR</h1>
     </div>
     <div className="flex items-center justify-center mt-96">
     <h1 className="font-bold text-sm">CENTRE REGIONAL DES OEUVRES UNIVERSITAIRES SOCIALES DE ZIGUINCHOR</h1>

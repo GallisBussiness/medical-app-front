@@ -1,17 +1,35 @@
-import { useQuery } from "react-query"
+import { useMutation, useQuery, useQueryClient } from "react-query"
 import { Link, Route, Routes, useLocation, useParams } from "react-router-dom"
-import { getEtudiantById } from "../services/etudiantservice"
+import { getEtudiantById, uploadFiles } from "../services/etudiantservice"
 import { Chip } from 'primereact/chip';
 import Consultations from "./Consultations";
 import PrisEnCharges from "./PrisEnCharges";
+import { AiFillPlusCircle } from "react-icons/ai";
+import AddFiles from "./modals/AddFiles";
+import { useRef } from "react";
+import { Toast } from "primereact/toast";
+import {env} from '../env'
 
 function Etudiant() {
     const {id} = useParams()
     const {pathname} = useLocation()
+    const toast = useRef();
+    const qc = useQueryClient();
+    const key = ['get_Etudiant',id]
   const getCurrentTab = (p) => {
     const t = p.split('/');
     return t[t.length - 1];
   }
+
+  const {mutate: upload} = useMutation(({id,data}) => uploadFiles(id,data), {
+    onSuccess: (_) => {
+    toast.current.show({severity: 'success', summary: 'Ajout de fichier', detail: 'Ajout des fichiers réussie !!'});
+    qc.invalidateQueries(key);
+    },
+    onError: (_) => {
+        toast.current.show({severity: 'error', summary: 'Ajout de fichier', detail: 'Ajout des fichiers échouée !!'});
+    }
+})
 
   const isActiveTab = (url) => url === getCurrentTab(pathname);
 
@@ -21,11 +39,21 @@ function Etudiant() {
     }
     return "inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300";
   }
-    const key = ['get_Etudiant',id]
     const {data} = useQuery(key, () => getEtudiantById(id))
     const makeChip = (str,cls='') => {
         return str?.split(',').map((s,i) => <Chip label={s} key={i} className={`mr-2 mb-2 ${cls}`} />) ?? ''
     }
+
+    const addFiles = () => {
+      AddFiles().then(fs => {
+        const fd  = new FormData();
+        fs.forEach(f => {
+          fd.append('files',f);
+        });
+        upload({id:data?._id ,data:fd});
+      })
+    }
+
   return (
     <>
       <div className="flex flex-wrap">
@@ -66,7 +94,7 @@ function Etudiant() {
       </div>
     </div>
 
-    {data?.dossier && (Object.keys(data?.dossier).length > 3) ? <div className="p-4 flex items-center justify-center">
+    {data?.dossier && (Object.keys(data?.dossier).length > 3) ? <div className="p-4 flex flex-col items-center justify-center">
       <ul className="flex flex-col mb-0 rounded-lg w-full">
       <li className="relative block px-4 py-2 pt-0 pl-0 leading-normal bg-white border-0 rounded-t-lg text-sm text-inherit"><strong className="text-slate-700">Groupe Sanguin:</strong> &nbsp; {data?.dossier?.groupe_sanguin}</li>
         <li className="relative block px-4 py-2 pt-0 pl-0 leading-normal bg-white border-0 rounded-t-lg text-sm text-inherit"><strong className="text-slate-700">Poids:</strong> &nbsp; {data?.dossier?.poids} kg</li>
@@ -74,8 +102,16 @@ function Etudiant() {
         <li className="relative block px-4 py-2 pl-0 leading-normal bg-white border-0 border-t-0 text-sm text-inherit"><strong className="text-slate-700">Maladies Chroniques:</strong> &nbsp; {makeChip(data?.dossier?.maladie_chronique,'bg-amber-500 text-white')}</li>
         <li className="relative block px-4 py-2 pl-0 leading-normal bg-white border-0 border-t-0 text-sm text-inherit"><strong className="text-slate-700">Allergies:</strong> &nbsp; {makeChip(data?.dossier?.allergies,'bg-blue-500 text-white')}</li>
         <li className="relative block px-4 py-2 pl-0 leading-normal bg-white border-0 border-t-0 text-sm text-inherit"><strong className="text-slate-700">Antécédants Médicaux:</strong> &nbsp; {makeChip(data?.dossier?.antecedant_medicaux,'bg-gray-600 text-white')}</li>
-
+        <li><button className="inline-block px-6 py-2 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" onClick={() => addFiles()} >AJOUTER DES FICHIERS <AiFillPlusCircle className="h-6 w-6 text-white inline"/></button></li>
       </ul>
+      <h1 className="font-semibold text-sm">Fichiers</h1>
+      <div className="my-5">
+        <ul>
+          {data?.files?.map((f,i) => (
+            <li key={i}><a href={`${env.baseServerURL}/uploads/${f}`}>{f}</a></li>
+          ))}
+        </ul>
+      </div>
     </div> : <div className="flex items-center jsutify-center"><h1 className="font-bold text-5xl p-10"> Dossier Vide</h1> </div> } 
         </div>
         <div className="mx-5 w-full">
@@ -101,6 +137,7 @@ function Etudiant() {
   </div>
  
 </div>
+<Toast ref={toast} />
     </>
   )
 }
