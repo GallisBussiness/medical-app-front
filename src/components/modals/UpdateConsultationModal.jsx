@@ -67,7 +67,7 @@ function UpdateConsultationModal({ isOpen, onResolve, onReject,idEtudiant,idAuth
    
   const onUpdate = data => {
       const {poids} = data;
-      onResolve({...data, poids: +poids});
+      onResolve({_id: consultation?._id,...data, poids: +poids});
     };
 
     const remplirTraitement = () => {

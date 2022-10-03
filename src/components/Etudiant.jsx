@@ -10,6 +10,9 @@ import { useRef } from "react";
 import { Toast } from "primereact/toast";
 import {env} from '../env'
 
+
+
+
 function Etudiant() {
     const {id} = useParams()
     const {pathname} = useLocation()
@@ -104,14 +107,7 @@ function Etudiant() {
         <li className="relative block px-4 py-2 pl-0 leading-normal bg-white border-0 border-t-0 text-sm text-inherit"><strong className="text-slate-700">Antécédants Médicaux:</strong> &nbsp; {makeChip(data?.dossier?.antecedant_medicaux,'bg-gray-600 text-white')}</li>
         <li><button className="inline-block px-6 py-2 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" onClick={() => addFiles()} >AJOUTER DES FICHIERS <AiFillPlusCircle className="h-6 w-6 text-white inline"/></button></li>
       </ul>
-      <h1 className="font-semibold text-sm">Fichiers</h1>
-      <div className="my-5">
-        <ul>
-          {data?.files?.map((f,i) => (
-            <li key={i}><a href={`${env.baseServerURL}/uploads/${f}`}>{f}</a></li>
-          ))}
-        </ul>
-      </div>
+      
     </div> : <div className="flex items-center jsutify-center"><h1 className="font-bold text-5xl p-10"> Dossier Vide</h1> </div> } 
         </div>
         <div className="mx-5 w-full">
