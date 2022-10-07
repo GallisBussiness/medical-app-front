@@ -85,7 +85,7 @@ const onCreate = () => {
             </div>
           
             <div className="flex flex-col space-y-2 w-full">
-            <label htmlFor="nombre" className="form-label">Nombre</label>
+            <label htmlFor="nombre" className="form-label">Posologie</label>
               <Controller control={control} name="nombre" render={({field}) => (
                   <InputNumber inputId="vertical" value={field.value} onValueChange={(e) => field.onChange(e.value)} showButtons buttonLayout="horizontal"
                   decrementButtonClassName="p-button-secondary" incrementButtonClassName="p-button-secondary" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
@@ -116,7 +116,7 @@ const onCreate = () => {
                     >
                     
                     <Column field="medicament" header="Medicament" sortable style={{ minWidth: '14rem' }} />
-                    <Column field="nombre" header="Nombre" body={nombreTemplate} sortable style={{ minWidth: '14rem' }} />
+                    <Column field="nombre" header="Posologie" body={nombreTemplate} sortable style={{ minWidth: '14rem' }} />
                     <Column field="frequence" header="Frequence de prise" body={frequenceTemplate} sortable style={{ minWidth: '14rem' }} />
                     <Column headerStyle={{ width: '4rem', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} body={actionBodyTemplate} />
                 </DataTable>

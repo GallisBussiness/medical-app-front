@@ -25,22 +25,12 @@ function Statistique({auth}) {
       const hommes = _.filter(c => c.etudiant.sexe === 'M');
       const femmes = _.filter(c => c.etudiant.sexe === 'F');
 
-      const datasets = labels.map(l => {
-        return {
-              label:l,
-              backgroundColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
-              data:somme 
-              }
-      })
-      // const datasets = tiketnames.map(t => {
-      //     let somme = [];
-      //     labels.forEach(l => {
-      //         const fichebydate = _.filter(f => f.date === l);
-      //         const s = fichebydate.map(f => f.ticket.nom === t ? f.nombre * f.ticket.valeur : 0).reduce((acc,cur) => acc + cur,0)
-      //         somme =  somme.concat(s);
-      //     } )
-      //    
-      // });
+      const datasets = [{
+              label:["HOMMES","FEMMES"],
+              backgroundColor: [`#${Math.floor(Math.random()*16777215).toString(16)}`,`#${Math.floor(Math.random()*16777215).toString(16)}`],
+              data:[hommes.length,femmes.length]
+              }]
+  
      
   setBasicData({
       labels,
@@ -162,7 +152,7 @@ function Statistique({auth}) {
   </div>
   {/* Card */}
   <div className="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-    <div className="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
+    <div className="p-3 mr-4 text-teal-800 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-800">
       <FaUserGraduate className="h-6 w-6 text-white"/>
     </div>
     <div>
@@ -175,8 +165,12 @@ function Statistique({auth}) {
     </div>
   </div>
 </div>
-<div className="flex my-10 mx-10 bg-white">
-<Chart type="bar" data={basicData} options={basicOptions} />
+<div className="flex flex-col my-10 mx-10 bg-white space-y-2 py-5 px-10">
+<h1 className="font-bold text-lg">CONSULTATION / SEXE </h1>
+  <div className="flex items-center space-x-10">
+    <Chart type="doughnut" data={basicData} options={basicOptions} />
+  </div>
+
 </div>
     </>
   )

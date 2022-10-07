@@ -18,7 +18,7 @@ const Dashboard = () => {
   const [visible,setVisible] = useState()
   const qc = useQueryClient();
   const auth = useAuthUser()();
-  const hasAuth = useIsAuthenticated()()
+  const hasAuth = useIsAuthenticated()();
   const navigate = useNavigate();
   const signOut = useSignOut()
 
