@@ -8,7 +8,7 @@ import { AiFillPlusCircle } from "react-icons/ai";
 import AddFiles from "./modals/AddFiles";
 import { useRef } from "react";
 import { Toast } from "primereact/toast";
-import {env} from '../env'
+// import {env} from '../env'
 
 
 
@@ -71,7 +71,7 @@ function Etudiant() {
                 <h5 className="font-semibold text-lg">{data?.nce}</h5>
                 </div>
              
-              <img className="relative z-20 w-32 pt-6 h-32" src={`/imgs/${data?.sexe}.svg`} alt="Etudiant" />
+              {data?.sexe && <img className="relative z-20 w-32 pt-6 h-32" src={`/imgs/${data?.sexe}.svg`} alt="Etudiant" />}
             </div>
           </div>
           <div className="max-w-full h-40 px-3 mt-12 ml-auto text-center lg:mt-0 lg:w-5/12 hidden md:block">

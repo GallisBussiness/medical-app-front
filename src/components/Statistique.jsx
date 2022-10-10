@@ -6,78 +6,46 @@ import { useQuery } from 'react-query';
 import { getConsultations } from '../services/consultationservice';
 import { getBulletins } from '../services/bulletinservice';
 import { getEtudiants } from '../services/etudiantservice';
-import { Chart } from 'primereact/chart'
-import { useState } from 'react';
 
 function Statistique({auth}) {
 
-  const [basicData,setBasicData] = useState({});
   const qk = ['get_users',auth?._id]
 
   const {data: users } = useQuery(qk, () => getUsers());
 
   const qkc = ['get_Consultations']
 
-  const {data: Consultations } = useQuery(qkc, () => getConsultations(), {
-    onSuccess: (_) => {
-      const labels = ["HOMMES","FEMMES"];
-     
-      const hommes = _.filter(c => c.etudiant.sexe === 'M');
-      const femmes = _.filter(c => c.etudiant.sexe === 'F');
+  const {data: Consultations } = useQuery(qkc, () => getConsultations(), {});
 
-      const datasets = labels.map(l => {
-        return {
-              label:l,
-              backgroundColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
-              data:somme 
-              }
-      })
-      // const datasets = tiketnames.map(t => {
-      //     let somme = [];
-      //     labels.forEach(l => {
-      //         const fichebydate = _.filter(f => f.date === l);
-      //         const s = fichebydate.map(f => f.ticket.nom === t ? f.nombre * f.ticket.valeur : 0).reduce((acc,cur) => acc + cur,0)
-      //         somme =  somme.concat(s);
-      //     } )
-      //    
-      // });
-     
-  setBasicData({
-      labels,
-      datasets
-  })
-    }
-  });
-
-  const  basicOptions = {
-    maintainAspectRatio: false,
-    aspectRatio: .8,
-    plugins: {
-        legend: {
-            labels: {
-                color: '#495057'
-            }
-        }
-    },
-    scales: {
-        x: {
-            ticks: {
-                color: '#495057'
-            },
-            grid: {
-                color: '#ebedef'
-            }
-        },
-        y: {
-            ticks: {
-                color: '#495057'
-            },
-            grid: {
-                color: '#ebedef'
-            }
-        }
-    }
-};
+//   const  basicOptions = {
+//     maintainAspectRatio: false,
+//     aspectRatio: .8,
+//     plugins: {
+//         legend: {
+//             labels: {
+//                 color: '#495057'
+//             }
+//         }
+//     },
+//     scales: {
+//         x: {
+//             ticks: {
+//                 color: '#495057'
+//             },
+//             grid: {
+//                 color: '#ebedef'
+//             }
+//         },
+//         y: {
+//             ticks: {
+//                 color: '#495057'
+//             },
+//             grid: {
+//                 color: '#ebedef'
+//             }
+//         }
+//     }
+// };
 
   const qkb = ['get_Bulletins']
 
@@ -176,7 +144,7 @@ function Statistique({auth}) {
   </div>
 </div>
 <div className="flex my-10 mx-10 bg-white">
-<Chart type="bar" data={basicData} options={basicOptions} />
+{/* <Chart type="bar" data={basicData} options={basicOptions} /> */}
 </div>
     </>
   )
