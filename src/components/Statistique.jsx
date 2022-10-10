@@ -6,8 +6,13 @@ import { useQuery } from 'react-query';
 import { getConsultations } from '../services/consultationservice';
 import { getBulletins } from '../services/bulletinservice';
 import { getEtudiants } from '../services/etudiantservice';
+import { Chart } from 'primereact/chart'
+import { useState } from 'react';
 
 function Statistique({auth}) {
+
+  const [basicData,setBasicData] = useState({})
+  const [bulletinData,setBulletinData] = useState({});
 
   const qk = ['get_users',auth?._id]
 
@@ -16,8 +21,7 @@ function Statistique({auth}) {
   const qkc = ['get_Consultations']
 
   const {data: Consultations } = useQuery(qkc, () => getConsultations(), {
-
-    onSucess: (_) => {
+    onSuccess: (_) => {
          const labels = ["HOMMES","FEMMES"];
           const hommes = _.filter(c=> c?.etudiant?.sexe === "M");
           const femmes = _.filter(c => c?.etudiant?.sexe !== "M");
@@ -25,9 +29,8 @@ function Statistique({auth}) {
               label: "Consultation selon le sexe",
               backgroundColor: [`#${Math.floor(Math.random()*16777215).toString(16)}`,`#${Math.floor(Math.random()*16777215).toString(16)}`],
               data:[hommes.length,femmes.length]
-              }]
+              }];
   
-     
   setBasicData({
       labels,
       datasets
@@ -36,14 +39,13 @@ function Statistique({auth}) {
 
   });
 
-
   const  basicOptions = {
     maintainAspectRatio: false,
     aspectRatio: .8,
     plugins: {
         legend: {
             labels: {
-                color: '#495057'
+                color: '#000'
             }
         }
     },
@@ -69,7 +71,23 @@ function Statistique({auth}) {
 
   const qkb = ['get_Bulletins']
 
-  const {data: Bulletins } = useQuery(qkb, () => getBulletins());
+  const {data: Bulletins } = useQuery(qkb, () => getBulletins(), {
+    onSuccess:(_) => {
+      const labels = ["HOMMES","FEMMES"];
+      const hommes = _.filter(c=> c?.etudiant?.sexe === "M");
+      const femmes = _.filter(c => c?.etudiant?.sexe !== "M");
+      const datasets = [{
+          label: "Consultation selon le sexe",
+          backgroundColor: [`#${Math.floor(Math.random()*16777215).toString(16)}`,`#${Math.floor(Math.random()*16777215).toString(16)}`],
+          data:[hommes.length,femmes.length]
+          }];
+
+setBulletinData({
+  labels,
+  datasets
+})
+    }
+  });
 
   const qke = ['get_Etudiants']
 
@@ -164,9 +182,28 @@ function Statistique({auth}) {
   </div>
 </div>
 <div className="flex flex-col my-10 mx-10 bg-white space-y-2 py-5 px-10">
-<h1 className="font-bold text-lg">CONSULTATION / SEXE </h1>
+<h1 className="font-bold text-3xl">CONSULTATION / SEXE </h1>
   <div className="flex items-center space-x-10">
-    <Chart type="doughnut" data={basicData} options={basicOptions} />
+    <div className="w-full">
+      <Chart type="bar" data={basicData} options={basicOptions} />
+    </div>
+    <div className="w-full">
+      <Chart type="doughnut" data={basicData} options={basicOptions} />
+    </div>
+    
+  </div>
+
+</div>
+<div className="flex flex-col my-10 mx-10 bg-white space-y-2 py-5 px-10">
+<h1 className="font-bold text-3xl">Prise en charge / SEXE </h1>
+  <div className="flex items-center space-x-10">
+    <div className="w-full">
+      <Chart type="bar" data={bulletinData} options={basicOptions} />
+    </div>
+    <div className="w-full">
+      <Chart type="doughnut" data={bulletinData} options={basicOptions} />
+    </div>
+    
   </div>
 
 </div>
