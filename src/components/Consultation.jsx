@@ -82,7 +82,7 @@ function Consultation() {
                       >
                       
                       <Column field="medicament" header="Medicament" style={{ minWidth: '14rem' }} />
-                      <Column field="nombre" header="Nombre" body={nombreTemplate} style={{ minWidth: '14rem' }} />
+                      <Column field="nombre" header="Posologie" body={nombreTemplate} style={{ minWidth: '14rem' }} />
                       <Column field="frequence" header="Frequence de prise" body={frequenceTemplate} style={{ minWidth: '14rem' }} />
                   </DataTable>
             </div>

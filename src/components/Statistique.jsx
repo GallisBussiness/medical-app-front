@@ -15,37 +15,57 @@ function Statistique({auth}) {
 
   const qkc = ['get_Consultations']
 
-  const {data: Consultations } = useQuery(qkc, () => getConsultations(), {});
+  const {data: Consultations } = useQuery(qkc, () => getConsultations(), {
 
-//   const  basicOptions = {
-//     maintainAspectRatio: false,
-//     aspectRatio: .8,
-//     plugins: {
-//         legend: {
-//             labels: {
-//                 color: '#495057'
-//             }
-//         }
-//     },
-//     scales: {
-//         x: {
-//             ticks: {
-//                 color: '#495057'
-//             },
-//             grid: {
-//                 color: '#ebedef'
-//             }
-//         },
-//         y: {
-//             ticks: {
-//                 color: '#495057'
-//             },
-//             grid: {
-//                 color: '#ebedef'
-//             }
-//         }
-//     }
-// };
+    onSucess: (_) => {
+         const labels = ["HOMMES","FEMMES"];
+          const hommes = _.filter(c=> c?.etudiant?.sexe === "M");
+          const femmes = _.filter(c => c?.etudiant?.sexe !== "M");
+          const datasets = [{
+              label: "Consultation selon le sexe",
+              backgroundColor: [`#${Math.floor(Math.random()*16777215).toString(16)}`,`#${Math.floor(Math.random()*16777215).toString(16)}`],
+              data:[hommes.length,femmes.length]
+              }]
+  
+     
+  setBasicData({
+      labels,
+      datasets
+  })
+    }
+
+  });
+
+
+  const  basicOptions = {
+    maintainAspectRatio: false,
+    aspectRatio: .8,
+    plugins: {
+        legend: {
+            labels: {
+                color: '#495057'
+            }
+        }
+    },
+    scales: {
+        x: {
+            ticks: {
+                color: '#495057'
+            },
+            grid: {
+                color: '#ebedef'
+            }
+        },
+        y: {
+            ticks: {
+                color: '#495057'
+            },
+            grid: {
+                color: '#ebedef'
+            }
+        }
+    }
+};
 
   const qkb = ['get_Bulletins']
 
@@ -130,7 +150,7 @@ function Statistique({auth}) {
   </div>
   {/* Card */}
   <div className="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-    <div className="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
+    <div className="p-3 mr-4 text-teal-800 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-800">
       <FaUserGraduate className="h-6 w-6 text-white"/>
     </div>
     <div>
@@ -143,8 +163,12 @@ function Statistique({auth}) {
     </div>
   </div>
 </div>
-<div className="flex my-10 mx-10 bg-white">
-{/* <Chart type="bar" data={basicData} options={basicOptions} /> */}
+<div className="flex flex-col my-10 mx-10 bg-white space-y-2 py-5 px-10">
+<h1 className="font-bold text-lg">CONSULTATION / SEXE </h1>
+  <div className="flex items-center space-x-10">
+    <Chart type="doughnut" data={basicData} options={basicOptions} />
+  </div>
+
 </div>
     </>
   )
