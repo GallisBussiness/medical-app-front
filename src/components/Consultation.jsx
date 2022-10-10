@@ -12,6 +12,7 @@ import { AiFillPrinter } from "react-icons/ai"
 import {ConsultationPrint} from "./ConsultationPrint"
 import ReactToPrint from 'react-to-print';
 import { useRef } from "react"
+import { OrdonnancePrint } from "./OrdonancePrint"
 
 
 function Consultation() {
@@ -19,6 +20,7 @@ function Consultation() {
     const key = ['get_Consultation',id]
     const {data} = useQuery(key, () => getConsultationById(id))
     const componentRef = useRef();
+    const ordonnanceRef = useRef();
 
     const nombreTemplate = (row) => {
       return <div>
@@ -36,13 +38,17 @@ function Consultation() {
      <div className="bg-pattern">
            <div className="p-10 border-b-0 rounded-t-2xl bg-white">
       <div className="flex items-center justify-between mx-5">
-        <div className="flex items-center  w-full md:w-8/12 md:flex-none">
+        <div className="flex items-center  w-full space-x-5">
           <h6 className="font-bold text-3xl">CONSULTATION {data?.type?.toUpperCase()}</h6>
+          <ReactToPrint
+        trigger={() => <button className="inline-block px-6 py-2 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" >IMPRIMER <AiFillPrinter className="h-6 w-6 text-white inline"/></button>}
+        content={() => componentRef.current}
+      />
         </div>
         <div>
         <ReactToPrint
-        trigger={() => <button className="inline-block px-6 py-2 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" >IMPRIMER <AiFillPrinter className="h-6 w-6 text-white inline"/></button>}
-        content={() => componentRef.current}
+        trigger={() => <button className="inline-block px-6 py-2 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" >IMPRIMER L'ORDONNANCE<AiFillPrinter className="h-6 w-6 text-white inline"/></button>}
+        content={() => ordonnanceRef.current}
       />
         </div>
       </div>
@@ -93,6 +99,7 @@ function Consultation() {
         </div>
         <div className="bg-white hidden print:block">
         {data && <ConsultationPrint ref={componentRef} consultation={data}/>}
+        {data && <OrdonnancePrint ref={ordonnanceRef} consultation={data}/>}
         </div>
         
     </>

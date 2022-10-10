@@ -13,6 +13,7 @@ import Consultation from "./Consultation";
 import Bulletin from "./Bulletin";
 import "./bg.css"
 import Statistique from "./Statistique";
+import GlobalLoadingIndicator from "./GlobalIsFetchingInd";
 
 const Dashboard = () => {
   const [visible,setVisible] = useState()
@@ -101,6 +102,7 @@ const Dashboard = () => {
 </div>
 <div className="bg-pattern">
   <div>
+  <GlobalLoadingIndicator />
   <Routes>
        <Route path="" element={<Profile auth={data}/>} />
        <Route path="profil" element={<Profile auth={data}/>}/>
