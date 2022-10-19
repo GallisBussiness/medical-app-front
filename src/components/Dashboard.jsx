@@ -43,18 +43,18 @@ const Dashboard = () => {
 
   return (
     <>
-   <div className="px-5 flex items-center justify-between bg-white py-1">
+   <div className="px-5 flex items-center justify-between bg-primary py-1">
     <button className="menu-icon dw dw-menu" onClick={() => setVisible(true)}></button>
     <div className="hidden w-full md:flex justify-end items-center mx-10 ">
-  <ul className="flex flex-col  md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium  md:bg-white">
+  <ul className="flex flex-col  md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
    {data?.role === 'admin' && <li>
-      <Link to="statistiques" className="block py-2 text-black hover:text-green-600 rounded md:bg-transparent md:p-0 uppercase font-bold">Statistiques</Link>
+      <Link to="statistiques" className="block py-2 text-whity rounded md:bg-transparent md:p-0 uppercase font-bold">Statistiques</Link>
     </li>}
     {data?.role === 'admin' && <li>
-      <Link to="users" className="block py-2 text-black hover:text-green-600 rounded md:bg-transparent md:p-0 uppercase font-bold">Utilisateurs</Link>
+      <Link to="users" className="block py-2 text-whity  rounded md:bg-transparent md:p-0 uppercase font-bold">Utilisateurs</Link>
     </li>}
     <li>
-      <Link to="etudiants" className="block py-2 text-black hover:text-green-600 rounded md:bg-transparent md:p-0 uppercase font-bold">Etudiants</Link>
+      <Link to="etudiants" className="block py-2 text-whity rounded md:bg-transparent md:p-0 uppercase font-bold">Etudiants</Link>
     </li>
   </ul>
 </div>
@@ -85,13 +85,13 @@ const Dashboard = () => {
       <div className="sidebar-menu">
         <ul id="accordion-menu">
         {data?.role === 'admin' && <li>
-      <Link to="statistiques" className="block py-2 text-black hover:text-green-600 rounded md:bg-transparent md:p-0 uppercase font-bold">Statistiques</Link>
+      <Link to="statistiques" className="block py-2 text-black hover:text-blue-600 rounded md:bg-transparent md:p-0 uppercase font-bold">Statistiques</Link>
     </li>}
     {data?.role === 'admin' && <li>
-      <Link to="users" className="block py-2 text-black hover:text-green-600 rounded md:bg-transparent md:p-0 uppercase font-bold">Utilisateurs</Link>
+      <Link to="users" className="block py-2 text-black hover:text-blue-600 rounded md:bg-transparent md:p-0 uppercase font-bold">Utilisateurs</Link>
     </li>}
     <li>
-      <Link to="etudiants" className="block py-2 text-black hover:text-green-600 rounded md:bg-transparent md:p-0 uppercase font-bold">Etudiants</Link>
+      <Link to="etudiants" className="block py-2 text-black hover:text-blue-600 rounded md:bg-transparent md:p-0 uppercase font-bold">Etudiants</Link>
     </li>
         </ul>
       </div>
@@ -100,11 +100,11 @@ const Dashboard = () => {
 </Sidebar>
  
 </div>
-<div className="bg-pattern">
+<div className="bg-back">
   <div>
   <GlobalLoadingIndicator />
   <Routes>
-       <Route path="" element={<Profile auth={data}/>} />
+      <Route path="" element={<Statistique auth={data}/>}/>
        <Route path="profil" element={<Profile auth={data}/>}/>
       {data?.role === 'admin' && <Route path="users" element={<Users auth={data}/>}/>}
       {data?.role === 'admin' && <Route path="statistiques" element={<Statistique auth={data}/>}/>}
