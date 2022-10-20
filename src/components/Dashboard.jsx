@@ -51,7 +51,7 @@ const Dashboard = () => {
     {isWide && <button className="menu-icon dw dw-menu text-white" onClick={() => setVisible(true)}></button>}
     {!isWide && <div className="w-2/5 flex space-x-2 items-center justify-center"><Link  to="/" className="p-2 rounded-full bg-whity">
         <img src="/imgs/logo_crousz.png" className="h-8 w-8 mx-auto object-contain" alt="logo" />
-      </Link> <span className="text-whity">CENTRE DES OEUVRES UNIVERSITAIRES</span></div>}
+      </Link> <span className="text-whity">CROUS/Z</span></div>}
     <div className="hidden w-full md:flex justify-end items-center mx-10 bg-secondary">
   <ul className="flex flex-col  md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
    {data?.role === 'admin' && <li>
@@ -119,7 +119,7 @@ const Dashboard = () => {
 </Sidebar>
  
 </div>
-<div className="bg-back">
+<div className="bg-back bg-fixed">
   <div>
   <GlobalLoadingIndicator />
   <Routes>

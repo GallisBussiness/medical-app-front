@@ -98,13 +98,19 @@ setBulletinData({
   <div className="w-full px-3 mb-6 lg:mb-0 lg:flex-none">
     <div className="relative flex flex-col h-40 min-w-0 break-words bg-whity shadow-soft-xl rounded-2xl bg-clip-border">
       <div className="flex-auto p-4">
-        <div className="flex flex-wrap -mx-3">
+        <div className="flex items-center justify-center -mx-3">
           <div className="max-w-full px-3 lg:w-1/2 lg:flex-none">
             <div className="flex items-center justify-start h-full">
               <h5 className="font-bold text-3xl">Statistiques</h5>
               <img className="relative z-20 w-32 pt-6 h-32" src="/imgs/stats.svg" alt="Statistiques" />
             </div>
           </div>
+          <img className="relative z-20 w-96 pt-6 h-32 object-cover" src="/imgs/gif2.gif" alt="gif" />
+          <div className="flex flex-col items-center justify-center space-y-2">
+            <h1 className="text-sm font-semibold">Centre Régional des Oeuvres Universitaires Sociales de Ziguinchor</h1>
+          <h1 className="text-sm font-semibold">Plateforme de gestion des dossiers médicaux des étudiants</h1>
+          </div>
+          
         </div>
       </div>
     </div>
@@ -135,7 +141,7 @@ setBulletinData({
     </div>
     <div>
       <p className="mb-2 text-2xl font-semibold text-white uppercase">
-        Total bulletins de pris en charge
+       bulletins
       </p>
       <p className="text-2xl font-semibold text-white">
         {Bulletins?.length}
@@ -152,7 +158,7 @@ setBulletinData({
     </div>
     <div>
       <p className="mb-2 text-2xl font-semibold text-white uppercase">
-        Total Etudiants
+        Etudiants
       </p>
       <p className="text-2xl font-semibold text-white">
         {Etudiants?.length}
@@ -171,7 +177,7 @@ setBulletinData({
     </div>
     <div>
       <p className="mb-2 text-2xl font-semibold text-white uppercase">
-        Total Utilisateurs
+        Utilisateurs
       </p>
       <p className="text-2xl font-semibold text-white">
         {users?.length}
@@ -180,7 +186,7 @@ setBulletinData({
   </div>
    </Link>
 </div>
-<div className="flex flex-col my-10 mx-10 bg-white space-y-2 py-5 px-10">
+<div className="flex flex-col my-10 mx-10 bg-white opacity-80 space-y-2 py-5 px-10">
 <h1 className="font-bold text-3xl">CONSULTATION / SEXE </h1>
   <div className="flex flex-col items-center space-y-10 md:flex-row md:space-x-10">
     <div className="w-full">
@@ -193,7 +199,7 @@ setBulletinData({
   </div>
 
 </div>
-<div className="flex flex-col my-10 mx-10 bg-white space-y-2 py-5 px-10">
+<div className="flex flex-col my-10 mx-10 bg-white  opacity-80 space-y-2 py-5 px-10">
 <h1 className="font-bold text-3xl">Prise en charge / SEXE </h1>
   <div className="flex flex-col items-center space-y-10 md:flex-row md:space-x-10">
     <div className="w-full">

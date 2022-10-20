@@ -93,7 +93,7 @@ function Etudiant() {
       </div>
     </div>
 
-    {data?.dossier && (Object.keys(data?.dossier).length > 3) ? <div className="p-4 flex flex-col items-center justify-center">
+    {data?.dossier && (Object.keys(data?.dossier).length > 3) ? <div className="p-4 flex flex-col items-center justify-start">
       {/* <ul className="flex flex-col mb-0 rounded-lg w-full">
       <li className="relative block px-4 py-2 pt-0 pl-0 leading-normal bg-white border-0 rounded-t-lg text-sm text-inherit"><strong className="text-slate-700">Groupe Sanguin:</strong> &nbsp; {data?.dossier?.groupe_sanguin}</li>
         <li className="relative block px-4 py-2 pt-0 pl-0 leading-normal bg-white border-0 rounded-t-lg text-sm text-inherit"><strong className="text-slate-700">Poids:</strong> &nbsp; {data?.dossier?.poids} kg</li>
@@ -104,7 +104,7 @@ function Etudiant() {
         <li></li>
       </ul> */}
 
-<table className="border-collapse border border-slate-500 w-full my-5">
+<table className="border-collapse border border-slate-500 w-full my-2">
   <thead>
     <tr>
       <th className="border border-slate-600 p-2 bg-blacky text-whity">INFORMATION</th>

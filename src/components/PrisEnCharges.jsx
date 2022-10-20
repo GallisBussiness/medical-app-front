@@ -137,7 +137,7 @@ const examensTemplate = (row) => row.examensDemandes.split(',').map((e,i) => <Ch
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" rowsPerPageOptions={[10,25,50]}
                     dataKey="_id" rowHover selection={selectedBulletins} onSelectionChange={e => setSelectedBulletins(e.value)}
                     filters={filters} filterDisplay="menu" loading={isLoading} responsiveLayout="scroll"
-                    globalFilterFields={['nom', 'prenom']} emptyMessage="Aucun Bulletin trouvé"
+                    globalFilterFields={['date', 'etablissement.nom']} emptyMessage="Aucun Bulletin trouvé"
                     currentPageReportTemplate="Voir {first} de {last} à {totalRecords} Bulletins">
                     <Column selectionMode="multiple" headerStyle={{ width: '3em' }}></Column>
                     <Column field="date" header="Date" body={dateTemplate} sortable style={{ minWidth: '14rem' }} />
