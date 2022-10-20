@@ -14,6 +14,9 @@ import Bulletin from "./Bulletin";
 import "./bg.css"
 import Statistique from "./Statistique";
 import GlobalLoadingIndicator from "./GlobalIsFetchingInd";
+import {useMedia} from 'react-use';
+import ConsultationsAll from "./ConsultationsAll";
+import BulletinsAll from "./BulletinsAll";
 
 const Dashboard = () => {
   const [visible,setVisible] = useState()
@@ -22,6 +25,7 @@ const Dashboard = () => {
   const hasAuth = useIsAuthenticated()();
   const navigate = useNavigate();
   const signOut = useSignOut()
+  const isWide = useMedia('(max-width: 680px)');
 
   const qk = ['auth',auth?.id]
   const {data} = useQuery(qk, () => getAuth(auth?.id), {
@@ -43,31 +47,40 @@ const Dashboard = () => {
 
   return (
     <>
-   <div className="px-5 flex items-center justify-between bg-primary py-1">
-    <button className="menu-icon dw dw-menu" onClick={() => setVisible(true)}></button>
-    <div className="hidden w-full md:flex justify-end items-center mx-10 ">
+   <div className="px-5 flex items-center justify-between bg-secondary py-1">
+    {isWide && <button className="menu-icon dw dw-menu text-white" onClick={() => setVisible(true)}></button>}
+    {!isWide && <div className="w-2/5 flex space-x-2 items-center justify-center"><Link  to="/" className="p-2 rounded-full bg-whity">
+        <img src="/imgs/logo_crousz.png" className="h-8 w-8 mx-auto object-contain" alt="logo" />
+      </Link> <span className="text-whity">CENTRE DES OEUVRES UNIVERSITAIRES</span></div>}
+    <div className="hidden w-full md:flex justify-end items-center mx-10 bg-secondary">
   <ul className="flex flex-col  md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
    {data?.role === 'admin' && <li>
-      <Link to="statistiques" className="block py-2 text-whity rounded md:bg-transparent md:p-0 uppercase font-bold">Statistiques</Link>
+      <Link to="statistiques" className="block py-2 text-whity rounded md:bg-transparent md:p-0 uppercase font-bold">Acceuil</Link>
     </li>}
-    {data?.role === 'admin' && <li>
-      <Link to="users" className="block py-2 text-whity  rounded md:bg-transparent md:p-0 uppercase font-bold">Utilisateurs</Link>
-    </li>}
+    <li>
+      <Link to="allconsultations" className="block py-2 text-whity rounded md:bg-transparent md:p-0 uppercase font-bold">Consultations</Link>
+    </li>
+    <li>
+      <Link to="allbulletins" className="block py-2 text-whity rounded md:bg-transparent md:p-0 uppercase font-bold">Prises en charge</Link>
+    </li>
     <li>
       <Link to="etudiants" className="block py-2 text-whity rounded md:bg-transparent md:p-0 uppercase font-bold">Etudiants</Link>
     </li>
+    {data?.role === 'admin' && <li>
+      <Link to="users" className="block py-2 text-whity  rounded md:bg-transparent md:p-0 uppercase font-bold">Utilisateurs</Link>
+    </li>}
   </ul>
 </div>
 
     <div className="user-info-dropdown">
       <div className="dropdown">
         <button className="dropdown-toggle" data-toggle="dropdown">
-          <span className="font-bold uppercase">{data?.prenom} {data?.nom}</span>
+          <span className="font-bold uppercase text-white">{data?.prenom} {data?.nom}</span>
         </button>
-        <div className="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-          <Link className="dropdown-item" to="profil"><i className="dw dw-user1" /> Profil</Link>
-         {data?.role === 'admin' && <Link className="dropdown-item" to="parametre"><i className="dw dw-settings2" /> Paramétres</Link>}
-          <button className="dropdown-item" onClick={logout}><i className="dw dw-logout" /> Se Déconnecter</button>
+        <div className="dropdown-menu dropdown-menu-right dropdown-menu-icon-list bg-secondary">
+          <Link className="dropdown-item text-whity" to="profil"><i className="dw dw-user1" /> Profil</Link>
+         {data?.role === 'admin' && <Link className="dropdown-item text-whity" to="parametre"><i className="dw dw-settings2" /> Paramétres</Link>}
+          <button className="dropdown-item text-whity" onClick={logout}><i className="dw dw-logout" /> Se Déconnecter</button>
         </div>
     </div>
   </div>
@@ -87,6 +100,12 @@ const Dashboard = () => {
         {data?.role === 'admin' && <li>
       <Link to="statistiques" className="block py-2 text-black hover:text-blue-600 rounded md:bg-transparent md:p-0 uppercase font-bold">Statistiques</Link>
     </li>}
+    <li>
+      <Link to="allconsultations" className="block py-2 text-blacky rounded md:bg-transparent md:p-0 uppercase font-bold">Consultations</Link>
+    </li>
+    <li>
+      <Link to="allbulletins" className="block py-2 text-blacky rounded md:bg-transparent md:p-0 uppercase font-bold">Prises en charge</Link>
+    </li>
     {data?.role === 'admin' && <li>
       <Link to="users" className="block py-2 text-black hover:text-blue-600 rounded md:bg-transparent md:p-0 uppercase font-bold">Utilisateurs</Link>
     </li>}
@@ -108,6 +127,8 @@ const Dashboard = () => {
        <Route path="profil" element={<Profile auth={data}/>}/>
       {data?.role === 'admin' && <Route path="users" element={<Users auth={data}/>}/>}
       {data?.role === 'admin' && <Route path="statistiques" element={<Statistique auth={data}/>}/>}
+       <Route path="allconsultations" element={<ConsultationsAll/>} />
+       <Route path="allbulletins" element={<BulletinsAll/>} />
        <Route path="consultations/:id" element={<Consultation/>} />
        <Route path="pris-en-charges/:id" element={<Bulletin/>} />
        <Route path="etudiants" element={<Etudiants/>}/>

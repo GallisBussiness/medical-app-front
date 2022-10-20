@@ -15,7 +15,6 @@ import UpdateUserModal from './modals/UpdateUserModal'
 import './datatable.css'
 import { createUser, getUsers, removeUser, updateUser } from '../services/userservice'
 import { FaUsers } from 'react-icons/fa';
-import { Link } from 'react-router-dom'
 const Users = ({auth}) => {
 
     const [selectedUsers, setSelectedUsers] = useState(null);
@@ -126,19 +125,16 @@ const Users = ({auth}) => {
     <div className="relative flex flex-col h-40 min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
       <div className="flex-auto p-4">
         <div className="flex flex-wrap -mx-3">
-        <Link  to="/">
-        <img src="/imgs/logo_crousz.png" className="h-20 w-20 mx-auto object-cover" alt="logo" />
-      </Link>
           <div className="max-w-full px-3 lg:w-1/2 lg:flex-none">
-            <div className="flex items-center justify-center h-full">
+            <div className="flex items-center justify-start h-full">
               <h5 className="font-bold text-3xl">Gestion des Utilisateurs</h5>
               <img className="relative z-20 w-32 pt-6 h-32" src="/imgs/users.svg" alt="users" />
             </div>
           </div>
           <div className="max-w-full h-40 px-3 mt-12 ml-auto text-center lg:mt-0 lg:w-5/12 hidden lg:block">
-            <div className="h-full bg-gradient-to-tl from-green-700 to-green-300 rounded-xl">
+            <div className="h-full bg-gradient-to-tl from-primary to-blue-300 rounded-xl">
               <div className="relative flex items-center justify-center h-full">
-                        <FaUsers className="h-32 w-32 bg-white text-green-600 rounded-full"/>
+                        <FaUsers className="h-32 w-32 bg-whity text-danger rounded-full"/>
               </div>
             </div>
           </div>
@@ -147,7 +143,7 @@ const Users = ({auth}) => {
     </div>
   </div>
 </div>
-<div className="datatable-doc mt-4">
+<div className="datatable-doc mt-4 mx-10">
             <div className="card">
             <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
                 <DataTable value={users} paginator className="p-datatable-customers" header={header} rows={10}

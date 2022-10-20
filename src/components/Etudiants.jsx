@@ -15,7 +15,7 @@ import UpdateEtudiantModal from './modals/UpdateEtudiantModal'
 import './datatable.css'
 import { createEtudiant, getEtudiants, removeEtudiant, updateEtudiant } from '../services/etudiantservice'
 import {FaUserGraduate } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 function Etudiants() {
 
@@ -133,19 +133,16 @@ function Etudiants() {
     <div className="relative flex flex-col h-40 min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
       <div className="flex-auto p-4">
         <div className="flex flex-wrap -mx-3">
-        <Link  to="/">
-        <img src="/imgs/logo_crousz.png" className="h-20 w-20 mx-auto object-cover" alt="logo" />
-      </Link>
           <div className="max-w-full px-3 lg:w-1/2 lg:flex-none">
-            <div className="flex items-center justify-center h-full">
+            <div className="flex items-center justify-start h-full">
               <h5 className="font-bold text-3xl">Gestion des Etudiants</h5>
               <img className="relative z-20 w-32 pt-6 h-32" src="/imgs/etudiant.svg" alt="Etudiants" />
             </div>
           </div>
           <div className="max-w-full h-40 px-3 mt-12 ml-auto text-center lg:mt-0 lg:w-5/12 hidden lg:block">
-            <div className="h-full bg-gradient-to-tl from-green-700 to-green-300 rounded-xl">
+            <div className="h-full bg-gradient-to-tl from-primary to-blue-300 rounded-xl">
               <div className="relative flex items-center justify-center h-full">
-                        <FaUserGraduate className="h-32 w-32 bg-white text-green-600 rounded-full"/>
+                        <FaUserGraduate className="h-32 w-32 bg-whity text-danger rounded-full"/>
               </div>
             </div>
           </div>
@@ -154,7 +151,7 @@ function Etudiants() {
     </div>
   </div>
 </div>
-<div className="datatable-doc mt-4">
+<div className="datatable-doc mt-4 mx-10">
             <div className="card">
             <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
                 <DataTable value={Etudiants} paginator className="p-datatable-customers" header={header} rows={10}

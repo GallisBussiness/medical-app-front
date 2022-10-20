@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'back': "url('/imgs/img1.jpg')",
+        'back': "url('./backgrounds/img3.jpg')",
       },
       colors: {
         'whity': '#FDFFFC',
