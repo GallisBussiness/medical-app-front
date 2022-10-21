@@ -125,7 +125,7 @@ function CreateConsultationModal({ isOpen, onResolve, onReject,idEtudiant,idAuth
               {getFormErrorMessage('temperature')} 
             </div>
             <div className="mb-3">
-            <label htmlFor="poule" className="form-label">Poule </label>
+            <label htmlFor="poule" className="form-label">Pouls </label>
             <Controller control={control} name="poule" render={({field}) => (
             <input type="text" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 
             ease-soft block w-full appearance-none rounded-lg border border-solid border-green-300
