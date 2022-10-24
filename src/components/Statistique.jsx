@@ -8,12 +8,12 @@ import { getEtudiants } from '../services/etudiantservice';
 import { Chart } from 'primereact/chart'
 import { useState } from 'react';
 
-function Statistique({auth}) {
+function Statistique() {
 
   const [basicData,setBasicData] = useState({})
   const [bulletinData,setBulletinData] = useState({});
 
-  const qk = ['get_users',auth?._id]
+  const qk = ['get_users']
 
   const {data: users } = useQuery(qk, () => getUsers());
 
@@ -94,9 +94,9 @@ setBulletinData({
 
   return (
     <>
-       <div className="flex flex-wrap">
+       <div className="flex flex-wrap bg-whity">
   <div className="w-full px-3 mb-6 lg:mb-0 lg:flex-none">
-    <div className="relative flex flex-col h-auto min-w-0 break-words bg-whity shadow-soft-xl rounded-2xl bg-clip-border">
+    <div className="relative flex flex-col h-auto min-w-0 break-words bg-whity shadow-soft-xl bg-clip-border">
       <div className="flex-auto p-4">
         <div className="flex flex-col  items-center justify-center md:flex-row -mx-3">
           <div className="max-w-full px-3 lg:w-1/2 lg:flex-none">
@@ -107,8 +107,8 @@ setBulletinData({
           </div>
           <img className="relative z-20 w-96 pt-6 h-32 object-cover" src="/imgs/gif2.gif" alt="gif" />
           <div className="flex flex-col items-center justify-center space-y-2">
-            <h1 className="text-sm font-semibold">Centre Régional des Oeuvres Universitaires Sociales de Ziguinchor</h1>
-          <h1 className="text-sm font-semibold">Plateforme de gestion des dossiers médicaux des étudiants</h1>
+            <h1 className="text-lg font-semibold">Centre Régional des Oeuvres Universitaires Sociales de Ziguinchor</h1>
+          <h1 className="text-lg font-semibold">Plateforme de gestion des dossiers médicaux des étudiants</h1>
           </div>
           
         </div>

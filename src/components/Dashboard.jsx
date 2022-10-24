@@ -17,6 +17,7 @@ import GlobalLoadingIndicator from "./GlobalIsFetchingInd";
 import {useMedia} from 'react-use';
 import ConsultationsAll from "./ConsultationsAll";
 import BulletinsAll from "./BulletinsAll";
+import P404 from "./P404";
 
 const Dashboard = () => {
   const [visible,setVisible] = useState()
@@ -134,6 +135,7 @@ const Dashboard = () => {
        <Route path="etudiants" element={<Etudiants/>}/>
        <Route path="etudiants/:id/*" element={<Etudiant/>}/>
       {data?.role === 'admin' && <Route path="parametre/*" element={<Paramettre auth={data}/>} />}
+      <Route path="*" element={<P404/>}/>
      </Routes>
   </div>
 </div>

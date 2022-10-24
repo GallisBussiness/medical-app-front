@@ -62,9 +62,9 @@ function BulletinsAll() {
 
   return (
     <>
-       <div className="flex flex-wrap">
+       <div className="flex flex-wrap bg-whity">
   <div className="w-full px-3 mb-6 lg:mb-0 lg:flex-none">
-    <div className="relative flex flex-col h-40 min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
+    <div className="relative flex flex-col h-40 min-w-0 break-words bg-white shadow-soft-xl bg-clip-border">
       <div className="flex-auto p-4">
         <div className="flex flex-wrap -mx-3">
           <div className="max-w-full px-3 lg:w-1/2 lg:flex-none">
