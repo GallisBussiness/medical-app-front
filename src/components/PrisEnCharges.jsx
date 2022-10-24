@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router-dom'
 import { format, parseISO } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { Chip } from 'primereact/chip'
+import ConfirmDelete from './modals/ConfirmDelete'
 
 function PrisEnCharges({etudiant}) {
 
@@ -97,10 +98,13 @@ function PrisEnCharges({etudiant}) {
       CreateBulletinModal({idEtudiant: etudiant?._id,idAuth: auth?.id}).then(create);
   }
 
-  const handleDelete = () => {
-      for(let i = 0; i < selectedBulletins?.length; i++) {
+  const handleDelete = async () => {
+    const resconfirm = await ConfirmDelete();
+    if(resconfirm) {
+        for(let i = 0; i < selectedBulletins?.length; i++) {
          deleteD(selectedBulletins[i]?._id);
       }
+    }
   }
 const dateTemplate = (row) => format(parseISO(row.date), 'dd-MMMM-yyyy H:m:s',  {locale: fr});
 const examensTemplate = (row) => row.examensDemandes.split(',').map((e,i) => <Chip key={i} label={e} className="bg-red-200"/>);

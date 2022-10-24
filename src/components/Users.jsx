@@ -15,6 +15,7 @@ import UpdateUserModal from './modals/UpdateUserModal'
 import './datatable.css'
 import { createUser, getUsers, removeUser, updateUser } from '../services/userservice'
 import { FaUsers } from 'react-icons/fa';
+import ConfirmDelete from './modals/ConfirmDelete'
 const Users = ({auth}) => {
 
     const [selectedUsers, setSelectedUsers] = useState(null);
@@ -91,9 +92,12 @@ const Users = ({auth}) => {
         CreateUserModal().then(create);
     }
 
-    const handleDelete = () => {
-        for(let i = 0; i < selectedUsers?.length; i++) {
+    const handleDelete = async () => {
+        const resconfirm = await ConfirmDelete();
+        if(resconfirm) {
+             for(let i = 0; i < selectedUsers?.length; i++) {
            deleteD(selectedUsers[i]?._id);
+        }
         }
     }
 

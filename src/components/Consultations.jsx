@@ -19,10 +19,11 @@ import { FaRegEye } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { format, parseISO } from 'date-fns'
 import { fr } from 'date-fns/locale'
+import ConfirmDelete from './modals/ConfirmDelete'
 function Consultations({etudiant}) {
     const auth = useAuthUser()();
     const navigate = useNavigate()
-  const [selectedConsultations, setSelectedConsultations] = useState(null);
+  const [selectedConsultations, setSelectedConsultations] = useState([]);
   const qc = useQueryClient()
   const toast = useRef();
   const [filters, setFilters] = useState({
@@ -93,10 +94,17 @@ function Consultations({etudiant}) {
       CreateConsultationModal({idEtudiant: etudiant?._id,idAuth: auth?.id}).then(create);
   }
 
-  const handleDelete = () => {
-      for(let i = 0; i < selectedConsultations?.length; i++) {
+  const handleDelete = async () => {
+
+
+    const resconfirm = await ConfirmDelete();
+    if(resconfirm) {
+          for(let i = 0; i < selectedConsultations?.length; i++) {
          deleteD(selectedConsultations[i]?._id);
       }
+    }
+
+    
   }
 const dateTemplate = (row) => format(parseISO(row.dateDeConsultation), 'dd-MMMM-yyyy H:m:s',  {locale: fr});
   const renderHeader = () => {

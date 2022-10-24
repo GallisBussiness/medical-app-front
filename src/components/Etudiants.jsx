@@ -16,6 +16,7 @@ import './datatable.css'
 import { createEtudiant, getEtudiants, removeEtudiant, updateEtudiant } from '../services/etudiantservice'
 import {FaUserGraduate } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom'
+import ConfirmDelete from './modals/ConfirmDelete'
 
 function Etudiants() {
 
@@ -97,10 +98,14 @@ function Etudiants() {
         CreateEtudiantModal().then(create);
     }
 
-    const handleDelete = () => {
-        for(let i = 0; i < selectedEtudiants?.length; i++) {
+    const handleDelete = async () => {
+      const resconfirm = await ConfirmDelete();
+      if(resconfirm) {
+         for(let i = 0; i < selectedEtudiants?.length; i++) {
            deleteD(selectedEtudiants[i]?._id);
         }
+      }
+       
     }
 
     const renderHeader = () => {

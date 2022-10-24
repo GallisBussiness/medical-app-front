@@ -96,9 +96,9 @@ setBulletinData({
     <>
        <div className="flex flex-wrap">
   <div className="w-full px-3 mb-6 lg:mb-0 lg:flex-none">
-    <div className="relative flex flex-col h-40 min-w-0 break-words bg-whity shadow-soft-xl rounded-2xl bg-clip-border">
+    <div className="relative flex flex-col h-auto min-w-0 break-words bg-whity shadow-soft-xl rounded-2xl bg-clip-border">
       <div className="flex-auto p-4">
-        <div className="flex items-center justify-center -mx-3">
+        <div className="flex flex-col  items-center justify-center md:flex-row -mx-3">
           <div className="max-w-full px-3 lg:w-1/2 lg:flex-none">
             <div className="flex items-center justify-start h-full">
               <h5 className="font-bold text-3xl">Statistiques</h5>
