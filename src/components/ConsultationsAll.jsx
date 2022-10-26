@@ -33,6 +33,7 @@ function ConsultationsAll() {
     const qk = ['get_Consultations']
   
     const {data: Consultations, isLoading } = useQuery(qk, () => getConsultations());
+    console.log(Consultations)
 
     const dateTemplate = (row) => format(parseISO(row.dateDeConsultation), 'dd-MMMM-yyyy H:m:s',  {locale: fr});
   const renderHeader = () => {

@@ -6,6 +6,9 @@ import { forwardRef } from "react";
 
 export  const BulletinPrint = forwardRef(({bulletin},ref) => {
 
+
+  // console.log(bulletin)
+
   return (
     <div ref={ref} className="bg-white">
     <div className="flex items-center justify-between py-5 mx-10 bg-white">
