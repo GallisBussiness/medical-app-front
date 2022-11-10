@@ -180,13 +180,13 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
             TENSION :
           </td>
           <td className="px-6 font-semibold text-lg">
-          {consultation?.tension ? <Chip label={`${consultation?.tension} kg`} className="bg-amber-300"/> : 'néant'}
+          {consultation?.tension ? <Chip label={`${consultation?.tension} `} className="bg-amber-300"/> : 'néant'}
           </td>
           <td className="px-6 font-bold text-lg">
             TEMPERATURE:
           </td>
           <td className="px-6 font-semibold text-lg">
-          {consultation?.temperature ? <Chip label={`${consultation?.temperature} kg`} className="bg-amber-300"/> : 'néant'}
+          {consultation?.temperature ? <Chip label={`${consultation?.temperature}`} className="bg-amber-300"/> : 'néant'}
           </td>
         </tr>
       
@@ -195,19 +195,19 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
             POULS :
           </td>
           <td className="px-6 font-semibold text-lg">
-          {consultation?.poule ? <Chip label={`${consultation?.poule} kg`} className="bg-amber-300"/> : 'néant'}
+          {consultation?.poule ? <Chip label={`${consultation?.poule} `} className="bg-amber-300"/> : 'néant'}
           </td>
           <td className="px-6 font-bold text-lg">
           GLYCEMIE :
           </td>
           <td className="px-6 font-semibold text-lg">
-          {consultation?.glycemie ? <Chip label={`${consultation?.glycemie} kg`} className="bg-amber-300"/> : 'néant'}
+          {consultation?.glycemie ? <Chip label={`${consultation?.glycemie}`} className="bg-amber-300"/> : 'néant'}
           </td>
           <td className="px-6 font-bold text-lg">
           CORPS CETONIQUES ::
           </td>
           <td className="px-6 font-semibold text-lg">
-          {consultation?.corps_cetonique ? <Chip label={`${consultation?.corps_cetonique} kg`} className="bg-amber-300"/> : 'néant'}
+          {consultation?.corps_cetonique ? <Chip label={`${consultation?.corps_cetonique}`} className="bg-amber-300"/> : 'néant'}
           </td>
         </tr>
         </tbody>

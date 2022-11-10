@@ -33,7 +33,6 @@ function ConsultationsAll() {
     const qk = ['get_Consultations']
   
     const {data: Consultations, isLoading } = useQuery(qk, () => getConsultations());
-    console.log(Consultations)
 
     const dateTemplate = (row) => format(parseISO(row.dateDeConsultation), 'dd-MMMM-yyyy H:m:s',  {locale: fr});
   const renderHeader = () => {
@@ -92,12 +91,12 @@ function ConsultationsAll() {
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" rowsPerPageOptions={[10,25,50]}
                     dataKey="_id" rowHover 
                     filters={filters} filterDisplay="menu" loading={isLoading} responsiveLayout="scroll"
-                    globalFilterFields={['dateDeConsultation', 'poids']} emptyMessage="Aucun Consultation trouvé"
+                    globalFilterFields={['dateDeConsultation', 'poids','etudiant.prenom']} emptyMessage="Aucun Consultation trouvé"
                     currentPageReportTemplate="Voir {first} de {last} à {totalRecords} consultations">
-                    <Column selectionMode="multiple" headerStyle={{ width: '3em' }}></Column>
                     <Column field="dateDeConsultation" header="Date" body={dateTemplate} sortable style={{ minWidth: '14rem' }} />
                     <Column field="type" header="Type de Consultation" sortable style={{ minWidth: '14rem' }} />
-                    <Column field="poids" header="Poids" sortable style={{ minWidth: '14rem' }} />
+                    <Column field="etudiant.prenom" header="Prénom Etudiant" sortable style={{ minWidth: '14rem' }} />
+                    <Column field="etudiant.nom" header="Nom Etudiant" sortable style={{ minWidth: '14rem' }} />
                     <Column headerStyle={{ width: '4rem', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} body={actionBodyTemplate} />
                 </DataTable>
             </div>

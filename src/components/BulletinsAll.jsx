@@ -92,9 +92,8 @@ function BulletinsAll() {
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" rowsPerPageOptions={[10,25,50]}
                     dataKey="_id" rowHover
                     filters={filters} filterDisplay="menu" loading={isLoading} responsiveLayout="scroll"
-                    globalFilterFields={['nom', 'prenom']} emptyMessage="Aucun Bulletin trouvé"
+                    globalFilterFields={['date', 'examensDemandes']} emptyMessage="Aucun Bulletin trouvé"
                     currentPageReportTemplate="Voir {first} de {last} à {totalRecords} Bulletins">
-                    <Column selectionMode="multiple" headerStyle={{ width: '3em' }}></Column>
                     <Column field="date" header="Date" body={dateTemplate} sortable style={{ minWidth: '14rem' }} />
                     <Column field="etablissement.nom" header="Etablissement" sortable style={{ minWidth: '14rem' }} />
                     <Column field="examensDemandes" header="Examens Demandes" body={examensTemplate} style={{ minWidth: '14rem' }} />
