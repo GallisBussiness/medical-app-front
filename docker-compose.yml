@@ -1,0 +1,31 @@
+version: '3.9'
+services:
+  ecampus:
+    container_name: ecampus
+    image: gallisdev/ecampus
+    environment:
+      NODE_ENV: production
+    build: .
+    env_file:
+      - .env
+    ports:
+      - 5000:3001
+    networks:
+      - nginxproxymanager_default
+    volumes:
+      - ../volumes/app:/usr/src/app/uploads
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+  
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    restart: always
+    networks:
+      - nginxproxymanager_default
+    volumes:
+      - ../volumes/mongo:/data/db
+networks:
+  nginxproxymanager_default:
+    external: true

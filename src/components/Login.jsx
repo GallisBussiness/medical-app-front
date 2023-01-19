@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useAuthUser, useIsAuthenticated, useSignIn } from 'react-auth-kit';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,7 +7,7 @@ import { useMutation } from 'react-query'
 import {Controller, useForm } from 'react-hook-form';
 import { Toast } from 'primereact/toast';
 import { login } from '../services/authservice';
-import { Button } from 'primereact/button';
+import { Group, PasswordInput, Stack, TextInput,Button, LoadingOverlay } from '@mantine/core';
 
 const schema = yup.object({
   username: yup.string()
@@ -24,7 +24,6 @@ const Login = () => {
   const auth = useAuthUser()()
   const signIn = useSignIn();
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
   useEffect(() => {
     if(isAuth()) {
       const targetDashboard = '/dashboard';
@@ -38,9 +37,6 @@ const Login = () => {
     resolver: yupResolver(schema),
     defaultValues
   });
-  const getFormErrorMessage = (name) => {
-    return errors[name] && <small className="p-error">{errors[name].message}</small>
-};
 
 
   const {isLoading, mutate} = useMutation((data) => login(data), {
@@ -69,6 +65,7 @@ const Login = () => {
 
   return (
     <div className="login-page">
+      <LoadingOverlay visible={isLoading} overlayBlur={2} />
       <div>
   <div className="login-header box-shadow">
     <div className="container-fluid d-flex justify-content-between align-items-center">
@@ -95,40 +92,38 @@ const Login = () => {
               <h2 className="text-green-500">Se connecter au DME</h2>
             </div>
             <form onSubmit={handleSubmit(onConnect)} method="POST">
-              <div className="input-group custom">
-              <Controller control={control} name="username" render={({field}) => (
-                <>
-                <input type="email" {...field} className="form-control form-control-lg" placeholder="Username" />
-                <div className="input-group-append custom">
-                  <span className="input-group-text"><i className="icon-copy dw dw-user1" /></span>
-                </div>
-                </>
-             )}/>
-              {getFormErrorMessage('username')} 
-            </div>
-              <div className="input-group custom">
-              <Controller control={control} name="password" render={({field}) => (
-                <>
-                <input type={showPassword ? 'text' : 'password'} {...field} className="form-control form-control-lg" placeholder="**********" />
-                <div className="input-group-append custom">
-                  <span className="input-group-text" onClick={() => setShowPassword(v => !v)}><i className="dw dw-padlock1" /></span>
-                </div>
-                </>
-             )}/>
-              {getFormErrorMessage('password')} 
-                
-              </div>
-              <div className="row">
-                <div className="col-sm-12">
-                  <div className="input-group mb-0">
-                    {/*
-											use code for form submit
-											<input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
-										*/}
-                    <Button className="btn btn-primary btn-lg btn-block bg-green-600" loading={isLoading} label="Se connecter" />
-                  </div>
-                </div>
-              </div>
+            <Stack>
+        <Controller control={control} name="username" render={({field}) => (
+                    <>
+                     <TextInput
+                    required
+                    label="Email"
+                    placeholder="gallis@child.dev"
+                    value={field.value}
+                    onChange={(event) => field.onChange(event.currentTarget.value)}
+                    error={errors.username && 'Invalid email'}
+                        />
+                    </>
+                     )}/>
+         
+         <Controller control={control} name="password" render={({field}) => (
+                    <>
+                        <PasswordInput
+                        required
+                        label="Mot de Passe"
+                        placeholder="Votre mot de passe"
+                        value={field.value}
+                        onChange={(event) => field.onChange(event.currentTarget.value)}
+                        error={errors.password && 'Password invalid !!'}
+                    />
+                    </>
+                     )}/>
+        
+        </Stack>
+
+        <Group position="apart" mt="xl">
+          <Button type="submit" className="bg-green-500 hover:bg-green-600">Se Connecter</Button>
+        </Group>
             </form>
           </div>
         </div>

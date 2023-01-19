@@ -7,6 +7,7 @@ import { getBulletins } from '../services/bulletinservice';
 import { getEtudiants } from '../services/etudiantservice';
 import { Chart } from 'primereact/chart'
 import { useState } from 'react';
+import { Text } from '@mantine/core';
 
 function Statistique() {
 
@@ -107,8 +108,8 @@ setBulletinData({
           </div>
           <img className="relative z-20 w-96 pt-6 h-32 object-cover" src="/imgs/gif2.gif" alt="gif" />
           <div className="flex flex-col items-center justify-center space-y-2">
-            <h1 className="text-lg font-semibold">Centre Régional des Oeuvres Universitaires Sociales de Ziguinchor</h1>
-          <h1 className="text-lg font-semibold">Plateforme de gestion des dossiers médicaux des étudiants</h1>
+            <Text fw="bold">Centre Régional des Oeuvres Universitaires Sociales de Ziguinchor</Text>
+            <Text fw="bold">Plateforme de gestion des dossiers médicaux des étudiants</Text>
           </div>
           
         </div>

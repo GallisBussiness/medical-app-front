@@ -3,8 +3,6 @@ import { useQuery, useQueryClient } from "react-query";
 import { Sidebar } from 'primereact/sidebar';
 import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import { getAuth } from "../services/authservice";
-import Paramettre from "./Paramettre";
-import Profile from "./Profile";
 import { useEffect, useState } from "react";
 import Users from "./Users";
 import Etudiants from "./Etudiants";
@@ -13,7 +11,6 @@ import Consultation from "./Consultation";
 import Bulletin from "./Bulletin";
 import "./bg.css"
 import Statistique from "./Statistique";
-import GlobalLoadingIndicator from "./GlobalIsFetchingInd";
 import {useMedia} from 'react-use';
 import ConsultationsAll from "./ConsultationsAll";
 import BulletinsAll from "./BulletinsAll";
@@ -48,12 +45,12 @@ const Dashboard = () => {
 
   return (
     <>
-   <div className="px-5 flex items-center justify-between bg-secondary py-1">
+   <div className="px-5 flex items-center justify-between bg-green-500 py-1">
     {isWide && <button className="menu-icon dw dw-menu text-white" onClick={() => setVisible(true)}></button>}
     {!isWide && <div className="w-2/5 flex space-x-2 items-center justify-center"><Link  to="/" className="p-2 rounded-full bg-whity">
         <img src="/imgs/logo_crousz.png" className="h-8 w-8 mx-auto object-contain" alt="logo" />
       </Link> <span className="text-whity">CROUS/Z</span></div>}
-    <div className="hidden w-full md:flex justify-end items-center mx-10 bg-secondary">
+    <div className="hidden w-full md:flex justify-end items-center mx-10 bg-green-500">
   <ul className="flex flex-col  md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
    {data?.role === 'admin' && <li>
       <Link to="statistiques" className="block py-2 text-whity rounded md:bg-transparent md:p-0 uppercase font-bold">Acceuil</Link>
@@ -78,9 +75,7 @@ const Dashboard = () => {
         <button className="dropdown-toggle" data-toggle="dropdown">
           <span className="font-bold uppercase text-white">{data?.prenom} {data?.nom}</span>
         </button>
-        <div className="dropdown-menu dropdown-menu-right dropdown-menu-icon-list bg-secondary">
-          <Link className="dropdown-item text-whity" to="profil"><i className="dw dw-user1" /> Profil</Link>
-         {data?.role === 'admin' && <Link className="dropdown-item text-whity" to="parametre"><i className="dw dw-settings2" /> Paramétres</Link>}
+        <div className="dropdown-menu dropdown-menu-right dropdown-menu-icon-list bg-green-500">
           <button className="dropdown-item text-whity" onClick={logout}><i className="dw dw-logout" /> Se Déconnecter</button>
         </div>
     </div>
@@ -122,10 +117,8 @@ const Dashboard = () => {
 </div>
 <div className="bg-back bg-fixed">
   <div>
-  <GlobalLoadingIndicator />
   <Routes>
       <Route path="" element={<Statistique auth={data}/>}/>
-       <Route path="profil" element={<Profile auth={data}/>}/>
       {data?.role === 'admin' && <Route path="users" element={<Users auth={data}/>}/>}
       {data?.role === 'admin' && <Route path="statistiques" element={<Statistique auth={data}/>}/>}
        <Route path="allconsultations" element={<ConsultationsAll/>} />
@@ -134,7 +127,6 @@ const Dashboard = () => {
        <Route path="pris-en-charges/:id" element={<Bulletin/>} />
        <Route path="etudiants" element={<Etudiants/>}/>
        <Route path="etudiants/:id/*" element={<Etudiant/>}/>
-      {data?.role === 'admin' && <Route path="parametre/*" element={<Paramettre auth={data}/>} />}
       <Route path="*" element={<P404/>}/>
      </Routes>
   </div>

@@ -3,18 +3,21 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { create } from 'react-modal-promise'
-import {Calendar} from 'primereact/calendar'
-import { Dropdown } from 'primereact/dropdown';
 import RemplirTraitementModal from './RemplirTraitementModal';
 import { parseISO } from 'date-fns'
+import { Button, Select, TextInput } from '@mantine/core';
+import { DatePicker } from '@mantine/dates';
 
 const schema = yup.object({
     dateDeConsultation: yup.string()
     .required(),
     poids: yup.string(),
+    taille: yup.string(),
     tension: yup.string(),
     temperature: yup.string(),
     poule: yup.string(),
+    examen: yup.string(),
+    diagnostique: yup.string(),
     glycemie: yup.string(),
     corps_cetonique: yup.string(),
     autres: yup.string(),
@@ -24,19 +27,22 @@ const schema = yup.object({
     plainte_du_jour: yup.string(),
     type: yup.string(),
     user: yup.string().required(),
-    etudiant: yup.string()
+    dossier: yup.string()
     .required(),
     traitement: yup.array()
   }).required();
 
-function CreateConsultationModal({ isOpen, onResolve, onReject,idEtudiant,idAuth }) {
+function CreateConsultationModal({ isOpen, onResolve, onReject,idDossier,idAuth }) {
 
     const defaultValues = {
       dateDeConsultation: new Date().toISOString(),
       poids: '',
+      taille: '',
       tension: '',
       temperature: '',
       poule: '',
+      examen: '',
+      diagnostique: '',
       glycemie: '',
       corps_cetonique: '',
       autres: '',
@@ -46,7 +52,7 @@ function CreateConsultationModal({ isOpen, onResolve, onReject,idEtudiant,idAuth
       plainte_du_jour: '',
       type: 'generale',
       user: idAuth,
-      etudiant: idEtudiant,
+      dossier: idDossier,
       traitement: []
     };
       const {control, handleSubmit,setValue,getValues, formState: { errors } } = useForm({
@@ -54,19 +60,14 @@ function CreateConsultationModal({ isOpen, onResolve, onReject,idEtudiant,idAuth
         defaultValues
       });
 
-    
-      const getFormErrorMessage = (name) => {
-        return errors[name] && <small className="p-error">{errors[name].message}</small>
-    };
 
     const ConsultationOptions = [
-      {name: 'Generale', value: 'generale'},
-      {name: 'Dentaire', value: 'dentaire'}
+      {label: 'Generale', value: 'generale'},
+      {label: 'Dentaire', value: 'dentaire'}
   ];
      
     const onCreate = data => {
-        const {poids} = data;
-        onResolve({...data, poids: +poids});
+        onResolve(data);
       };
 
       const remplirTraitement = () => {
@@ -80,150 +81,147 @@ function CreateConsultationModal({ isOpen, onResolve, onReject,idEtudiant,idAuth
     <>
         <Dialog header="Creer une Consultation" visible={isOpen} onHide={() => onReject(false)} className="w-1/2">
     <form  className="mb-3" onSubmit={handleSubmit(onCreate)} method="POST">
-    <div className="mb-3 flex flex-col space-y-2">
-            <label className="form-label">Type de Consultation</label>
-            <Controller control={control} name="type" render={({field}) => (
-            <Dropdown value={field.value} options={ConsultationOptions} onChange={field.onChange} optionLabel="name" placeholder="Selectionez le type de consultation" />
-             )}/>
-              {getFormErrorMessage('type')} 
+          <div >
+      <Controller control={control} name="type" render={({field}) => (
+                    <Select
+                    label="Type de consultation"
+                    placeholder="Selectionnez le type de consultation ..."
+                    searchable
+                    clearable
+                    nothingFound="Pas de types disponibles"
+                    data={ConsultationOptions}
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={errors.type && errors.type.message}
+                  />
+              )} />
             </div>
-    <div className="mb-3 flex flex-col space-y-2">
-            <label htmlFor="dateDeConsultation" className="form-label">Date De Consultation </label>
+            <div>
             <Controller control={control} name="dateDeConsultation" render={({field}) => (
-            <Calendar id="dateDeConsultation" value={parseISO(field.value)} onChange={(e) => field.onChange(e.value.toISOString())} showTime showSeconds minDate={new Date()} dateFormat="dd/mm/yyyy"  placeholder="Date De Consultation"/>
+            <DatePicker placeholder="Choisir la date de consultation" label="Date de Consultation" withAsterisk locale="fr" value={parseISO(field.value)} onChange={(v) => field.onChange(v.toISOString())} error={errors.dateDeConsultation && errors.dateDeConsultation.message} />
              )}/>
-              {getFormErrorMessage('dateDeConsultation')} 
             </div>
-            <div className="mb-3">
-            <label htmlFor="poids" className="form-label">Poids </label>
+            <div>
             <Controller control={control} name="poids" render={({field}) => (
-            <input type="text" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 
-            ease-soft block w-full appearance-none rounded-lg border border-solid border-green-300
-             bg-white bg-clip-padding px-3 py-2 font-normal text-green-700 outline-none transition-all
-              placeholder:text-green-500 focus:border-green-300 focus:outline-none" id="poids" placeholder="Entrer le poids" />
+            <TextInput value={field.value} onChange={field.onChange}
+            label="Poids" error={errors.poids && errors.poids.message}
+            placeholder="entrer le poids"
+            rightSection="kg"
+              withAsterisk/>
              )}/>
-              {getFormErrorMessage('poids')} 
             </div>
-            <div className="mb-3">
-            <label htmlFor="tension" className="form-label">Tension </label>
+            <div>
+            <Controller control={control} name="taille" render={({field}) => (
+            <TextInput value={field.value} onChange={field.onChange}
+            label="Taille" error={errors.taille && errors.taille.message}
+            placeholder="entrer la taille"
+            rightSection="cm"
+              withAsterisk/>
+             )}/>
+            </div>
+            <div>
             <Controller control={control} name="tension" render={({field}) => (
-            <input type="text" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 
-            ease-soft block w-full appearance-none rounded-lg border border-solid border-green-300
-             bg-white bg-clip-padding px-3 py-2 font-normal text-green-700 outline-none transition-all
-              placeholder:text-green-500 focus:border-green-300 focus:outline-none" id="tension" placeholder="Tension" />
+            <TextInput value={field.value} onChange={field.onChange}
+            label="Tension" error={errors.tension && errors.tension.message}
+            placeholder="entrer la tension"
+              withAsterisk/>
              )}/>
-              {getFormErrorMessage('tension')} 
             </div>
-            <div className="mb-3">
-            <label htmlFor="temperature" className="form-label">Temperature </label>
+            <div>
             <Controller control={control} name="temperature" render={({field}) => (
-            <input type="text" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 
-            ease-soft block w-full appearance-none rounded-lg border border-solid border-green-300
-             bg-white bg-clip-padding px-3 py-2 font-normal text-green-700 outline-none transition-all
-              placeholder:text-green-500 focus:border-green-300 focus:outline-none" id="temperature" placeholder="Entrer la Température" />
+            <TextInput value={field.value} onChange={field.onChange}
+            label="Temperature" error={errors.temperature && errors.temperature.message}
+            placeholder="entrer la température"
+            rightSection="°C"
+              withAsterisk/>
              )}/>
-              {getFormErrorMessage('temperature')} 
             </div>
-            <div className="mb-3">
-            <label htmlFor="poule" className="form-label">Pouls </label>
+            <div>
             <Controller control={control} name="poule" render={({field}) => (
-            <input type="text" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 
-            ease-soft block w-full appearance-none rounded-lg border border-solid border-green-300
-             bg-white bg-clip-padding px-3 py-2 font-normal text-green-700 outline-none transition-all
-              placeholder:text-green-500 focus:border-green-300 focus:outline-none" id="poule" placeholder="Poule" />
+            <TextInput value={field.value} onChange={field.onChange}
+            label="Pouls" error={errors.poule && errors.poule.message}
+            placeholder="entrer le pouls"
+            rightSection="bpm"
+              withAsterisk/>
              )}/>
-              {getFormErrorMessage('poule')} 
             </div>
-            <div className="mb-3">
-            <label htmlFor="glycemie" className="form-label">Glycemie </label>
+            <div>
             <Controller control={control} name="glycemie" render={({field}) => (
-            <input type="text" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 
-            ease-soft block w-full appearance-none rounded-lg border border-solid border-green-300
-             bg-white bg-clip-padding px-3 py-2 font-normal text-green-700 outline-none transition-all
-              placeholder:text-green-500 focus:border-green-300 focus:outline-none" id="glycemie" placeholder="Glycemie" />
+            <TextInput value={field.value} onChange={field.onChange}
+            label="Glycemie" error={errors.glycemie && errors.glycemie.message}
+            placeholder="entrer le taux de glycémie"
+              withAsterisk/>
              )}/>
-              {getFormErrorMessage('glycemie')} 
             </div>
-            <div className="mb-3">
-            <label htmlFor="corps_cetonique" className="form-label">Corps Cetonique </label>
+            <div>
             <Controller control={control} name="corps_cetonique" render={({field}) => (
-            <input type="text" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 
-            ease-soft block w-full appearance-none rounded-lg border border-solid border-green-300
-             bg-white bg-clip-padding px-3 py-2 font-normal text-green-700 outline-none transition-all
-              placeholder:text-green-500 focus:border-green-300 focus:outline-none" id="corps_cetonique" placeholder="Corps Cetonique" />
+            <TextInput value={field.value} onChange={field.onChange}
+            label="Corps Cetonique" error={errors.corps_cetonique && errors.corps_cetonique.message}
+            placeholder="entrer le corps cétonique"
+              withAsterisk/>
              )}/>
-              {getFormErrorMessage('corps_cetonique')} 
             </div>
-            <div className="mb-3">
-            <label htmlFor="autres" className="form-label">Autres </label>
+            <div>
             <Controller control={control} name="autres" render={({field}) => (
-            <input type="text" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 
-            ease-soft block w-full appearance-none rounded-lg border border-solid border-green-300
-             bg-white bg-clip-padding px-3 py-2 font-normal text-green-700 outline-none transition-all
-              placeholder:text-green-500 focus:border-green-300 focus:outline-none" id="autres" placeholder="Autres" />
+            <TextInput value={field.value} onChange={field.onChange}
+            label="Autres" error={errors.autres && errors.autres.message}
+            placeholder="autres observations ..."
+              withAsterisk/>
              )}/>
-              {getFormErrorMessage('autres')} 
             </div>
-            <div className="mb-3">
-            <label htmlFor="bilan" className="form-label">Bilan </label>
-            <Controller control={control} name="bilan" render={({field}) => (
-            <input type="text" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 
-            ease-soft block w-full appearance-none rounded-lg border border-solid border-green-300
-             bg-white bg-clip-padding px-3 py-2 font-normal text-green-700 outline-none transition-all
-              placeholder:text-green-500 focus:border-green-300 focus:outline-none" id="bilan" placeholder="Bilan" />
-             )}/>
-              {getFormErrorMessage('bilan')} 
-            </div>
-            <div className="mb-3 flex flex-col space-y-2">
-            <label htmlFor="prochain_rv" className="form-label">Prochain rendez-vous </label>
-            <Controller control={control} name="prochain_rv" render={({field}) => (
-            <Calendar id="prochain_rv"  value={parseISO(field.value)} onChange={(e) => field.onChange(e.value.toISOString())} showTime showSeconds minDate={new Date()} dateFormat="dd/mm/yyyy"  placeholder="Prochain rendez-vous"/>
-             )}/>
-              {getFormErrorMessage('prochain_rv')} 
-            </div>
-            <div className="mb-3 flex flex-col space-y-2">
-            <h1 className="font-semibold text-3xl">Traitement</h1>
-            <button type="button" className="inline-block px-6 py-3 font-bold text-center
-             text-white uppercase align-middle transition-all rounded-lg cursor-pointer
-              bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in
-               tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85
-                hover:shadow-soft-xs mr-2" onClick={remplirTraitement}> AJOUTER TRAITEMENTS</button>
-            </div>
-            <div className="mb-3">
-            <label htmlFor="reference" className="form-label">Reference </label>
-            <Controller control={control} name="reference" render={({field}) => (
-            <input type="text" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 
-            ease-soft block w-full appearance-none rounded-lg border border-solid border-green-300
-             bg-white bg-clip-padding px-3 py-2 font-normal text-green-700 outline-none transition-all
-              placeholder:text-green-500 focus:border-green-300 focus:outline-none" id="reference" placeholder="References" />
-             )}/>
-              {getFormErrorMessage('reference')} 
-            </div>
-            <div className="mb-3">
-            <label htmlFor="painte_du_jour" className="form-label">Plainte Du Jour </label>
+            <div>
             <Controller control={control} name="plainte_du_jour" render={({field}) => (
-            <input type="text" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 
-            ease-soft block w-full appearance-none rounded-lg border border-solid border-green-300
-             bg-white bg-clip-padding px-3 py-2 font-normal text-green-700 outline-none transition-all
-              placeholder:text-green-500 focus:border-green-300 focus:outline-none" id="plainte_du_jour" placeholder="Plainte_du_jour" />
+            <TextInput value={field.value} onChange={field.onChange}
+            label="Plaite du jour" error={errors.plainte_du_jour	&& errors.plainte_du_jour.message}
+            placeholder="Plaite du jour ..."
+              withAsterisk/>
              )}/>
-              {getFormErrorMessage('plainte_du_jour')} 
             </div>
-            <div className="flex items-center justify-between">
-              <div>
-              <button  type="submit" className="inline-block px-6 py-3 font-bold text-center
-             text-white uppercase align-middle transition-all rounded-lg cursor-pointer
-              bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in
-               tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85
-                hover:shadow-soft-xs mr-2"> CREER</button>
-            <button onClick={() => onReject(false)} className="inline-block px-6 py-3 font-bold text-center
-             text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl
-              from-red-700 to-red-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md
-               bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs"> ANNULER</button>
-              </div>
-             
+            <div>
+            <Controller control={control} name="examen" render={({field}) => (
+            <TextInput value={field.value} onChange={field.onChange}
+            label="Examen" error={errors.examen	&& errors.examen.message}
+            placeholder="Examen ..."
+              withAsterisk/>
+             )}/>
+            </div>
+            <div>
+            <Controller control={control} name="diagnostique" render={({field}) => (
+            <TextInput value={field.value} onChange={field.onChange}
+            label="Diagnostique" error={errors.diagnostique	&& errors.diagnostique.message}
+            placeholder="Diagnostique ..."
+              withAsterisk/>
+             )}/>
+            </div>
+            <div className="my-2">
+              <Button onClick={remplirTraitement} className="bg-green-500 hover:bg-green-700">AJOUTER TRAITEMENTS</Button>
+            </div>
+            <div>
+            <Controller control={control} name="bilan" render={({field}) => (
+            <TextInput value={field.value} onChange={field.onChange}
+            label="Bilan" error={errors.bilan && errors.bilan.message}
+            placeholder="entrer le bilan"
+              withAsterisk/>
+             )}/>
+            </div>
+            <div>
+            <Controller control={control} name="prochain_rv" render={({field}) => (
+            <DatePicker placeholder="Choisir la date du prochain rendez-vous" label="Date du prochain rendez-vous" withAsterisk locale="fr" value={parseISO(field.value)} onChange={(v) => field.onChange(v.toISOString())} error={errors.prochain_rv && errors.prochain_rv.message} />
+             )}/>
             </div>
             
+            <div>
+            <Controller control={control} name="reference" render={({field}) => (
+            <TextInput value={field.value} onChange={field.onChange}
+            label="References" error={errors.reference && errors.reference.message}
+            placeholder="References ...."
+              withAsterisk/>
+             )}/>
+            </div>
+           
+            <div className="flex items-center justify-center space-x-2 my-5"> 
+              <Button type="submit" className="bg-green-500 hover:bg-green-700">CREER LA CONSULTATION</Button>
+            </div>
           </form>
           
   </Dialog>

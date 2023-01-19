@@ -9,6 +9,7 @@ import { BulletinPrint } from "./BulletinPrint"
 import ReactToPrint from 'react-to-print';
 import { useRef } from "react"
 import { AiFillPrinter } from "react-icons/ai"
+import { Button } from "@mantine/core"
 
 
 function Bulletin() {
@@ -20,17 +21,24 @@ function Bulletin() {
   return (
     <>
      <div className="bg-white">
-           <div className="p-10 border-b-0 rounded-t-2xl">
-      <div className="flex">
-        <div className="flex items-center  w-full md:w-8/12 md:flex-none">
-          <h6 className="font-bold text-3xl">BULLETIN DE PRIS EN CHARGE</h6>
-        </div>
+     <section className="bg-white">
+  <div className="container flex flex-col items-center px-4 py-5 mx-auto text-center">
+    <h2 className="text-3xl font-bold tracking-tight text-gray-800 xl:text-4xl">
+    BULLETIN DE PRIS EN CHARGE
+    </h2>
+    <div className="mt-6">
+    <div className="flex items-center space-x-2 mx-5">
+        <div className="flex items-center  w-full space-x-5">
         <ReactToPrint
-        trigger={() => <button className="inline-block px-6 py-2 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" >IMPRIMER <AiFillPrinter className="h-6 w-6 text-white inline"/></button>}
+        trigger={() => <Button className="bg-green-500 hover:bg-green-600" leftIcon={<AiFillPrinter className="text-white"/>}> IMPRIMER LE BULLETIN</Button>}
         content={() => componentRef.current}
       />
+        </div>
       </div>
     </div>
+  </div>
+</section>
+
      <div className="flex justify-between mx-10">
       {data && <div className="p-10 bg-white flex items-center justify-center">
       <ul className="flex flex-col mb-0 rounded-lg w-full">

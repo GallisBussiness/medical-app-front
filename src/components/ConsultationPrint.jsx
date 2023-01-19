@@ -1,3 +1,4 @@
+import { Text } from "@mantine/core";
 import { format, parseISO } from "date-fns"
 import { fr } from "date-fns/locale"
 import { Chip } from "primereact/chip";
@@ -25,29 +26,25 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
     <div className="flex items-center justify-between py-2 mx-10 bg-white">
        <div className="flex flex-col items-center space-y-1">
         <div className="flex flex-col items-center">
-            <h1 className="font-bold text-lg">REPUBLIQUE DU SENEGAL</h1>
-            <h1>un peuple - un But - Une Foi</h1>
-            <h1>------------------</h1>
+            <Text fw="bol" size={25}>REPUBLIQUE DU SENEGAL</Text>
+            <Text fw="bold" size={10}>un peuple - un But - Une Foi</Text>
+            <Text size={8}>------------------</Text>
             <img src="/imgs/drapeau.png" alt="logo" className="h-16 w-16 object-cover"/>
         </div>
         <div className="flex flex-col items-center">
             <h1 className="font-bold text-lg">MINISTERE DE L'ENSEIGNEMENT SUPPERIEUR <br /> DE LA RECHERCHE ET DE L'INNOVATION</h1>
-            <h1>------------------</h1>
+            <Text size={8}>------------------</Text>
         </div>
-        <div className="flex flex-col items-center">
+       </div>
+       <div className="flex flex-col space-y-3">
+       <div className="flex flex-col items-center">
             <h1 className="font-bold text-lg">CENTRE REGIONAL DES OEUVRES <br />
                         UNIVERSITAIRES SOCIALES DE ZIGUINCHOR</h1>
                         <img src="/imgs/logo_crousz.png" alt="logo" className="h-24 w-24 object-cover"/>
             <h1 className="font-bold text-lg uppercase underline">DIVISION MEDICO SOCIALE</h1>
         </div>
-       </div>
-       <div className="flex flex-col space-y-3">
-       <div className="flex flex-col">
-            <h1 className="font-bold text-lg">EFFECTUEE PAR : Dr. {consultation?.user?.prenom} {consultation?.user?.nom}</h1>
-            <h1 className="font-bold text-lg">EXERCICE : {new Date().getFullYear()}</h1>
-            {consultation?.dateDeConsultation && <h1 className="font-bold text-lg">DATE : {format(parseISO(consultation?.dateDeConsultation),'dd-MMMM-yyyy H:m:s', {locale: fr})}</h1>}
-        </div>
-        <h1>Ziguinchor, le </h1>
+       
+        <Text fw="bold" size={18}>Ziguinchor, le </Text>
        </div>
     </div>
     <Divider/>
@@ -66,7 +63,7 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
             PRENOM & NOM :
           </td>
           <td className="px-6 font-semibold text-lg">
-            {consultation?.etudiant?.prenom} {consultation?.etudiant?.nom}
+            {consultation?.dossier?.etudiant?.prenom} {consultation?.dossier?.etudiant?.nom}
           </td>
         </tr>
         <tr>
@@ -74,7 +71,7 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
             SEXE :  
           </td>
           <td className="px-6 font-semibold text-lg">
-          {consultation?.etudiant?.sexe === 'M' ? 'HOMME' : 'FEMME'}
+          {consultation?.dossier?.etudiant?.sexe === 'M' ? 'HOMME' : 'FEMME'}
           </td>
         </tr>
         <tr>
@@ -82,7 +79,7 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
             NE(E) LE:
           </td>
           <td className="px-6 font-semibold text-lg">
-          {consultation?.etudiant?.dateDeNaissance ?? 'néant'}
+          {consultation?.dossier?.etudiant?.dateDeNaissance && format(parseISO(consultation?.dossier?.etudiant?.dateDeNaissance),'dd-MMMM-yyyy', {locale: fr})}
           </td>
         </tr>
         <tr>
@@ -90,7 +87,7 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
             A :
           </td>
           <td className="px-6 font-semibold text-lg">
-          {consultation?.etudiant?.lieuDeNaissance ?? 'néant'}
+          {consultation?.dossier?.etudiant?.lieuDeNaissance ?? 'néant'}
           </td>
         </tr>
         <tr>
@@ -98,7 +95,7 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
             FORMATION :
           </td>
           <td className="px-6 font-semibold text-lg">
-            {consultation?.etudiant?.formation?.niveau?.nom} {consultation?.etudiant?.formation?.departement?.nom}
+            {consultation?.dossier?.etudiant?.formation}
           </td>
         </tr>
         <tr>
@@ -106,7 +103,7 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
             ADRESSE :
           </td>
           <td className="px-6 font-semibold text-lg">
-          {consultation?.etudiant?.adresse ?? 'néant'}
+          {consultation?.dossier?.etudiant?.adresse ?? 'néant'}
           </td>
         </tr>
         <tr>
@@ -114,7 +111,7 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
             TELEPHONE :
           </td>
           <td className="px-6 font-semibold text-lg">
-          {consultation?.etudiant?.telephone ?? 'néant'}
+          {consultation?.dossier?.etudiant?.telephone ?? 'néant'}
           </td>
         </tr>
       </tbody>
@@ -164,7 +161,7 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
   </div>
     </div>
     </div>
-    <div className="flex flex-col space-y-5 mx-10">
+    <div className="flex flex-col space-y-2 mx-2">
     <h1 className="font-bold text-2xl">DETAIL DE LA CONSULTATION</h1>
     <div className="overflow-x-auto relative">
       <table>
@@ -177,16 +174,22 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
           {consultation?.poids ? <Chip label={`${consultation?.poids} kg`} className="bg-amber-300"/> : 'néant'}
           </td>
           <td className="px-6 font-bold text-lg">
+            Taille :
+          </td>
+          <td className="px-6 font-semibold text-lg">
+          {consultation?.taille ? <Chip label={`${consultation?.taille} cm`} className="bg-blue-300"/> : 'néant'}
+          </td>
+          <td className="px-6 font-bold text-lg">
             TENSION :
           </td>
           <td className="px-6 font-semibold text-lg">
-          {consultation?.tension ? <Chip label={`${consultation?.tension} `} className="bg-amber-300"/> : 'néant'}
+          {consultation?.tension ? <Chip label={`${consultation?.tension} `} className="bg-green-300"/> : 'néant'}
           </td>
           <td className="px-6 font-bold text-lg">
             TEMPERATURE:
           </td>
           <td className="px-6 font-semibold text-lg">
-          {consultation?.temperature ? <Chip label={`${consultation?.temperature}`} className="bg-amber-300"/> : 'néant'}
+          {consultation?.temperature ? <Chip label={`${consultation?.temperature}`} className="bg-purple-300"/> : 'néant'}
           </td>
         </tr>
       
@@ -195,16 +198,16 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
             POULS :
           </td>
           <td className="px-6 font-semibold text-lg">
-          {consultation?.poule ? <Chip label={`${consultation?.poule} `} className="bg-amber-300"/> : 'néant'}
+          {consultation?.poule ? <Chip label={`${consultation?.poule} `} className="bg-blue-300"/> : 'néant'}
           </td>
           <td className="px-6 font-bold text-lg">
           GLYCEMIE :
           </td>
           <td className="px-6 font-semibold text-lg">
-          {consultation?.glycemie ? <Chip label={`${consultation?.glycemie}`} className="bg-amber-300"/> : 'néant'}
+          {consultation?.glycemie ? <Chip label={`${consultation?.glycemie}`} className="bg-green-300"/> : 'néant'}
           </td>
           <td className="px-6 font-bold text-lg">
-          CORPS CETONIQUES ::
+          CORPS CETONIQUES :
           </td>
           <td className="px-6 font-semibold text-lg">
           {consultation?.corps_cetonique ? <Chip label={`${consultation?.corps_cetonique}`} className="bg-amber-300"/> : 'néant'}
@@ -212,7 +215,7 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
         </tr>
         </tbody>
       </table>
-    <table className="w-full text-lg text-left">
+    <table className="w-full text-lg my-2">
       <tbody>
         <tr>
           <td className="px-6 font-bold text-lg">
@@ -228,6 +231,22 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
           </td>
           <td className="px-6 font-semibold text-lg">
           {consultation?.plainte_du_jour ?? "néant"}
+          </td>
+        </tr>
+        <tr>
+          <td className="px-6 font-bold text-lg">
+            EXAMEN :
+          </td>
+          <td className="px-6 font-semibold text-lg">
+          {consultation?.examen ?? "néant"}
+          </td>
+        </tr>
+        <tr>
+          <td className="px-6 font-bold text-lg">
+            DIAGNOSTIQUE :
+          </td>
+          <td className="px-6 font-semibold text-lg">
+          {consultation?.diagnostique ?? "néant"}
           </td>
         </tr>
         <tr>
@@ -251,7 +270,7 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
             PROCHAIN RENDEZ-VOUS :
           </td>
           <td className="px-6 font-semibold text-lg">
-          {consultation?.prochain_rv && format(parseISO(consultation?.prochain_rv),'dd-MMMM-yyyy H:m:s', {locale: fr})}
+          {consultation?.prochain_rv && format(parseISO(consultation?.prochain_rv),'dd-MMMM-yyyy', {locale: fr})}
           </td>
         </tr>
       </tbody>
@@ -261,7 +280,7 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
     </div>
     <div className="my-2 px-5">
             <div className="flex items-center justify-center">
-            <h6 className="font-bold text-lg my-10">TRAITEMENT PRESCRIT</h6>
+            <h6 className="font-bold text-md">TRAITEMENT PRESCRIT</h6>
             </div>
             <DataTable value={consultation?.traitement}
                        size="small"
@@ -275,15 +294,16 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
                       <Column field="frequence" header="Frequence de prise" body={frequenceTemplate} style={{ minWidth: '14rem' }} />
                   </DataTable>
             </div>
-            <div className="flex items-center justify-around mt-5 mx-20">
-    <h1 className="font-bold text-lg">LE MEDECIN CHEF</h1>
-    <h1 className="font-bold text-lg">LE DIRECTEUR</h1>
-    </div>
-    <div className="flex flex-col items-center justify-end h-96">
+    <div className="flex flex-col items-center justify-end h-5  mt-10">
     <h1 className="font-bold text-lg">CENTRE REGIONAL DES OEUVRES UNIVERSITAIRES SOCIALES DE ZIGUINCHOR</h1>
     </div>
-    <div className="flex items-center justify-end my-5 mx-5">
+    <div className="flex items-center justify-between my-5 mx-5">
     <QRCodeSVG value={consultation?.code} fgColor="#25BE45" size={100}/>
+    <div className="flex flex-col">
+            <h1 className="font-bold text-lg">EFFECTUEE PAR : Dr. {consultation?.user?.prenom} {consultation?.user?.nom}</h1>
+            <h1 className="font-bold text-lg">EXERCICE : {new Date().getFullYear()}</h1>
+            {consultation?.dateDeConsultation && <h1 className="font-bold text-lg">DATE : {format(parseISO(consultation?.dateDeConsultation),'dd-MMMM-yyyy H:m:s', {locale: fr})}</h1>}
+        </div>
     </div>
     </div>
   );

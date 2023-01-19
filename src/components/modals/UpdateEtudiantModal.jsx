@@ -2,22 +2,20 @@ import { Dialog } from 'primereact/dialog';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
-
+import { MaskField } from 'react-mask-field';
 import { create } from 'react-modal-promise'
-import Select from 'react-select'
-import { SelectButton } from 'primereact/selectbutton';
-import {InputMask} from 'primereact/inputmask'
-import { useQuery } from 'react-query';
-import { getFormations } from '../../services/formation-service';
-import { useState } from 'react';
-import RemplirDossierModal from './RemplirDossierModal';
+import { Button, Input, NumberInput, Radio, Select, TextInput } from '@mantine/core';
+import { DatePicker } from '@mantine/dates';
+import 'dayjs/locale/fr';
+import { parseISO } from 'date-fns';
 
 const schema = yup.object({
     prenom: yup.string()
     .required(),
     nom: yup.string()
     .required(),
-    nce: yup.string()
+    nce: yup.string(),
+    ine: yup.string()
     .required(),
     sexe: yup.string()
     .required(),
@@ -29,169 +27,134 @@ const schema = yup.object({
     .required(),
     telephone: yup.string()
     .required(),
-    formation: yup.object()
+    email: yup.string(),
+    formation: yup.string()
     .required(),
-    dossier: yup.object()
   }).required();
 
-
 function UpdateEtudiantModal({ isOpen, onResolve, onReject,etudiant }) {
-  const [formations,setFormations] = useState([])
-    const defaultValues = {nce: etudiant.nce, nom: etudiant.nom, prenom: etudiant.prenom,sexe: etudiant.sexe,dateDeNaissance: etudiant.dateDeNaissance,
-      lieuDeNaissance: etudiant.lieuDeNaissance,adresse: etudiant.adresse,telephone: etudiant.telephone,formation: null,
-       dossier: {
-        groupe_sanguin: etudiant?.dossier?.groupe_sanguin ?? '',  poids: etudiant?.dossier?.poids ?? '',handicap_particulier: etudiant?.dossier?.handicap_particulier?.split(',') ?? [],
-        maladie_chronique: etudiant?.dossier?.maladie_chronique?.split(',') ?? [],allergies: etudiant?.dossier?.allergies?.split((',')) ?? [],
-        antecedant_medicaux: etudiant?.dossier?.antecedant_medicaux?.split(',') ?? []
-      }};
-      const {control, handleSubmit,getValues,setValue, formState: { errors } } = useForm({
-          resolver: yupResolver(schema),
-        defaultValues
-      });
+  const defaultValues = {nce: parseInt(etudiant?.nce), ine: etudiant?.ine, nom: etudiant?.nom,
+     prenom: etudiant?.prenom,
+     sexe: etudiant?.sexe,dateDeNaissance: etudiant?.dateDeNaissance,lieuDeNaissance: etudiant?.lieuDeNaissance,
+     adresse: etudiant?.adresse,telephone: etudiant?.telephone,email: etudiant?.email,formation: etudiant?.formation};
+  const {control, handleSubmit, formState: { errors } } = useForm({
+      resolver: yupResolver(schema),
+    defaultValues
+  });
 
-      const qk = ['get_Formations']
+ 
+const onCreate = data => {
+    onResolve(data);
+  };
 
-   useQuery(qk, () => getFormations(), {
-    onSuccess:(_) => {
-      const newObj = _.map(f => ({value: f._id, label: `${f.niveau.nom} ${f.departement.nom}`}));
-      const curf = newObj.find(f => {
-       return f.value === etudiant.formation._id
-      }
-        )
-      setValue('formation',curf);
-      setFormations(newObj);
-    }
-   });
 
-      const sexeOptions = [
-        {name: 'Homme', value: 'M'},
-        {name: 'Femme', value: 'F'}
-    ];
-      const getFormErrorMessage = (name) => {
-        return errors[name] && <small className="p-error">{errors[name].message}</small>
-    };
-
-     
-    const onCreate = data => {
-        const {dossier} = data;
-        onResolve({_id:etudiant._id,...data,formation: data.formation.value, dossier: {
-          groupe_sanguin: dossier?.groupe_sanguin ?? '',  poids: dossier?.poids ?? '',handicap_particulier: dossier?.handicap_particulier?.join(',') ?? '',
-        maladie_chronique: dossier?.maladie_chronique?.join(',') ?? '',allergies: dossier?.allergies?.join(',') ?? '',antecedant_medicaux: dossier?.antecedant_medicaux?.join(',') ?? ''
-        }});
-      };
-
-      const remplirDossier = () => {
-        RemplirDossierModal({dossier: getValues().dossier}).then((d => {
-            setValue('dossier',d);
-        }));
-    }
   return (
     <>
         <Dialog header="Modifier un Etudiant" visible={isOpen} onHide={() => onReject(false)} className="w-1/2">
-        <div className="flex items-center justify-end my-5">
-              <button className="inline-block px-6 py-3 font-bold text-center
-             text-white uppercase align-middle transition-all rounded-lg cursor-pointer
-              bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in
-               tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85
-                hover:shadow-soft-xs mr-2" onClick={remplirDossier}> MODIFIER SON DOSSIER</button>
-              </div>
-    <form  className="mb-3" onSubmit={handleSubmit(onCreate)} method="POST">
-    <div className="mb-3">
-            <label htmlFor="nce" className="form-label">Numéro carte Etudiant </label>
+        <form  onSubmit={handleSubmit(onCreate)} method="POST">
+        <div>
             <Controller control={control} name="nce" render={({field}) => (
-            <input type="text" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 
-            ease-soft block w-full appearance-none rounded-lg border border-solid border-green-300
-             bg-white bg-clip-padding px-3 py-2 font-normal text-green-700 outline-none transition-all
-              placeholder:text-green-500 focus:border-green-300 focus:outline-none" id="nce" placeholder="Entrer le numéro carte étudiant" />
+            <NumberInput label="Numéro carte d'étudiant" error={errors.nce && errors.nce.message} value={field.value} onChange={field.onChange}/>
              )}/>
-              {getFormErrorMessage('nce')} 
             </div>
-            <div className="mb-3">
-            <label htmlFor="prenom" className="form-label">Prenom</label>
+            <div>
+            <Controller control={control} name="ine" render={({field}) => (
+              <TextInput value={field.value} onChange={field.onChange}
+              label="INE" error={errors.ine && errors.ine.message}
+              placeholder="Ine de l'étudiant"
+                withAsterisk/>
+             )}/>
+            </div>
+            <div>
             <Controller control={control} name="prenom" render={({field}) => (
-            <input type="text" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 
-            ease-soft block w-full appearance-none rounded-lg border border-solid border-green-300
-             bg-white bg-clip-padding px-3 py-2 font-normal text-green-700 outline-none transition-all
-              placeholder:text-green-500 focus:border-green-300 focus:outline-none" id="prenom" placeholder="Entrer le prenom" />
+              <TextInput value={field.value} onChange={field.onChange}
+              label="Prenom" error={errors.nom && errors.nom.message}
+              placeholder="prenom de l'étudiant"
+                withAsterisk/>
              )}/>
-              {getFormErrorMessage('prenom')} 
             </div>
-            <div className="mb-3">
-            <label htmlFor="nom" className="form-label">Nom</label>
+            <div>
             <Controller control={control} name="nom" render={({field}) => (
-            <input type="text" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-green-300 bg-white bg-clip-padding px-3 py-2 font-normal text-green-700 outline-none transition-all placeholder:text-green-500 focus:border-green-300 focus:outline-none" id="nom" placeholder="Entrer le nom" autoFocus />
+            <TextInput value={field.value} onChange={field.onChange}
+            label="Nom" error={errors.nom && errors.nom.message}
+            placeholder="Nom de l'étudiant"
+              withAsterisk/>
              )}/>
-              {getFormErrorMessage('nom')} 
             </div>
-            <div className="mb-3">
-            <label htmlFor="sexe" className="form-label">Sexe</label>
+            <div>
             <Controller control={control} name="sexe" render={({field}) => (
-            <SelectButton value={field.value} optionLabel="name" options={sexeOptions} onChange={(e) => field.onChange(e.value)} />
+            <Radio.Group
+            value={field.value}
+            onChange={field.onChange}
+            name="sexe"
+            error={errors.sexe && errors.sexe.message}
+            label="Selectionnez le sexe"
+            withAsterisk
+          >
+            <Radio value="H" label="HOMME" />
+            <Radio value="F" label="FEMME" />
+          </Radio.Group>
              )}/>
-              {getFormErrorMessage('sexe')} 
             </div>
-            <div className="mb-3 flex flex-col space-y-2">
-            <label htmlFor="dateDeNaissance" className="form-label">Date de Naissance</label>
+            <div>
             <Controller control={control} name="dateDeNaissance" render={({field}) => (
-            <InputMask id="dateDeNaissance" mask="99/99/9999" value={field.value} placeholder="99/99/9999" slotChar="mm/dd/yyyy" onChange={(e) => field.onChange(e.value)}></InputMask>
+            <DatePicker placeholder="Choisir la date de Naissance" label="Date de Naissance" withAsterisk locale="fr" value={parseISO(field.value)} onChange={(v) => field.onChange(v.toISOString())} error={errors.dateDeNaissance && errors.dateDeNaissance.message} />
              )}/>
-              {getFormErrorMessage('dateDeNaissance')} 
             </div>
-            <div className="mb-3">
-            <label htmlFor="lieuDeNaissance" className="form-label">Lieu de Naissance</label>
+            <div>
             <Controller control={control} name="lieuDeNaissance" render={({field}) => (
-            <input type="text" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 
-            ease-soft block w-full appearance-none rounded-lg border border-solid border-green-300
-             bg-white bg-clip-padding px-3 py-2 font-normal text-green-700 outline-none transition-all
-              placeholder:text-green-500 focus:border-green-300 focus:outline-none" id="lieuDeNaissance" placeholder="Entrer le lieu de Naissance" />
+            <TextInput  value={field.value} onChange={field.onChange}
+            label="lieu de Naissance" error={errors.lieuDeNaissance && errors.lieuDeNaissance.message}
+            placeholder="Lieu de Naissance"
+              withAsterisk/>
              )}/>
-              {getFormErrorMessage('lieuDeNaissance')} 
+            </div>
+            <div>
+            <Controller control={control} name="adresse" render={({field}) => (
+             <TextInput value={field.value} onChange={field.onChange}
+             label="Adresse" error={errors.adresse && errors.adresse.message}
+             placeholder="Adresse de l'étudiant"
+               withAsterisk/>
+             )}/>
+            </div>
+            <div>
+            <Controller control={control} name="email" render={({field}) => (
+              <TextInput value={field.value} onChange={field.onChange}
+              label="EMAIL" error={errors.email && errors.email.message}
+              placeholder="Email de l'étudiant"
+              />
+             )}/>
+            </div>
+            <div>
+            <Controller control={control} name="telephone" render={({field}) => (
+            <Input.Wrapper id="tel" label="Téléphone" error={errors.telephone && errors.telephone.message} required>
+            <Input component={MaskField} mask="+221 (__) ___-__-__" replacement={{ _: /\d/ }} id="tel" placeholder="Numéro de téléphone" value={field.value} onChange={field.onChange}/>
+            </Input.Wrapper>
+             )}/>
             </div>
             <div className="mb-3">
-            <label htmlFor="adresse" className="form-label">Adresse</label>
-            <Controller control={control} name="adresse" render={({field}) => (
-            <input type="text" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 
-            ease-soft block w-full appearance-none rounded-lg border border-solid border-green-300
-             bg-white bg-clip-padding px-3 py-2 font-normal text-green-700 outline-none transition-all
-              placeholder:text-green-500 focus:border-green-300 focus:outline-none" id="adresse" placeholder="Entrer votre adresse" />
-             )}/>
-              {getFormErrorMessage('adresse')} 
-            </div>
-            <div className="mb-3 flex flex-col space-y-2">
-            <label htmlFor="telephone" className="form-label">Numéro de téléphone</label>
-            <Controller control={control} name="telephone" render={({field}) => (
-            <InputMask id="telephone" mask="(+221) 99-999-99-99" value={field.value} onChange={(e) => field.onChange(e.value)}></InputMask>
-             )}/>
-              {getFormErrorMessage('telephone')} 
-            </div>
-            <div className="mb-3 flex flex-col justify-center">
-            <label htmlFor="formation" className="form-label">Formation</label>
               <Controller control={control} name="formation" render={({field}) => (
                     <Select
-                    {...field}
-                    options={formations}
+                    label="Formation"
+                    placeholder="Selectionnez la formation ..."
+                    searchable
+                    clearable
+                    nothingFound="Pas de formations disponibles"
+                    data={['React', 'Angular', 'Svelte', 'Vue']}
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={errors.formation && errors.formation.message}
                   />
               )} />
-              {getFormErrorMessage('formation')} 
             </div>
             <div className="flex items-center justify-between">
               <div>
-              <button  type="submit" className="inline-block px-6 py-3 font-bold text-center
-             text-white uppercase align-middle transition-all rounded-lg cursor-pointer
-              bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in
-               tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85
-                hover:shadow-soft-xs mr-2"> MODIFIER</button>
-            <button onClick={() => onReject(false)} className="inline-block px-6 py-3 font-bold text-center
-             text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl
-              from-red-700 to-red-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md
-               bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs"> ANNULER</button>
+              <Button type="submit" className="bg-green-500 hover:bg-green-600">CREER L'ETUDIANT</Button>
               </div>
-             
             </div>
             
           </form>
-         
-  </Dialog>
+        </Dialog>
     
     </>
   )

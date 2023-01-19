@@ -1,4 +1,6 @@
 import { FilterMatchMode, FilterOperator } from 'primereact/api'
+import { ConfirmPopup } from 'primereact/confirmpopup'; 
+import { confirmPopup } from 'primereact/confirmpopup'; 
 import { Column } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
 import { Toast } from 'primereact/toast'
@@ -12,11 +14,13 @@ import { InputText } from 'primereact/inputtext'
 import { BsEye, BsPencilSquare } from 'react-icons/bs'
 import CreateEtudiantModal from './modals/CreateEtudiantModal'
 import UpdateEtudiantModal from './modals/UpdateEtudiantModal'
+import RemplirDossierModal from './modals/RemplirDossierModal'
 import './datatable.css'
 import { createEtudiant, getEtudiants, removeEtudiant, updateEtudiant } from '../services/etudiantservice'
 import {FaUserGraduate } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom'
-import ConfirmDelete from './modals/ConfirmDelete'
+import { ActionIcon, Button } from '@mantine/core'
+import { format, parseISO } from 'date-fns'
 
 function Etudiants() {
 
@@ -47,6 +51,7 @@ function Etudiants() {
     const {mutate: create} = useMutation((data) => createEtudiant(data), {
         onSuccess: (_) => {
         toast.current.show({severity: 'success', summary: 'Creation Etudiant', detail: 'Création réussie !!'});
+          RemplirDossierModal({etudiant: _._id}).then(console.log).catch((e) => console.log("creation rejected !",e))
          qc.invalidateQueries(qk);
         },
         onError: (_) => {
@@ -77,8 +82,8 @@ function Etudiants() {
     const leftToolbarTemplate = () => {
         return (
             <div className="flex items-center justify-center space-x-2">
-                <button className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" onClick={() => handleCreateEtudiant()} >Nouveau <AiOutlinePlus className="h-6 w-6 text-white inline"/></button>
-                <button className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-red-700 to-red-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" onClick={() => handleDelete()} disabled={!selectedEtudiants || !selectedEtudiants.length}>Supprimer <MdDelete className="h-6 w-6 text-white inline"/></button>
+                <Button className="bg-green-500 hover:bg-green-700" onClick={handleCreateEtudiant} leftIcon={<AiOutlinePlus />}>Nouveau</Button>
+                <Button className="bg-red-500 hover:bg-red-700" disabled={!selectedEtudiants || !selectedEtudiants.length} onClick={(ev) => handleDelete(ev)} leftIcon={<MdDelete />}> Supprimer</Button>
             </div>
         )
     }
@@ -98,14 +103,20 @@ function Etudiants() {
         CreateEtudiantModal().then(create);
     }
 
-    const handleDelete = async () => {
-      const resconfirm = await ConfirmDelete();
-      if(resconfirm) {
-         for(let i = 0; i < selectedEtudiants?.length; i++) {
-           deleteD(selectedEtudiants[i]?._id);
-        }
-      }
-       
+    const handleDelete = async (event) => {
+      confirmPopup({
+        target: event.currentTarget,
+        message: 'Etes vous sur de vouloir supprimer ?',
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Supprimer',
+        acceptClassName: 'bg-red-500 hover:bg-red-700 border-none ring-node focus:ring-none',
+        accept: () => {
+          for(let i = 0; i < selectedEtudiants?.length; i++) {
+            deleteD(selectedEtudiants[i]?._id);
+         }
+        },
+        reject: () => {}
+    });
     }
 
     const renderHeader = () => {
@@ -122,14 +133,18 @@ function Etudiants() {
 
     const actionBodyTemplate = (rowData) => {
         return <div className="flex items-center justify-center space-x-1">
-        <button type="button" onClick={() => handleUpdateEtudiant(rowData)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><BsPencilSquare className="text-white inline"/></button>
-        <button type="button" onClick={() => handleViewEtudiant(rowData)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-700 to-blue-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><BsEye className="text-white inline"/></button>
+        <ActionIcon color="green" size="lg" onClick={() => handleUpdateEtudiant(rowData)}>
+      <BsPencilSquare size={26} />
+    </ActionIcon>
+    <ActionIcon color="blue" size="lg" onClick={() => handleViewEtudiant(rowData)}>
+      <BsEye size={26} />
+    </ActionIcon>
         </div>;
         
     }
 
     const header = renderHeader();
-
+    const dateTemplate = (row) => format(parseISO(row.dateDeNaissance),'dd-MM-yyyy');
 
   return (
     <>
@@ -147,7 +162,7 @@ function Etudiants() {
           <div className="max-w-full h-40 px-3 mt-12 ml-auto text-center lg:mt-0 lg:w-5/12 hidden lg:block">
             <div className="h-full bg-gradient-to-tl from-primary to-blue-300 rounded-xl">
               <div className="relative flex items-center justify-center h-full">
-                        <FaUserGraduate className="h-32 w-32 bg-whity text-danger rounded-full"/>
+                        <FaUserGraduate className="h-32 w-32 bg-whity text-green-500 rounded-full"/>
               </div>
             </div>
           </div>
@@ -163,20 +178,23 @@ function Etudiants() {
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" rowsPerPageOptions={[10,25,50]}
                     dataKey="_id" rowHover selection={selectedEtudiants} onSelectionChange={e => setSelectedEtudiants(e.value)}
                     filters={filters} filterDisplay="menu" loading={isLoading} responsiveLayout="scroll"
-                    globalFilterFields={['nom', 'prenom']} emptyMessage="Aucun Etudiant trouvé"
+                    globalFilterFields={['nom', 'prenom','nce']} emptyMessage="Aucun Etudiant trouvé"
                     currentPageReportTemplate="Voir {first} de {last} à {totalRecords} utilisateurs">
-                    <Column selectionMode="multiple" headerStyle={{ width: '3em' }}></Column>
-                    <Column field="prenom" header="Prenom" sortable style={{ minWidth: '14rem' }} />
-                    <Column field="nom" header="Nom" sortable style={{ minWidth: '14rem' }} />
-                    <Column field="dateDeNaissance" header="Date de Naissance" sortable  style={{ minWidth: '8rem' }}/>
-                    <Column field="lieuDeNaissance" header="Lieu de Naissance" sortable  style={{ minWidth: '8rem' }}/>
-                    <Column field="telephone" header="Telephone" sortable  style={{ minWidth: '8rem' }}/>
-                    <Column field="adresse" header="Adresse" sortable  style={{ minWidth: '8rem' }}/>
+                    <Column selectionMode="multiple" headerStyle={{ width: '2em' }}></Column>
+                    <Column field="nce" header="NCE" sortable style={{ minWidth: '6rem' }} />
+                    <Column field="ine" header="INE" style={{ minWidth: '6rem' }} />
+                    <Column field="prenom" header="Prenom" sortable style={{ minWidth: '6rem' }} />
+                    <Column field="nom" header="Nom" sortable style={{ minWidth: '6rem' }} />
+                    <Column field="dateDeNaissance" header="Date de Naissance" body={dateTemplate} sortable  style={{ minWidth: '3rem' }}/>
+                    <Column field="lieuDeNaissance" header="Lieu de Naissance" sortable  style={{ minWidth: '3rem' }}/>
+                    <Column field="telephone" header="Telephone" sortable  style={{ minWidth: '6rem' }}/>
+                    <Column field="adresse" header="Adresse" sortable  style={{ minWidth: '4rem' }}/>
                     <Column headerStyle={{ width: '4rem', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} body={actionBodyTemplate} />
                 </DataTable>
             </div>
         </div>
         <Toast ref={toast} />
+        <ConfirmPopup />
     <ModalContainer />
     </>
   )

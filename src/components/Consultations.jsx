@@ -1,4 +1,6 @@
 import { FilterMatchMode } from 'primereact/api'
+import { ConfirmPopup } from 'primereact/confirmpopup'; 
+import { confirmPopup } from 'primereact/confirmpopup'; 
 import { Column } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
 import { Toast } from 'primereact/toast'
@@ -13,13 +15,16 @@ import { BsPencilSquare } from 'react-icons/bs'
 import CreateConsultationModal from './modals/CreateConsultationModal'
 import UpdateConsultationModal from './modals/UpdateConsultationModal'
 import './datatable.css'
-import { createConsultation, getConsultationByEtudiant, removeConsultation, updateConsultation } from '../services/consultationservice'
+import { createConsultation, getConsultationByDossier, removeConsultation, updateConsultation } from '../services/consultationservice'
 import { useAuthUser } from 'react-auth-kit'
 import { FaRegEye } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { format, parseISO } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import ConfirmDelete from './modals/ConfirmDelete'
+import { getDossierByEtudiant } from '../services/dossier-service'
+import { ActionIcon, Button, LoadingOverlay } from '@mantine/core'
+
+
 function Consultations({etudiant}) {
     const auth = useAuthUser()();
     const navigate = useNavigate()
@@ -40,33 +45,41 @@ function Consultations({etudiant}) {
       setGlobalFilterValue(value);
   }
 
-  const qk = ['get_Consultations',etudiant?._id]
+  const qk = ['get_Dossier',etudiant?._id]
+  const qk2 = ['get_Consultions',etudiant?._id]
 
-  const {data: Consultations, isLoading } = useQuery(qk, () => getConsultationByEtudiant(etudiant?._id));
-  const {mutate: create} = useMutation((data) => createConsultation(data), {
+  const {data: Dossier, isLoading: isLoadingDossier } = useQuery(qk, () => getDossierByEtudiant(etudiant?._id));
+
+  const {data: Consultations, isLoading} = useQuery(qk2, () => getConsultationByDossier(Dossier?._id), {
+    enabled: Dossier !== undefined,
+  });
+
+  console.log(Consultations)
+
+  const {mutate: create, isLoading: isLoadingCreate} = useMutation((data) => createConsultation(data), {
       onSuccess: (_) => {
       toast.current.show({severity: 'success', summary: 'Creation Consultation', detail: 'Création réussie !!'});
-       qc.invalidateQueries(qk);
+       qc.invalidateQueries(qk2);
       },
       onError: (_) => {
           toast.current.show({severity: 'error', summary: 'Create Consultation', detail: 'Creation échouée !!'});
       }
   })
 
-  const {mutate: deleteD} = useMutation((id) => removeConsultation(id), {
+  const {mutate: deleteD, isLoading: isLoadingDelete} = useMutation((id) => removeConsultation(id), {
       onSuccess: (_) => {
       toast.current.show({severity: 'success', summary: 'Suppréssion Consultation', detail: 'Suppréssion réussie !!'});
-       qc.invalidateQueries(qk);
+       qc.invalidateQueries(qk2);
       },
       onError: (_) => {
           toast.current.show({severity: 'error', summary: 'Suppréssion Consultation', detail: 'Suppréssion échouée !!'});
       }
   })
 
-  const {mutate: update} = useMutation((data) => updateConsultation(data._id, data.data), {
+  const {mutate: update,isLoading: isLoadingUpdate} = useMutation((data) => updateConsultation(data._id, data.data), {
       onSuccess: (_) => {
           toast.current.show({severity: 'success', summary: 'Mise à jour Consultation', detail: 'Mis à jour réussie !!'});
-          qc.invalidateQueries(qk);
+          qc.invalidateQueries(qk2);
          },
          onError: (_) => {
           toast.current.show({severity: 'error', summary: 'Mis à jour Consultation', detail: 'Mis à jour échouée !!'});
@@ -76,8 +89,8 @@ function Consultations({etudiant}) {
   const leftToolbarTemplate = () => {
       return (
           <div className="flex items-center justify-center space-x-2">
-              <button className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" onClick={() => handleCreateConsultation()} >Nouveau <AiOutlinePlus className="h-6 w-6 text-white inline"/></button>
-              <button className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-red-700 to-red-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" onClick={() => handleDelete()} disabled={!selectedConsultations || !selectedConsultations.length}>Supprimer <MdDelete className="h-6 w-6 text-white inline"/></button>
+               <Button className="bg-green-500 hover:bg-green-700" onClick={handleCreateConsultation} leftIcon={<AiOutlinePlus />}>Nouveau</Button>
+                <Button className="bg-red-500 hover:bg-red-700" disabled={!selectedConsultations || !selectedConsultations.length} onClick={(ev) => handleDelete(ev)} leftIcon={<MdDelete />}> Supprimer</Button>
           </div>
       )
   }
@@ -91,22 +104,27 @@ function Consultations({etudiant}) {
   }
 
   const handleCreateConsultation = () => {
-      CreateConsultationModal({idEtudiant: etudiant?._id,idAuth: auth?.id}).then(create);
+      CreateConsultationModal({idDossier: Dossier?._id,idAuth: auth?.id}).then(create);
   }
 
-  const handleDelete = async () => {
-
-
-    const resconfirm = await ConfirmDelete();
-    if(resconfirm) {
-          for(let i = 0; i < selectedConsultations?.length; i++) {
-         deleteD(selectedConsultations[i]?._id);
-      }
+  const handleDelete = async (ev) => {
+    confirmPopup({
+        target: ev.currentTarget,
+        message: 'Etes vous sur de vouloir supprimer ?',
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Supprimer',
+        acceptClassName: 'bg-red-500 hover:bg-red-700 border-none ring-node focus:ring-none',
+        accept: () => {
+            for(let i = 0; i < selectedConsultations?.length; i++) {
+                deleteD(selectedConsultations[i]?._id);
+        }},
+        reject: () => {}
+    });
     }
 
-    
-  }
+
 const dateTemplate = (row) => format(parseISO(row.dateDeConsultation), 'dd-MMMM-yyyy H:m:s',  {locale: fr});
+const dateProchainTemplate = (row) => format(parseISO(row.prochain_rv), 'dd-MMMM-yyyy',  {locale: fr});
   const renderHeader = () => {
       return (
           <div className="flex justify-between items-center">
@@ -121,8 +139,12 @@ const dateTemplate = (row) => format(parseISO(row.dateDeConsultation), 'dd-MMMM-
 
   const actionBodyTemplate = (rowData) => {
       return <div className="flex items-center justify-center space-x-1">
-         <button type="button" onClick={() => navigate(`/dashboard/consultations/${rowData._id}`)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-700 to-blue-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><FaRegEye className="text-white inline"/></button>
-      <button type="button" onClick={() => handleUpdateConsultation(rowData)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><BsPencilSquare className="text-white inline"/></button>
+        <ActionIcon onClick={() => navigate(`/dashboard/consultations/${rowData._id}`)}>
+        <FaRegEye className="text-blue-500"/>
+        </ActionIcon>
+        <ActionIcon onClick={() => handleUpdateConsultation(rowData)}>
+        <BsPencilSquare className="text-amber-500"/>
+        </ActionIcon>
       </div>;
       
   }
@@ -133,23 +155,29 @@ const dateTemplate = (row) => format(parseISO(row.dateDeConsultation), 'dd-MMMM-
 
   return (
     <>
-    <div className="datatable-doc mt-4">
+    <LoadingOverlay visible={isLoadingDossier || isLoadingCreate || isLoadingDelete || isLoadingUpdate} overlayBlur={2} />
+    {Dossier ? <div className="datatable-doc mt-4">
             <div className="card">
             <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
-                <DataTable value={Consultations} paginator className="p-datatable-customers" header={header} rows={10}
+                {Consultations && <DataTable value={Consultations} paginator className="p-datatable-customers" header={header} rows={10}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" rowsPerPageOptions={[10,25,50]}
                     dataKey="_id" rowHover selection={selectedConsultations} onSelectionChange={e => setSelectedConsultations(e.value)}
                     filters={filters} filterDisplay="menu" loading={isLoading} responsiveLayout="scroll"
                     globalFilterFields={['dateDeConsultation', 'poids']} emptyMessage="Aucun Consultation trouvé"
                     currentPageReportTemplate="Voir {first} de {last} à {totalRecords} consultations">
                     <Column selectionMode="multiple" headerStyle={{ width: '3em' }}></Column>
-                    <Column field="dateDeConsultation" header="Date" body={dateTemplate} sortable style={{ minWidth: '14rem' }} />
-                    <Column field="type" header="Type de Consultation" sortable style={{ minWidth: '14rem' }} />
-                    <Column field="poids" header="Poids" sortable style={{ minWidth: '14rem' }} />
+                    <Column field="dossier.etudiant.nce" header="NCE" sortable style={{ minWidth: '4rem' }} />
+                    <Column field="dossier.etudiant.prenom" header="PRENOM" sortable style={{ minWidth: '4rem' }} />
+                    <Column field="dossier.etudiant.nom" header="NOM" sortable style={{ minWidth: '4rem' }} />
+                    <Column field="type" header="Type de Consultation" sortable style={{ minWidth: '4rem' }} />
+                    <Column field="dateDeConsultation" header="Date" body={dateTemplate} sortable style={{ minWidth: '4rem' }} />
+                    <Column field="prochain_rv" header="PROCHAIN RV" body={dateProchainTemplate} sortable style={{ minWidth: '4rem' }} />
+                    <Column field="reference" header="REFERENCE" sortable style={{ minWidth: '4rem' }} />
                     <Column headerStyle={{ width: '4rem', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} body={actionBodyTemplate} />
-                </DataTable>
+                </DataTable>}
             </div>
-        </div>
+        </div> : "pas encore de dossier"}
+        <ConfirmPopup />
         <Toast ref={toast} />
     <ModalContainer />
     </>

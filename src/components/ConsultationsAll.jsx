@@ -12,6 +12,7 @@ import { fr } from 'date-fns/locale'
 import { getConsultations } from "../services/consultationservice"
 import { useQuery } from "react-query"
 import { useState } from "react"
+import { ActionIcon } from "@mantine/core"
 
 function ConsultationsAll() {
     const navigate = useNavigate()
@@ -34,7 +35,9 @@ function ConsultationsAll() {
   
     const {data: Consultations, isLoading } = useQuery(qk, () => getConsultations());
 
+
     const dateTemplate = (row) => format(parseISO(row.dateDeConsultation), 'dd-MMMM-yyyy H:m:s',  {locale: fr});
+    const dateProchainTemplate = (row) => format(parseISO(row.prochain_rv), 'dd-MMMM-yyyy',  {locale: fr});
   const renderHeader = () => {
       return (
           <div className="flex justify-between items-center">
@@ -49,7 +52,9 @@ function ConsultationsAll() {
 
   const actionBodyTemplate = (rowData) => {
       return <div className="flex items-center justify-center space-x-1">
-         <button type="button" onClick={() => navigate(`/dashboard/consultations/${rowData._id}`)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-700 to-blue-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><FaRegEye className="text-white inline"/></button>
+        <ActionIcon onClick={() => navigate(`/dashboard/consultations/${rowData._id}`)}>
+        <FaRegEye className="text-blue-500"/>
+        </ActionIcon>
       </div>;
       
   }
@@ -93,10 +98,12 @@ function ConsultationsAll() {
                     filters={filters} filterDisplay="menu" loading={isLoading} responsiveLayout="scroll"
                     globalFilterFields={['dateDeConsultation', 'poids','etudiant.prenom']} emptyMessage="Aucun Consultation trouvé"
                     currentPageReportTemplate="Voir {first} de {last} à {totalRecords} consultations">
-                    <Column field="dateDeConsultation" header="Date" body={dateTemplate} sortable style={{ minWidth: '14rem' }} />
-                    <Column field="type" header="Type de Consultation" sortable style={{ minWidth: '14rem' }} />
-                    <Column field="etudiant.prenom" header="Prénom Etudiant" sortable style={{ minWidth: '14rem' }} />
-                    <Column field="etudiant.nom" header="Nom Etudiant" sortable style={{ minWidth: '14rem' }} />
+                     <Column field="dossier.etudiant.prenom" header="PRENOM" sortable style={{ minWidth: '4rem' }} />
+                    <Column field="dossier.etudiant.nom" header="NOM" sortable style={{ minWidth: '4rem' }} />
+                    <Column field="type" header="Type de Consultation" sortable style={{ minWidth: '4rem' }} />
+                    <Column field="dateDeConsultation" header="Date" body={dateTemplate} sortable style={{ minWidth: '4rem' }} />
+                    <Column field="prochain_rv" header="PROCHAIN RV" body={dateProchainTemplate} sortable style={{ minWidth: '4rem' }} />
+                    <Column field="reference" header="REFERENCE" sortable style={{ minWidth: '4rem' }} />
                     <Column headerStyle={{ width: '4rem', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} body={actionBodyTemplate} />
                 </DataTable>
             </div>

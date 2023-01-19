@@ -18,33 +18,35 @@ const schema = yup.object({
     etudiant: yup.string().required()
   }).required();
 
-function RemplirDossierModal({ isOpen, onResolve, onReject,etudiant }) {
 
-    const defaultValues = {etudiant: etudiant?._id,groupe_sanguin: '',  poids: '',taille:'',handicap_particulier:  [],
-        maladie_chronique: [],allergies: [],antecedants_medicaux: []
-    };
-    const {control, handleSubmit, formState: { errors } } = useForm({
-        resolver: yupResolver(schema),
-      defaultValues
-    });
+function UpdateDossierMedical({ isOpen, onResolve, onReject,dossier }) {
+    const defaultValues = {_id: dossier?._id,etudiant: dossier?.etudiant?._id,groupe_sanguin: dossier?.groupe_sanguin,  poids: dossier?.poids,
+        taille: dossier?.taille,handicap_particulier: dossier?.handicap_particulier?.split(',') == false ?  [] : [...dossier?.handicap_particulier?.split(',')],
+    maladie_chronique:dossier?.maladie_chronique?.split(',') == false ?  [] : [...dossier?.maladie_chronique?.split(',')],
+    allergies:dossier?.allergies?.split(',') == false ?  [] : [...dossier?.allergies?.split(',')],
+    antecedants_medicaux: dossier?.antecedants_medicaux?.split(',') == false ?  [] : [...dossier?.antecedants_medicaux?.split(',')]
+};
+const {control, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(schema),
+  defaultValues
+});
 
-    const getFormErrorMessage = (name) => {
-        return errors[name] && <small className="p-error">{errors[name].message}</small>
-    };
+const getFormErrorMessage = (name) => {
+    return errors[name] && <small className="p-error">{errors[name].message}</small>
+};
 
-    const onCreate = data => {
-       const {handicap_particulier,maladie_chronique,allergies,antecedants_medicaux} = data;
-       const strHandP = handicap_particulier.join(',');
-       const strmc = maladie_chronique.join(',');
-       const stral = allergies.join(',');
-       const strantm = antecedants_medicaux.join(',');
-        onResolve({...data, handicap_particulier: strHandP, maladie_chronique: strmc,allergies: stral,antecedants_medicaux: strantm});
-      };
-
+const onCreate = data => {
+   const {handicap_particulier,maladie_chronique,allergies,antecedants_medicaux} = data;
+   const strHandP = handicap_particulier.join(',');
+   const strmc = maladie_chronique.join(',');
+   const stral = allergies.join(',');
+   const strantm = antecedants_medicaux.join(',');
+    onResolve({...data, handicap_particulier: strHandP, maladie_chronique: strmc,allergies: stral,antecedants_medicaux: strantm});
+  };
 
   return (
     <>
-         <Dialog header="Création du Dossier" visible={isOpen} onHide={() => onReject(false)} className="w-1/2">
+       <Dialog header="Modification du Dossier" visible={isOpen} onHide={() => onReject(false)} className="w-1/2">
     <form  className="mb-3" onSubmit={handleSubmit(onCreate)} method="POST">
     <div className="mb-3">
               <Controller control={control} name="groupe_sanguin" render={({field}) => (
@@ -108,11 +110,11 @@ function RemplirDossierModal({ isOpen, onResolve, onReject,etudiant }) {
               )} />
               {getFormErrorMessage('antecedant_medicaux')} 
             </div>
-            <Button type="submit" className="bg-green-500 hover:bg-green-600">REMPLIR LE DOSSIER DE {etudiant?.prenom} {etudiant?.nom}</Button>
+            <Button type="submit" className="bg-green-500 hover:bg-green-600">REMPLIR LE DOSSIER DE {dossier?.etudiant?.prenom} {dossier?.etudiant?.nom}</Button>
           </form>
   </Dialog>
     </>
   )
 }
 
-export default create(RemplirDossierModal)
+export default create(UpdateDossierMedical)

@@ -7,6 +7,7 @@ import P404 from './components/P404';
 import { env } from './env';
 import { locale, addLocale } from 'primereact/api';
 import './index.css';
+import { MantineProvider } from '@mantine/core';
 addLocale('fr', {
   firstDayOfWeek: 1,
   dayNames: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
@@ -48,7 +49,8 @@ function App() {
                   authName={env.tokenStorageName}
                   cookieDomain={window.location.hostname}
     cookieSecure={window.location.protocol === "https:"}>
-      <BrowserRouter>
+       <MantineProvider withGlobalStyles withNormalizeCSS>
+         <BrowserRouter>
         <Routes>
        <Route path="/" element={<Login />} />
        <Route element={<PrivateRoute><Dashboard/></PrivateRoute>} path={'dashboard/*'}/>
@@ -56,6 +58,8 @@ function App() {
        <Route path="*" element={<P404/>} />
      </Routes>
       </BrowserRouter>
+       </MantineProvider>
+     
    
    </AuthProvider> 
    </QueryClientProvider>

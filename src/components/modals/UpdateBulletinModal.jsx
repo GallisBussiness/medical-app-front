@@ -3,12 +3,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { create } from 'react-modal-promise'
-import {Calendar} from 'primereact/calendar'
 import { parseISO } from 'date-fns'
 import { Chips } from 'primereact/chips';
-import { Dropdown } from 'primereact/dropdown';
-import { getEtablissements } from '../../services/etablissementservice';
-import { useQuery } from 'react-query';
+import { DatePicker } from '@mantine/dates';
+import { Button, Select, TextInput } from '@mantine/core';
 
 const schema = yup.object({
     date: yup.string()
@@ -17,29 +15,26 @@ const schema = yup.object({
     service: yup.string(),
     etablissement: yup.string(),
     user: yup.string().required(),
-    etudiant: yup.string()
+    dossier: yup.string()
     .required(),
   }).required();
 
 
-
-function UpdateBulletinModal({ isOpen, onResolve, onReject,idEtudiant,idAuth,bulletin }) {
+function UpdateBulletinModal({ isOpen, onResolve, onReject,idDossier,idAuth,bulletin }) {
     const defaultValues = {
+        _id: bulletin?._id,
         date: bulletin?.date,
-        examensDemandes: bulletin?.examensDemandes?.split(',') ?? [],
+        examensDemandes: bulletin?.examensDemandes?.split(',') == false ? [] : [...bulletin?.examensDemandes?.split(',')],
         service: bulletin?.service,
-        etablissement: bulletin?.etablissement?._id,
+        etablissement: bulletin?.etablissement,
         user: idAuth,
-        etudiant: idEtudiant,
+        dossier: idDossier,
       };
         const {control, handleSubmit, formState: { errors } } = useForm({
           resolver: yupResolver(schema),
           defaultValues
         });
   
-        const qk = ['get_Etablissements']
-
-        const {data: Etablissements} = useQuery(qk, () => getEtablissements());
       
         const getFormErrorMessage = (name) => {
           return errors[name] && <small className="p-error">{errors[name].message}</small>
@@ -52,52 +47,45 @@ function UpdateBulletinModal({ isOpen, onResolve, onReject,idEtudiant,idAuth,bul
   return (
     <>
           <Dialog header="Creer un Bulletin" visible={isOpen} onHide={() => onReject(false)} className="w-1/2">
-    <form  className="mb-3" onSubmit={handleSubmit(onUpdate)} method="POST">
+          <form  className="mb-3" onSubmit={handleSubmit(onUpdate)} method="POST">
     
-    <div className="mb-3 flex flex-col space-y-2">
-            <label htmlFor="date" className="form-label">Date</label>
+    <div>
             <Controller control={control} name="date" render={({field}) => (
-            <Calendar id="date" value={parseISO(field.value)} onChange={(e) => field.onChange(e.value.toISOString())} showTime showSeconds minDate={new Date()} dateFormat="dd/mm/yyyy"  placeholder="Date"/>
+            <DatePicker placeholder="Choisir la date" label="Date" withAsterisk locale="fr" value={parseISO(field.value)} onChange={(v) => field.onChange(v.toISOString())} error={errors.date && errors.date.message} />
              )}/>
-              {getFormErrorMessage('date')} 
             </div>
             <div className="mb-3 flex flex-col space-y-2">
             <label htmlFor="examensDemandes" className="form-label">Examens Demandés : </label>
               <Controller control={control} name="examensDemandes" render={({field}) => (
-                 <Chips value={field.value} onChange={(e) => field.onChange(e.value)} separator="," />   
+                 <Chips value={field.value} onChange={(e) => field.onChange(e.value)} separator=","  className="focus:outline-none"/>   
               )} />
               {getFormErrorMessage('examensDemandes')} 
             </div>
-            <div className="mb-3">
-            <label htmlFor="etablissement" className="form-label">Etablissement</label>
-            <Controller control={control} name="etablissement" render={({field}) => (
-             <Dropdown className="w-full" optionLabel="nom" optionValue="_id" value={field.value} options={Etablissements} onChange={(e) => field.onChange(e.value)} placeholder="Selectionnez l'établissement"/>
-             )}/>
-              {getFormErrorMessage('etablissement')} 
+            <div >
+      <Controller control={control} name="etablissement" render={({field}) => (
+                    <Select
+                    label="Etablissement"
+                    placeholder="Selectionnez l'etablissement"
+                    searchable
+                    clearable
+                    nothingFound="Pas d'etablissement disponibles"
+                    data={['HOPITAL REGIONAL DE ZIGUINCHOR','HOPITAL DE LA PAIX DE ZIGUINCHOR','HOPITAL PSYCHIATRIQUE DE KENIA DE ZIGUINCHOR']}
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={errors.etablissement && errors.etablissement.message}
+                  />
+              )} />
             </div>
-            <div className="mb-3">
-            <label htmlFor="service" className="form-label">Service </label>
+            <div>
             <Controller control={control} name="service" render={({field}) => (
-            <input type="text" {...field} className="focus:shadow-soft-primary-outline text-sm leading-5.6 
-            ease-soft block w-full appearance-none rounded-lg border border-solid border-green-300
-             bg-white bg-clip-padding px-3 py-2 font-normal text-green-700 outline-none transition-all
-              placeholder:text-green-500 focus:border-green-300 focus:outline-none" id="poids" placeholder="Entrer le service" />
+            <TextInput value={field.value} onChange={field.onChange}
+            label="Service" error={errors.service && errors.service.message}
+            placeholder="entrer le service"
+              withAsterisk/>
              )}/>
-              {getFormErrorMessage('service')} 
             </div>
-            <div className="flex items-center justify-between">
-              <div>
-              <button  type="submit" className="inline-block px-6 py-3 font-bold text-center
-             text-white uppercase align-middle transition-all rounded-lg cursor-pointer
-              bg-gradient-to-tl from-green-700 to-green-300 leading-pro text-xs ease-soft-in
-               tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85
-                hover:shadow-soft-xs mr-2"> MODIFIER</button>
-            <button onClick={() => onReject(false)} className="inline-block px-6 py-3 font-bold text-center
-             text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl
-              from-red-700 to-red-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md
-               bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs"> ANNULER</button>
-              </div>
-             
+              <div className="my-5">
+             <Button type="submit" className="bg-green-500 hover:bg-green-600"> MODIFIER BULLETIN</Button>
             </div>
             
           </form>

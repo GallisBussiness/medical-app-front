@@ -13,6 +13,7 @@ import { useQuery } from "react-query"
 import { useState } from "react"
 import { getBulletins } from "../services/bulletinservice"
 import { Chip } from "primereact/chip"
+import { ActionIcon } from "@mantine/core"
 function BulletinsAll() {
 
     const navigate = useNavigate()
@@ -49,7 +50,10 @@ function BulletinsAll() {
 
   const actionBodyTemplate = (rowData) => {
       return <div className="flex items-center justify-center space-x-1">
-         <button type="button" onClick={() => navigate(`/dashboard/pris-en-charges/${rowData._id}`)} className="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-700 to-blue-300 leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs" ><FaRegEye className="text-white inline"/></button>
+        <ActionIcon onClick={() => navigate(`/dashboard/pris-en-charges/${rowData._id}`)}>
+        <FaRegEye className="text-blue-500"/>
+        </ActionIcon>
+         
       </div>;
       
   }
@@ -94,10 +98,10 @@ function BulletinsAll() {
                     filters={filters} filterDisplay="menu" loading={isLoading} responsiveLayout="scroll"
                     globalFilterFields={['date', 'examensDemandes']} emptyMessage="Aucun Bulletin trouvé"
                     currentPageReportTemplate="Voir {first} de {last} à {totalRecords} Bulletins">
-                    <Column field="date" header="Date" body={dateTemplate} sortable style={{ minWidth: '14rem' }} />
-                    <Column field="etablissement.nom" header="Etablissement" sortable style={{ minWidth: '14rem' }} />
-                    <Column field="examensDemandes" header="Examens Demandes" body={examensTemplate} style={{ minWidth: '14rem' }} />
-                    <Column field="service" header="Service" sortable style={{ minWidth: '14rem' }} />
+                    <Column field="date" header="Date" body={dateTemplate} sortable style={{ minWidth: '4rem' }} />
+                    <Column field="etablissement" header="Etablissement" sortable style={{ minWidth: '4rem' }} />
+                    <Column field="examensDemandes" header="Examens Demandes" body={examensTemplate} style={{ minWidth: '4rem' }} />
+                    <Column field="service" header="Service" sortable style={{ minWidth: '4rem' }} />
                     <Column headerStyle={{ width: '4rem', textAlign: 'center' }} bodyStyle={{ textAlign: 'center', overflow: 'visible' }} body={actionBodyTemplate} />
                 </DataTable>
             </div>
