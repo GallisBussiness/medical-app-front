@@ -96,7 +96,7 @@ function ConsultationsAll() {
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" rowsPerPageOptions={[10,25,50]}
                     dataKey="_id" rowHover 
                     filters={filters} filterDisplay="menu" loading={isLoading} responsiveLayout="scroll"
-                    globalFilterFields={['dateDeConsultation', 'poids','etudiant.prenom']} emptyMessage="Aucun Consultation trouvé"
+                    globalFilterFields={['dossier.etudiant.prenom', 'dossier.etudiant.nom','dateDeConsultation']} emptyMessage="Aucun Consultation trouvé"
                     currentPageReportTemplate="Voir {first} de {last} à {totalRecords} consultations">
                      <Column field="dossier.etudiant.prenom" header="PRENOM" sortable style={{ minWidth: '4rem' }} />
                     <Column field="dossier.etudiant.nom" header="NOM" sortable style={{ minWidth: '4rem' }} />

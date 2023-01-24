@@ -54,8 +54,6 @@ function Consultations({etudiant}) {
     enabled: Dossier !== undefined,
   });
 
-  console.log(Consultations)
-
   const {mutate: create, isLoading: isLoadingCreate} = useMutation((data) => createConsultation(data), {
       onSuccess: (_) => {
       toast.current.show({severity: 'success', summary: 'Creation Consultation', detail: 'Création réussie !!'});

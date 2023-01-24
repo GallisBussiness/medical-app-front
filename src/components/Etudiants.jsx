@@ -144,7 +144,7 @@ function Etudiants() {
     }
 
     const header = renderHeader();
-    const dateTemplate = (row) => format(parseISO(row.dateDeNaissance),'dd-MM-yyyy');
+    const dateTemplate = (row) => format(parseISO(row?.dateDeNaissance),'dd-MM-yyyy');
 
   return (
     <>
@@ -178,8 +178,8 @@ function Etudiants() {
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" rowsPerPageOptions={[10,25,50]}
                     dataKey="_id" rowHover selection={selectedEtudiants} onSelectionChange={e => setSelectedEtudiants(e.value)}
                     filters={filters} filterDisplay="menu" loading={isLoading} responsiveLayout="scroll"
-                    globalFilterFields={['nom', 'prenom','nce']} emptyMessage="Aucun Etudiant trouvé"
-                    currentPageReportTemplate="Voir {first} de {last} à {totalRecords} utilisateurs">
+                    globalFilterFields={['nom', 'prenom','telephone','adresse','lieuDeNaissance']} emptyMessage="Aucun Etudiant trouvé"
+                    currentPageReportTemplate="Voir {first} de {last} à {totalRecords} étudiants">
                     <Column selectionMode="multiple" headerStyle={{ width: '2em' }}></Column>
                     <Column field="nce" header="NCE" sortable style={{ minWidth: '6rem' }} />
                     <Column field="ine" header="INE" style={{ minWidth: '6rem' }} />

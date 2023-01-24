@@ -51,7 +51,7 @@ function BulletinsAll() {
   const actionBodyTemplate = (rowData) => {
       return <div className="flex items-center justify-center space-x-1">
         <ActionIcon onClick={() => navigate(`/dashboard/pris-en-charges/${rowData._id}`)}>
-        <FaRegEye className="text-blue-500"/>
+        <FaRegEye className="text-blue-500 h-6 w-6"/>
         </ActionIcon>
          
       </div>;
@@ -66,7 +66,7 @@ function BulletinsAll() {
 
   return (
     <>
-       <div className="flex flex-wrap bg-whity">
+       <div className="flex flex-wrap bg-whity ">
   <div className="w-full px-3 mb-6 lg:mb-0 lg:flex-none">
     <div className="relative flex flex-col h-40 min-w-0 break-words bg-white shadow-soft-xl bg-clip-border">
       <div className="flex-auto p-4">

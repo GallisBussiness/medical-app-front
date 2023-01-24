@@ -125,7 +125,7 @@ function CreateEtudiantModal({ isOpen, onResolve, onReject }) {
             <div>
             <Controller control={control} name="telephone" render={({field}) => (
             <Input.Wrapper id="tel" label="Téléphone" error={errors.telephone && errors.telephone.message} required>
-            <Input component={MaskField} mask="+221 (__) ___-__-__" replacement={{ _: /\d/ }} id="tel" placeholder="Numéro de téléphone" value={field.value} onChange={field.onChange}/>
+            <Input component={MaskField} mask="_________" replacement={{ _: /\d/ }} id="tel" placeholder="Numéro de téléphone" value={field.value} onChange={field.onChange}/>
             </Input.Wrapper>
              )}/>
             </div>

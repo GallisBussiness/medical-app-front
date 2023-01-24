@@ -64,7 +64,7 @@ const Login = () => {
     };
 
   return (
-    <div className="login-page">
+    <div className="login-page bg-slate-400">
       <LoadingOverlay visible={isLoading} overlayBlur={2} />
       <div>
   <div className="login-header box-shadow">
@@ -76,14 +76,9 @@ const Login = () => {
       </div>
     </div>
   </div>
-  <div className="login-wrap d-flex align-items-center flex-wrap justify-content-center">
-    <div className="container">
-      <div className="row align-items-center">
-        <div className="col-md-6 col-lg-7">
-          <img src="/imgs/medicine.svg" alt="medecine" />
-        </div>
-        <div className="col-md-6 col-lg-5">
-          <div className="login-box bg-white box-shadow border-radius-10">
+  <div className="flex items-center justify-center">
+        <div className="w-1/2 mx-auto">
+          <div className="bg-white shadow-md rounded-md border w-8/12 mx-auto p-8">
             <div className="flex items-center justify-center">
               <img src="/imgs/logo_crousz.png" className="h-52 w-60" alt="logo" />
             </div>
@@ -128,8 +123,6 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </div>
-  </div>
 </div>
 <Toast ref={toast} />
     </div>

@@ -15,6 +15,8 @@ import {useMedia} from 'react-use';
 import ConsultationsAll from "./ConsultationsAll";
 import BulletinsAll from "./BulletinsAll";
 import P404 from "./P404";
+import { ActionIcon } from "@mantine/core";
+import { MdDashboard } from "react-icons/md";
 
 const Dashboard = () => {
   const [visible,setVisible] = useState()
@@ -44,42 +46,34 @@ const Dashboard = () => {
   }, [hasAuth,navigate]);
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen justify-start">
    <div className="px-5 flex items-center justify-between bg-green-500 py-1">
-    {isWide && <button className="menu-icon dw dw-menu text-white" onClick={() => setVisible(true)}></button>}
+    {isWide && <ActionIcon onClick={() => setVisible(true)}>
+      <MdDashboard className="text-white h-6 w-6" />
+      </ActionIcon>}
     {!isWide && <div className="w-2/5 flex space-x-2 items-center justify-center"><Link  to="/" className="p-2 rounded-full bg-whity">
         <img src="/imgs/logo_crousz.png" className="h-8 w-8 mx-auto object-contain" alt="logo" />
-      </Link> <span className="text-whity">CROUS/Z</span></div>}
+      </Link> <span className="text-white font-semibold">CROUS/Z</span></div>}
     <div className="hidden w-full md:flex justify-end items-center mx-10 bg-green-500">
-  <ul className="flex flex-col  md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
+  <ul className="flex flex-col  md:flex-row md:space-x-1 md:mt-0 md:text-sm md:font-medium">
    {data?.role === 'admin' && <li>
-      <Link to="statistiques" className="block py-2 text-whity rounded md:bg-transparent md:p-0 uppercase font-bold">Acceuil</Link>
+      <Link to="statistiques" className="block py-2 px-4 text-whity rounded-md uppercase font-bold hover:text-green-500 hover:bg-white ">Acceuil</Link>
     </li>}
     <li>
-      <Link to="allconsultations" className="block py-2 text-whity rounded md:bg-transparent md:p-0 uppercase font-bold">Consultations</Link>
+      <Link to="allconsultations" className="block py-2 px-4 text-whity rounded-md uppercase font-bold hover:text-green-500 hover:bg-white">Consultations</Link>
     </li>
     <li>
-      <Link to="allbulletins" className="block py-2 text-whity rounded md:bg-transparent md:p-0 uppercase font-bold">Prises en charge</Link>
+      <Link to="allbulletins" className="block py-2 px-4 text-whity rounded-md uppercase font-bold hover:text-green-500 hover:bg-white">Prises en charge</Link>
     </li>
     <li>
-      <Link to="etudiants" className="block py-2 text-whity rounded md:bg-transparent md:p-0 uppercase font-bold">Etudiants</Link>
+      <Link to="etudiants" className="block py-2 px-4 text-whity rounded-md uppercase font-bold hover:text-green-500 hover:bg-white">Etudiants</Link>
     </li>
     {data?.role === 'admin' && <li>
-      <Link to="users" className="block py-2 text-whity  rounded md:bg-transparent md:p-0 uppercase font-bold">Utilisateurs</Link>
+      <Link to="users" className="block py-2 px-4 text-whity rounded-md uppercase font-bold hover:text-green-500 hover:bg-white">Utilisateurs</Link>
     </li>}
+    <li><button className="block py-2 px-4 text-whity rounded-md uppercase font-bold hover:text-green-500 hover:bg-white" onClick={logout}><i className="dw dw-logout" /> Se Déconnecter</button></li>
   </ul>
 </div>
-
-    <div className="user-info-dropdown">
-      <div className="dropdown">
-        <button className="dropdown-toggle" data-toggle="dropdown">
-          <span className="font-bold uppercase text-white">{data?.prenom} {data?.nom}</span>
-        </button>
-        <div className="dropdown-menu dropdown-menu-right dropdown-menu-icon-list bg-green-500">
-          <button className="dropdown-item text-whity" onClick={logout}><i className="dw dw-logout" /> Se Déconnecter</button>
-        </div>
-    </div>
-  </div>
 </div>
 <div>
 
@@ -115,7 +109,7 @@ const Dashboard = () => {
 </Sidebar>
  
 </div>
-<div className="bg-back bg-fixed">
+<div>
   <div>
   <Routes>
       <Route path="" element={<Statistique auth={data}/>}/>
@@ -131,8 +125,11 @@ const Dashboard = () => {
      </Routes>
   </div>
 </div>
-
-    </>
+<footer className="mt-auto p-4 bg-green-500 md:p-6 text-white">
+      <span className="text-sm sm:text-center">© 2023 <span  className="hover:underline">DME CROUSZ</span>.CELLULE INFORMATIQUE CROUSZ, TOUS DROITS RESERVES.
+      </span>
+  </footer>
+    </div>
   )
 }
 
