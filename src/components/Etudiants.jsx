@@ -17,7 +17,7 @@ import UpdateEtudiantModal from './modals/UpdateEtudiantModal'
 import RemplirDossierModal from './modals/RemplirDossierModal'
 import './datatable.css'
 import { createEtudiant, getEtudiants, removeEtudiant, updateEtudiant } from '../services/etudiantservice'
-import {FaUserGraduate } from 'react-icons/fa';
+import {FaFileCsv, FaFileExcel, FaFilePdf, FaUserGraduate } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom'
 import { ActionIcon, Button } from '@mantine/core'
 import { format, parseISO } from 'date-fns'
@@ -25,9 +25,70 @@ import { format, parseISO } from 'date-fns'
 function Etudiants() {
 
   const [selectedEtudiants, setSelectedEtudiants] = useState(null);
+  const qk = ['get_Etudiants']
+  const {data: Etudiants, isLoading } = useQuery(qk, () => getEtudiants());
     const qc = useQueryClient()
     const navigate = useNavigate()
     const toast = useRef();
+
+    const dt = useRef(null);
+    
+
+    const cols = [
+        { field: 'nce', header: 'NCE' },
+        { field: 'ine', header: 'INE' },
+        { field: 'prenom', header: 'PRENOM' },
+        { field: 'nom', header: 'NOM' },
+        { field: 'dateDeNaissance', header: 'Date De Naissance' },
+        { field: 'lieuDeNaissance', header: 'Lieu de Naissance' },
+        { field: 'adresse', header: 'ADRESSE' }
+    ];
+
+    const exportColumns = cols.map(col => ({ title: col.header, dataKey: col.field }));
+
+
+    const exportCSV = (selectionOnly) => {
+      dt.current.exportCSV({ selectionOnly });
+  };
+
+  const exportPdf = () => {
+      import('jspdf').then((jsPDF) => {
+          import('jspdf-autotable').then(() => {
+              const doc = new jsPDF.default(0, 0);
+
+              doc.autoTable(exportColumns, Etudiants);
+              doc.save('etudiants.pdf');
+          });
+      });
+  };
+
+  const exportExcel = () => {
+      import('xlsx').then((xlsx) => {
+          const worksheet = xlsx.utils.json_to_sheet(Etudiants);
+          const workbook = { Sheets: { data: worksheet }, SheetNames: ['Etudiants'] };
+          const excelBuffer = xlsx.write(workbook, {
+              bookType: 'xlsx',
+              type: 'array'
+          });
+
+          saveAsExcelFile(excelBuffer, 'Etudiants');
+      });
+  };
+
+  const saveAsExcelFile = (buffer, fileName) => {
+      import('file-saver').then((module) => {
+          if (module && module.default) {
+              let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+              let EXCEL_EXTENSION = '.xlsx';
+              const data = new Blob([buffer], {
+                  type: EXCEL_TYPE
+              });
+
+              module.default.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+          }
+      });
+  };
+
     const [filters, setFilters] = useState({
         'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
         'nom': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
@@ -44,9 +105,7 @@ function Etudiants() {
         setGlobalFilterValue(value);
     }
 
-    const qk = ['get_Etudiants']
-
-    const {data: Etudiants, isLoading } = useQuery(qk, () => getEtudiants());
+    
 
     const {mutate: create} = useMutation((data) => createEtudiant(data), {
         onSuccess: (_) => {
@@ -86,6 +145,23 @@ function Etudiants() {
                 <Button className="bg-red-500 hover:bg-red-700" disabled={!selectedEtudiants || !selectedEtudiants.length} onClick={(ev) => handleDelete(ev)} leftIcon={<MdDelete />}> Supprimer</Button>
             </div>
         )
+    }
+
+    const rightToolbarTemplate = () => {
+     return ( <div className="flex items-center justify-center space-x-2">
+         <ActionIcon onClick={() => exportCSV(false)} title="CSV EXPORTS">
+          <FaFileCsv className="text-sky-500 w-6 h-6" />
+         </ActionIcon>
+         <ActionIcon onClick={exportExcel} title="XLS EXPORTS">
+         <FaFileExcel className="text-green-500 w-6 h-6"/>
+         </ActionIcon>
+         <ActionIcon onClick={exportPdf} title="PDF EXPORTS">
+          <FaFilePdf className="text-red-500 w-6 h-6"/>
+         </ActionIcon>
+         <ActionIcon onClick={() => exportCSV(true)} title="CSV SELECTION EXPORTS">
+         <FaFileCsv className="text-sky-500 w-6 h-6"/>
+         </ActionIcon>
+      </div>);
     }
 
 
@@ -173,8 +249,8 @@ function Etudiants() {
 </div>
 <div className="datatable-doc mt-4 mx-10">
             <div className="card">
-            <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
-                <DataTable value={Etudiants} paginator className="p-datatable-customers" header={header} rows={10}
+            <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
+                <DataTable value={Etudiants} paginator className="p-datatable-customers" header={header} rows={10} ref={dt}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" rowsPerPageOptions={[10,25,50]}
                     dataKey="_id" rowHover selection={selectedEtudiants} onSelectionChange={e => setSelectedEtudiants(e.value)}
                     filters={filters} filterDisplay="menu" loading={isLoading} responsiveLayout="scroll"

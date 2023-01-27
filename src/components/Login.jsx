@@ -64,7 +64,7 @@ const Login = () => {
     };
 
   return (
-    <div className="login-page bg-slate-400">
+    <div className="login-page">
       <LoadingOverlay visible={isLoading} overlayBlur={2} />
       <div>
   <div className="login-header box-shadow">

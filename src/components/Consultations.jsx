@@ -17,7 +17,7 @@ import UpdateConsultationModal from './modals/UpdateConsultationModal'
 import './datatable.css'
 import { createConsultation, getConsultationByDossier, removeConsultation, updateConsultation } from '../services/consultationservice'
 import { useAuthUser } from 'react-auth-kit'
-import { FaRegEye } from 'react-icons/fa'
+import { FaFileCsv, FaFileExcel, FaFilePdf, FaRegEye } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import { format, parseISO } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -30,7 +30,75 @@ function Consultations({etudiant}) {
     const navigate = useNavigate()
   const [selectedConsultations, setSelectedConsultations] = useState([]);
   const qc = useQueryClient()
+  const qk = ['get_Dossier',etudiant?._id]
+  const qk2 = ['get_Consultions',etudiant?._id]
+
+  const {data: Dossier, isLoading: isLoadingDossier } = useQuery(qk, () => getDossierByEtudiant(etudiant?._id));
+
+  const {data: Consultations, isLoading} = useQuery(qk2, () => getConsultationByDossier(Dossier?._id), {
+    enabled: Dossier !== undefined,
+  });
   const toast = useRef();
+  const dt = useRef(null);
+    
+
+  const cols = [
+      { field: 'type', header: 'TYPE' },
+      { field:'poids', header: 'POIDS' },
+      { field:'taille', header: 'TAILLE' },
+      { field:'tension', header: 'TENSION' },
+      { field:'temperature', header: 'TEMPERATURE' },
+      { field:'poule', header: 'POULS' },
+      { field:'glycemie', header: 'GLYCEMIE' },
+      { field: 'dateDeConsultation', header: 'Date' },
+      { field: 'prochain_rv', header: 'PROCHAIN RV' },
+      { field: 'reference', header: 'REFERENCE' }
+  ];
+
+  const exportColumns = cols.map(col => ({ title: col.header, dataKey: col.field }));
+
+
+  const exportCSV = (selectionOnly) => {
+    dt.current.exportCSV({ selectionOnly });
+};
+
+const exportPdf = () => {
+    import('jspdf').then((jsPDF) => {
+        import('jspdf-autotable').then(() => {
+            const doc = new jsPDF.default(0, 0);
+
+            doc.autoTable(exportColumns, Consultations);
+            doc.save('consultations.pdf');
+        });
+    });
+};
+
+const exportExcel = () => {
+    import('xlsx').then((xlsx) => {
+        const worksheet = xlsx.utils.json_to_sheet(Consultations);
+        const workbook = { Sheets: { data: worksheet }, SheetNames: ['Consultations'] };
+        const excelBuffer = xlsx.write(workbook, {
+            bookType: 'xlsx',
+            type: 'array'
+        });
+
+        saveAsExcelFile(excelBuffer, 'Consultations');
+    });
+};
+
+const saveAsExcelFile = (buffer, fileName) => {
+    import('file-saver').then((module) => {
+        if (module && module.default) {
+            let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+            let EXCEL_EXTENSION = '.xlsx';
+            const data = new Blob([buffer], {
+                type: EXCEL_TYPE
+            });
+
+            module.default.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+        }
+    });
+};
   const [filters, setFilters] = useState({
       'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
@@ -45,14 +113,6 @@ function Consultations({etudiant}) {
       setGlobalFilterValue(value);
   }
 
-  const qk = ['get_Dossier',etudiant?._id]
-  const qk2 = ['get_Consultions',etudiant?._id]
-
-  const {data: Dossier, isLoading: isLoadingDossier } = useQuery(qk, () => getDossierByEtudiant(etudiant?._id));
-
-  const {data: Consultations, isLoading} = useQuery(qk2, () => getConsultationByDossier(Dossier?._id), {
-    enabled: Dossier !== undefined,
-  });
 
   const {mutate: create, isLoading: isLoadingCreate} = useMutation((data) => createConsultation(data), {
       onSuccess: (_) => {
@@ -93,6 +153,22 @@ function Consultations({etudiant}) {
       )
   }
 
+  const rightToolbarTemplate = () => {
+    return ( <div className="flex items-center justify-center space-x-2">
+        <ActionIcon onClick={() => exportCSV(false)} title="CSV EXPORTS">
+         <FaFileCsv className="text-sky-500 w-6 h-6" />
+        </ActionIcon>
+        <ActionIcon onClick={exportExcel} title="XLS EXPORTS">
+        <FaFileExcel className="text-green-500 w-6 h-6"/>
+        </ActionIcon>
+        <ActionIcon onClick={exportPdf} title="PDF EXPORTS">
+         <FaFilePdf className="text-red-500 w-6 h-6"/>
+        </ActionIcon>
+        <ActionIcon onClick={() => exportCSV(true)} title="CSV SELECTION EXPORTS">
+        <FaFileCsv className="text-sky-500 w-6 h-6"/>
+        </ActionIcon>
+     </div>);
+   }
 
   const handleUpdateConsultation = (d) => {
       UpdateConsultationModal({idEtudiant: etudiant?._id,idAuth: auth?.id,consultation: d}).then((d => {
@@ -156,12 +232,12 @@ const dateProchainTemplate = (row) => format(parseISO(row.prochain_rv), 'dd-MMMM
     <LoadingOverlay visible={isLoadingDossier || isLoadingCreate || isLoadingDelete || isLoadingUpdate} overlayBlur={2} />
     {Dossier ? <div className="datatable-doc mt-4">
             <div className="card">
-            <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
-                {Consultations && <DataTable value={Consultations} paginator className="p-datatable-customers" header={header} rows={10}
+            <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
+                {Consultations && <DataTable value={Consultations} paginator className="p-datatable-customers" header={header} rows={10} ref={dt}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" rowsPerPageOptions={[10,25,50]}
                     dataKey="_id" rowHover selection={selectedConsultations} onSelectionChange={e => setSelectedConsultations(e.value)}
                     filters={filters} filterDisplay="menu" loading={isLoading} responsiveLayout="scroll"
-                    globalFilterFields={['dateDeConsultation', 'poids']} emptyMessage="Aucun Consultation trouvé"
+                    globalFilterFields={['dateDeConsultation', 'type']} emptyMessage="Aucun Consultation trouvé"
                     currentPageReportTemplate="Voir {first} de {last} à {totalRecords} consultations">
                     <Column selectionMode="multiple" headerStyle={{ width: '3em' }}></Column>
                     <Column field="dossier.etudiant.nce" header="NCE" sortable style={{ minWidth: '4rem' }} />
