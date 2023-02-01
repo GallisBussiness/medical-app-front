@@ -16,7 +16,7 @@ function AddFiles({ isOpen, onResolve, onReject,dossier }) {
         formData.append('docs', f,f.name);
       })
       formData.append('dossier',dossier._id);
-      formData.append('type', 'img');
+      formData.append('nom','upload');
       onResolve(formData);
     }
     

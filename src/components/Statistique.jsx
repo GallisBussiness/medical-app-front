@@ -5,15 +5,25 @@ import { useQuery } from 'react-query';
 import { getConsultations } from '../services/consultationservice';
 import { getBulletins } from '../services/bulletinservice';
 import { getEtudiants } from '../services/etudiantservice';
-import { Chart } from 'primereact/chart'
 import { useState } from 'react';
 import { Text } from '@mantine/core';
+import StateComponent from './StateComponent';
+import { getMonth, parseISO } from 'date-fns';
+import StateComponentApx from './StateComponentApx';
 
 function Statistique() {
 
   const [basicData,setBasicData] = useState({})
+  const [consultationByMonthData,setConsultationByMonthData] = useState([])
   const [bulletinData,setBulletinData] = useState({});
-
+   const consByMonthOption = {
+    chart: {
+      id: "conByMonth"
+    },
+    xaxis: {
+      categories: ['jan', 'fev', 'mar', 'avr', 'mai', 'jui', 'juil', 'aout', 'sep', 'oct', 'nov', 'dec']
+    }
+  };
   const qk = ['get_users']
 
   const {data: users } = useQuery(qk, () => getUsers());
@@ -22,9 +32,25 @@ function Statistique() {
 
   const {data: Consultations } = useQuery(qkc, () => getConsultations(), {
     onSuccess: (_) => {
+      const dt = [];
+         for(let i = 0; i <= 11; i++){
+          const ma = _.filter(c => {
+            return getMonth(parseISO(c.dateDeConsultation)) === i;
+          }
+            );
+          dt.push(ma.length);
+         }
+
+         setConsultationByMonthData([
+          {
+            name: "nombre de consultations par mois",
+            data: dt
+          }
+        ]);
+         
          const labels = ["HOMMES","FEMMES"];
-          const hommes = _.filter(c=> c?.etudiant?.sexe === "M");
-          const femmes = _.filter(c => c?.etudiant?.sexe !== "M");
+          const hommes = _.filter(c=> c?.dossier?.etudiant?.sexe === "H");
+          const femmes = _.filter(c => c?.dossier?.etudiant?.sexe === "F");
           const datasets = [{
               label: "Consultation selon le sexe",
               backgroundColor: [`#4464AD`,`#C1292E`],
@@ -74,8 +100,8 @@ function Statistique() {
   const {data: Bulletins } = useQuery(qkb, () => getBulletins(), {
     onSuccess:(_) => {
       const labels = ["HOMMES","FEMMES"];
-      const hommes = _.filter(c=> c?.etudiant?.sexe === "M");
-      const femmes = _.filter(c => c?.etudiant?.sexe !== "M");
+      const hommes = _.filter(c=> c?.dossier?.etudiant?.sexe === "H");
+      const femmes = _.filter(c => c?.dossier?.etudiant?.sexe === "F");
       const datasets = [{
           label: "Consultation selon le sexe",
           backgroundColor: [`#${Math.floor(Math.random()*16777215).toString(16)}`,`#${Math.floor(Math.random()*16777215).toString(16)}`],
@@ -188,30 +214,22 @@ setBulletinData({
    </Link>
 </div>
 <div className="flex flex-col my-10 mx-10 bg-white opacity-80 space-y-2 py-5 px-10">
-<h1 className="font-bold text-3xl">CONSULTATION / SEXE </h1>
-  <div className="flex flex-col items-center space-y-10 md:flex-row md:space-x-10">
+  <div className="w-full flex  space-y-2">
     <div className="w-full">
-      <Chart type="bar" data={basicData} options={basicOptions} />
+    <h1 className="font-bold text-3xl">CONSULTATION / SEXE </h1>
+    <StateComponent data={basicData} options={basicOptions} />
     </div>
     <div className="w-full">
-      <Chart type="doughnut" data={basicData} options={basicOptions} />
+    <h1 className="font-bold text-3xl">PRISE EN CHARGE / SEXE </h1>
+    <StateComponent data={bulletinData} options={basicOptions} />
     </div>
-    
   </div>
-
-</div>
-<div className="flex flex-col my-10 mx-10 bg-white  opacity-80 space-y-2 py-5 px-10">
-<h1 className="font-bold text-3xl">Prise en charge / SEXE </h1>
-  <div className="flex flex-col items-center space-y-10 md:flex-row md:space-x-10">
-    <div className="w-full">
-      <Chart type="bar" data={bulletinData} options={basicOptions} />
-    </div>
-    <div className="w-full">
-      <Chart type="doughnut" data={bulletinData} options={basicOptions} />
-    </div>
-    
-  </div>
-
+  <div className="mixed-chart w-full my-5">
+            <StateComponentApx
+              options={consByMonthOption}
+              data={consultationByMonthData}
+            />
+          </div>
 </div>
     </>
   )

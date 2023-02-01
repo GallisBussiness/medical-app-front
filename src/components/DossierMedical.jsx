@@ -6,6 +6,7 @@ import RemplirDossierModal from "./modals/RemplirDossierModal";
 import UpdateDossierMedical from "./modals/UpdateDossierMedical";
 import { GiFiles } from 'react-icons/gi';
 import AddFiles from "./modals/AddFiles";
+import { createDoc } from "../services/docservice";
 
 function DossierMedical({etudiant}) {
 
@@ -18,6 +19,16 @@ function DossierMedical({etudiant}) {
         }
     })
 
+    const {mutate: uploads } = useMutation((data) => createDoc(data), {
+        onSuccess:(_) => {
+            console.log(_);
+            qc.invalidateQueries(qk);
+        },
+        onError:(_) => {
+            console.log(_);
+        }
+    })
+
     const handleCreateDossier = () => {
         RemplirDossierModal({etudiant}).then(createD).catch(((e) => console.log(e, "rejected create")))
     }
@@ -27,7 +38,7 @@ function DossierMedical({etudiant}) {
     }
 
     const handleAddFile = (dossier) => {
-        AddFiles({dossier}).then(console.log).catch(((e) => console.log(e, "rejected create")))
+        AddFiles({dossier}).then(uploads).catch(((e) => console.log(e, "rejected create")))
     }
 
   return (
