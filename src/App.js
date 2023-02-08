@@ -8,6 +8,7 @@ import { env } from './env';
 import { locale, addLocale } from 'primereact/api';
 import './index.css';
 import { MantineProvider } from '@mantine/core';
+import { NotificationsProvider } from '@mantine/notifications';
 addLocale('fr', {
   firstDayOfWeek: 1,
   dayNames: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
@@ -50,6 +51,7 @@ function App() {
                   cookieDomain={window.location.hostname}
     cookieSecure={window.location.protocol === "https:"}>
        <MantineProvider withGlobalStyles withNormalizeCSS>
+       <NotificationsProvider>
          <BrowserRouter>
         <Routes>
        <Route path="/" element={<Login />} />
@@ -58,6 +60,7 @@ function App() {
        <Route path="*" element={<P404/>} />
      </Routes>
       </BrowserRouter>
+      </NotificationsProvider>
        </MantineProvider>
      
    

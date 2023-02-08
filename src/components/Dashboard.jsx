@@ -29,6 +29,11 @@ const Dashboard = () => {
 
   const qk = ['auth',auth?.id]
   const {data} = useQuery(qk, () => getAuth(auth?.id), {
+    onError: (_) => {
+      if(_.status === 440) {
+        logout();
+      }
+    },
     stateTime: 100_000,
     refetchOnWindowFocus:false,
   })
