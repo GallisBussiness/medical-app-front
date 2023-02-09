@@ -15,7 +15,7 @@ const schema = yup.object({
     nom: yup.string()
     .required(),
     nce: yup.string(),
-    ine: yup.string()
+    cni: yup.string()
     .required(),
     sexe: yup.string()
     .required(),
@@ -33,7 +33,7 @@ const schema = yup.object({
   }).required();
 
 function UpdateEtudiantModal({ isOpen, onResolve, onReject,etudiant }) {
-  const defaultValues = {nce: parseInt(etudiant?.nce), ine: etudiant?.ine, nom: etudiant?.nom,
+  const defaultValues = {nce: parseInt(etudiant?.nce), cni: etudiant?.cni, nom: etudiant?.nom,
      prenom: etudiant?.prenom,
      sexe: etudiant?.sexe,dateDeNaissance: etudiant?.dateDeNaissance,lieuDeNaissance: etudiant?.lieuDeNaissance,
      adresse: etudiant?.adresse,telephone: etudiant?.telephone,email: etudiant?.email,formation: etudiant?.formation};
@@ -172,10 +172,10 @@ const onCreate = data => {
              )}/>
             </div>
             <div>
-            <Controller control={control} name="ine" render={({field}) => (
+            <Controller control={control} name="cni" render={({field}) => (
               <TextInput value={field.value} onChange={field.onChange}
-              label="INE" error={errors.ine && errors.ine.message}
-              placeholder="Ine de l'étudiant"
+              label="CNI" error={errors.cni && errors.cni.message}
+              placeholder="CNI de l'étudiant"
                 withAsterisk/>
              )}/>
             </div>
