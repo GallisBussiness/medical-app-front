@@ -8,6 +8,7 @@ import { GiFiles } from 'react-icons/gi';
 import AddFiles from "./modals/AddFiles";
 import { createDoc, getDocByDossier } from "../services/docservice";
 import { showNotification } from "@mantine/notifications";
+import { IMAGE_MIME_TYPE} from '@mantine/dropzone';
 import { env } from "../env";
 
 function DossierMedical({etudiant}) {
@@ -24,6 +25,7 @@ function DossierMedical({etudiant}) {
     const {mutate: createD } = useMutation((data) => createDossier(data), {
         onSuccess:(_) => {
             qc.invalidateQueries(qk);
+            qc.invalidateQueries(qkd);
         }
     })
 
@@ -34,7 +36,7 @@ function DossierMedical({etudiant}) {
                 message: 'félicitations, votre fichier a bien été créé!',
                 color: "green"
               })
-            qc.invalidateQueries(qk);
+            qc.invalidateQueries(qkd);
         },
         onError:(_) => {
             showNotification({
@@ -72,7 +74,9 @@ function DossierMedical({etudiant}) {
         <div className="w-1/2 mx-10">
         <Grid grow gutter="xs">
         {docs?.map((doc) => (
-         <Grid.Col key={doc._id} span={2}><Image src={`${env.baseServerURL}/uploads/docs/${doc.nom}`} /></Grid.Col>
+         <Grid.Col key={doc._id} span={2}>
+           {doc.type === IMAGE_MIME_TYPE.join(',') ? <Image src={`${env.baseServerURL}/uploads/docs/${doc.nom}`}/>  : <a  href={`${env.baseServerURL}/uploads/docs/${doc.nom}`}> {doc.nom} </a> }
+        </Grid.Col>
         ))}
     </Grid>
         </div>
