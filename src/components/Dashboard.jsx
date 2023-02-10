@@ -30,7 +30,7 @@ const Dashboard = () => {
   const qk = ['auth',auth?.id]
   const {data} = useQuery(qk, () => getAuth(auth?.id), {
     onError: (_) => {
-      if(_.status === 440) {
+      if(_.response.data.statusCode === 440) {
         logout();
       }
     },

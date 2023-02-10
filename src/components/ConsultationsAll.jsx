@@ -98,7 +98,7 @@ function ConsultationsAll() {
                     filters={filters} filterDisplay="menu" loading={isLoading} responsiveLayout="scroll"
                     globalFilterFields={['dossier.etudiant.prenom', 'dossier.etudiant.nom','dateDeConsultation']} emptyMessage="Aucun Consultation trouvé"
                     currentPageReportTemplate="Voir {first} de {last} à {totalRecords} consultations">
-                     <Column field="dossier.etudiant.prenom" header="PRENOM" sortable style={{ minWidth: '4rem' }} />
+                    <Column field="dossier.etudiant.prenom" header="PRENOM" sortable style={{ minWidth: '4rem' }} />
                     <Column field="dossier.etudiant.nom" header="NOM" sortable style={{ minWidth: '4rem' }} />
                     <Column field="type" header="Type de Consultation" sortable style={{ minWidth: '4rem' }} />
                     <Column field="dateDeConsultation" header="Date" body={dateTemplate} sortable style={{ minWidth: '4rem' }} />

@@ -19,7 +19,7 @@ function DossierMedical({etudiant}) {
 
     
     const {data: docs, isLoading: isLoadingDocs } = useQuery(qkd, () => getDocByDossier(dossier?._id), {
-        enabled:!!dossier,
+        enabled: dossier !== undefined,
     });
     const qc = useQueryClient()
     const {mutate: createD } = useMutation((data) => createDossier(data), {

@@ -12,70 +12,70 @@ export  const BulletinPrint = forwardRef(({bulletin},ref) => {
 
   return (
     <div ref={ref} className="bg-white">
-    <div className="flex items-center justify-between py-2 mx-10 bg-white">
+      <div className="m-4">
+      <div className="flex items-center justify-between py-2 mx-10 bg-white">
        <div className="flex flex-col items-center space-y-1">
         <div className="flex flex-col items-center">
-            <Text fw="bol" size={25}>REPUBLIQUE DU SENEGAL</Text>
+            <Text fw="bol" size={12}>REPUBLIQUE DU SENEGAL</Text>
             <Text fw="bold" size={10}>un peuple - un But - Une Foi</Text>
             <Text size={8}>------------------</Text>
             <img src="/imgs/drapeau.png" alt="logo" className="h-16 w-16 object-cover"/>
         </div>
         <div className="flex flex-col items-center">
-            <h1 className="font-bold text-lg">MINISTERE DE L'ENSEIGNEMENT SUPPERIEUR <br /> DE LA RECHERCHE ET DE L'INNOVATION</h1>
+            <Text size={12}>MINISTERE DE L'ENSEIGNEMENT SUPPERIEUR DE LA RECHERCHE ET DE L'INNOVATION</Text>
             <Text size={8}>------------------</Text>
         </div>
        </div>
-       <div className="flex flex-col space-y-3">
+       <div className="flex flex-col space-y-1">
        <div className="flex flex-col items-center">
-            <h1 className="font-bold text-lg">CENTRE REGIONAL DES OEUVRES <br />
-                        UNIVERSITAIRES SOCIALES DE ZIGUINCHOR</h1>
-                        <img src="/imgs/logo_crousz.png" alt="logo" className="h-24 w-24 object-cover"/>
-            <h1 className="font-bold text-lg uppercase underline">DIVISION MEDICO SOCIALE</h1>
+            <Text size={12}>CENTRE REGIONAL DES OEUVRE UNIVERSITAIRES SOCIALES DE ZIGUINCHOR</Text>
+                        <img src="/imgs/logo_crousz.png" alt="logo" className="h-16 w-16 object-cover"/>
+            <Text size={10} >DIVISION MEDICO SOCIALE</Text>
         </div>
        
-        <Text fw="bold" size={18}>Ziguinchor, le </Text>
+        <Text fw="bold" size={12}>Ziguinchor, le </Text>
        </div>
     </div>
     <Divider/>
     <div className="flex items-center justify-center py-2 bg-green-400">
-    <h1 className="font-bold text-2xl text-white uppercase">bulletin de prise en charge</h1>
+    <Text size={14} fw="bold">bulletin de prise en charge</Text>
     </div>
     <Divider/>
     <div className="flex flex-col my-5 mx-10">
     <div className="flex flex-col space-y-5">
-    <h1 className="font-bold text-2xl">BENEFICIAIRE</h1>
-    <div className="overflow-x-auto relative">
-    <table className="w-full text-lg text-left">
+    <Text size={12} fw="bold">BENEFICIAIRE</Text>
+    <div className="overflow-x-hiden relative">
+    <table className="w-full text-xs text-left">
       <tbody>
         <tr>
-          <td className="px-6 font-bold text-lg">
+          <td className="px-6 font-bold text-xs">
             PRENOM(S) :
           </td>
-          <td className="px-6 font-semibold text-lg">
+          <td className="px-6 font-semibold text-xs">
             {bulletin?.dossier?.etudiant?.prenom} 
           </td>
         </tr>
         <tr>
-          <td className="px-6 font-bold text-lg">
+          <td className="px-6 font-bold text-xs">
             NOM :  
           </td>
-          <td className="px-6 font-semibold text-lg">
+          <td className="px-6 font-semibold text-xs">
           {bulletin?.dossier?.etudiant?.nom}
           </td>
         </tr>
         <tr>
-          <td className="px-6 font-bold text-lg">
+          <td className="px-6 font-bold text-xs">
             FORMATION:
           </td>
-          <td className="px-6 font-semibold text-lg">
+          <td className="px-6 font-semibold text-xs">
           {bulletin?.dossier?.etudiant?.formation ?? 'néant'}
           </td>
         </tr>
         <tr>
-          <td className="px-6 font-bold text-lg">
+          <td className="px-6 font-bold text-xs">
             N° CARTE ETUDIANT:
           </td>
-          <td className="px-6 font-semibold text-lg">
+          <td className="px-6 font-semibold text-xs">
           {bulletin?.dossier?.etudiant?.nce ?? 'néant'}
           </td>
         </tr>
@@ -87,29 +87,29 @@ export  const BulletinPrint = forwardRef(({bulletin},ref) => {
     <div className="flex flex-col space-y-5">
     <h1 className="font-bold text-2xl">RENSEIGNEMENTS MEDICAUX</h1>
     <div className="overflow-x-auto relative">
-    <table className="w-full text-lg text-left">
+    <table className="w-full text-xs text-left">
       <tbody>
         <tr>
-          <td className="px-6 font-bold text-lg">
+          <td className="px-6 font-bold text-xs">
             EXAMENS DEMANDES :
           </td>
-          <td className="px-6 font-semibold text-lg">
+          <td className="px-6 font-semibold text-xs">
           {bulletin?.examensDemandes ?? 'néant'}
           </td>
         </tr>
         <tr>
-          <td className="px-6 font-bold text-lg">
+          <td className="px-6 font-bold text-xs">
             ETABLISSEMENT DE SOINS :  
           </td>
-          <td className="px-6 font-semibold text-lg">
+          <td className="px-6 font-semibold text-xs">
           {bulletin?.etablissement}
           </td>
         </tr>
         <tr>
-          <td className="px-6 font-bold text-lg">
+          <td className="px-6 font-bold text-xs">
             SERVICE MEDICAL:
           </td>
-          <td className="px-6 font-semibold text-lg">
+          <td className="px-6 font-semibold text-xs">
           {bulletin?.service ?? 'néant'}
           </td>
         </tr>
@@ -120,23 +120,24 @@ export  const BulletinPrint = forwardRef(({bulletin},ref) => {
     </div>
     </div>
     <div className="flex justify-center mt-2">
-    <h1 className="font-semibold text-lg">Part à charge du CROUS/Z 5/5</h1>
+    <h1 className="font-semibold text-xs">Part à charge du CROUS/Z 5/5</h1>
     </div>
     <div className="flex items-center justify-around mt-5 mx-20">
-    <h1 className="font-bold text-lg">LE MEDECIN CHEF</h1>
-    <h1 className="font-bold text-lg">LE DIRECTEUR</h1>
+    <Text size={12}>LE MEDECIN CHEF</Text>
+    <Text size={12}>LE DIRECTEUR</Text>
     </div>
     <div className="flex items-center justify-center mt-60">
-    <h1 className="font-bold text-lg">CENTRE REGIONAL DES OEUVRES UNIVERSITAIRES SOCIALES DE ZIGUINCHOR</h1>
+    <Text size={10} fw="bold">CENTRE REGIONAL DES OEUVRES UNIVERSITAIRES SOCIALES DE ZIGUINCHOR</Text>
     </div>
     <div className="flex items-center justify-between my-2 mx-5">
     <QRCodeSVG value={bulletin?.code} fgColor="#25BE45" size={100}/>
     <div className="flex flex-col">
-            <h1 className="font-bold text-lg">EFFECTUEE PAR : Dr. {bulletin?.user?.prenom} {bulletin?.user?.nom}</h1>
-            <h1 className="font-bold text-lg">EXERCICE : {new Date().getFullYear()}</h1>
-            {bulletin?.date && <h1 className="font-bold text-lg">DATE : {format(parseISO(bulletin?.date),'dd-MMMM-yyyy H:m:s', {locale: fr})}</h1>}
+            <Text size={10}>EXERCICE : {new Date().getFullYear()}</Text>
+            {bulletin?.date && <Text size={10}>DATE : {format(parseISO(bulletin?.date),'dd-MMMM-yyyy H:m:s', {locale: fr})}</Text>}
         </div>
     </div>
+
+      </div>
     </div>
   );
 });

@@ -258,7 +258,7 @@ function Etudiants() {
                     currentPageReportTemplate="Voir {first} de {last} à {totalRecords} étudiants">
                     <Column selectionMode="multiple" headerStyle={{ width: '2em' }}></Column>
                     <Column field="nce" header="NCE" sortable style={{ minWidth: '6rem' }} />
-                    <Column field="ine" header="INE" style={{ minWidth: '6rem' }} />
+                    <Column field="cni" header="CNI" style={{ minWidth: '6rem' }} />
                     <Column field="prenom" header="Prenom" sortable style={{ minWidth: '6rem' }} />
                     <Column field="nom" header="Nom" sortable style={{ minWidth: '6rem' }} />
                     <Column field="dateDeNaissance" header="Date de Naissance" body={dateTemplate} sortable  style={{ minWidth: '3rem' }}/>
