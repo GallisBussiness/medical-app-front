@@ -36,6 +36,7 @@ const schema = yup.object({
 function UpdateConsultationModal({ isOpen, onResolve, onReject,idDossier,idAuth,consultation }) {
 
   const defaultValues = {
+    _id: consultation._id,
     dateDeConsultation: consultation?.dateDeConsultation,
     poids: consultation?.poids,
     taille: consultation?.taille,

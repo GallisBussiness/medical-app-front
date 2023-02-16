@@ -171,7 +171,7 @@ const saveAsExcelFile = (buffer, fileName) => {
    }
 
   const handleUpdateConsultation = (d) => {
-      UpdateConsultationModal({idEtudiant: etudiant?._id,idAuth: auth?.id,consultation: d}).then((d => {
+      UpdateConsultationModal({idDossier: Dossier?._id,idAuth: auth?.id,consultation: d}).then((d => {
           const {_id,...rest} = d;
           update({_id,data: rest});
       }));

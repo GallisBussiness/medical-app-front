@@ -33,7 +33,7 @@ const schema = yup.object({
   }).required();
 
 function UpdateEtudiantModal({ isOpen, onResolve, onReject,etudiant }) {
-  const defaultValues = {nce: parseInt(etudiant?.nce), cni: etudiant?.cni, nom: etudiant?.nom,
+  const defaultValues = {_id: etudiant?._id,nce: parseInt(etudiant?.nce), cni: etudiant?.cni, nom: etudiant?.nom,
      prenom: etudiant?.prenom,
      sexe: etudiant?.sexe,dateDeNaissance: etudiant?.dateDeNaissance,lieuDeNaissance: etudiant?.lieuDeNaissance,
      adresse: etudiant?.adresse,telephone: etudiant?.telephone,email: etudiant?.email,formation: etudiant?.formation};

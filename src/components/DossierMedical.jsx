@@ -1,6 +1,6 @@
 import { Button, Grid, Image, LoadingOverlay } from "@mantine/core";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { createDossier, getDossierByEtudiant } from "../services/dossier-service";
+import { createDossier, getDossierByEtudiant, updateDossier } from "../services/dossier-service";
 import Dossier from "./Dossier";
 import RemplirDossierModal from "./modals/RemplirDossierModal";
 import UpdateDossierMedical from "./modals/UpdateDossierMedical";
@@ -10,6 +10,7 @@ import { createDoc, getDocByDossier } from "../services/docservice";
 import { showNotification } from "@mantine/notifications";
 import { IMAGE_MIME_TYPE} from '@mantine/dropzone';
 import { env } from "../env";
+import { FaRegFilePdf } from "react-icons/fa";
 
 function DossierMedical({etudiant}) {
 
@@ -24,8 +25,39 @@ function DossierMedical({etudiant}) {
     const qc = useQueryClient()
     const {mutate: createD } = useMutation((data) => createDossier(data), {
         onSuccess:(_) => {
+            showNotification({
+                title: 'Dossier Crée !',
+                message: 'félicitations, le dossier a bien été créé!',
+                color: "green"
+              })
             qc.invalidateQueries(qk);
             qc.invalidateQueries(qkd);
+        },
+        onError:(_) => {
+            showNotification({
+                title: 'Dossier non crée!',
+                message: 'désolé, le dossier n\'a pas pu être créé',
+                color: "red"
+              });
+        }
+    })
+
+    const {mutate: updateD } = useMutation(({_id,...rest}) => updateDossier(_id,rest), {
+        onSuccess:(_) => {
+            showNotification({
+                title: 'Dossier Modifié !',
+                message: 'félicitations, le dossier a bien été modifié!',
+                color: "green"
+              })
+            qc.invalidateQueries(qk);
+            qc.invalidateQueries(qkd);
+        },
+        onError:(_) => {
+            showNotification({
+                title: 'Dossier non modifié!',
+                message: 'désolé, le dossier n\'a pas pu être modifié',
+                color: "red"
+              });
         }
     })
 
@@ -52,7 +84,7 @@ function DossierMedical({etudiant}) {
     }
 
     const handleUpdateDossier = (dossier) => {
-        UpdateDossierMedical({dossier}).then(createD).catch(((e) => console.log(e, "rejected create")))
+        UpdateDossierMedical({dossier}).then(updateD).catch(((e) => console.log(e, "rejected create")))
     }
 
     const handleAddFile = (dossier) => {
@@ -75,7 +107,7 @@ function DossierMedical({etudiant}) {
         <Grid grow gutter="xs">
         {docs?.map((doc) => (
          <Grid.Col key={doc._id} span={2}>
-           {doc.type === IMAGE_MIME_TYPE.join(',') ? <Image src={`${env.baseServerURL}/uploads/docs/${doc.nom}`}/>  : <a  href={`${env.baseServerURL}/uploads/docs/${doc.nom}`}> {doc.nom} </a> }
+           {doc.type === IMAGE_MIME_TYPE.join(',') ? <Image src={`${env.baseServerURL}/uploads/docs/${doc.nom}`}/>  : <a  href={`${env.baseServerURL}/uploads/docs/${doc.nom}`}><FaRegFilePdf className="text-red-500 w-10 h-10 inline" /> {doc.nom} </a> }
         </Grid.Col>
         ))}
     </Grid>
