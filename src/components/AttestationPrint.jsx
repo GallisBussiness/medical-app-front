@@ -37,22 +37,22 @@ export  const AttestationPrint = forwardRef(({dossier},ref) => {
     </div>
     <div className="mx-10 my-24">
         <Text size={20} className="font-roboto">
-            Je sousigné, DR. Amadou P. K. Koita, Medecin Chef du CROUS/Z atteste que {dossier?.etudiant?.sexe === "H" ? "Me " : "Mme " } {dossier?.etudiant?.prenom} {dossier?.etudiant?.nom} {' '}
+            Je sousigné, <span className="font-bold"> DR. Amadou P. K. Koïta</span>, Medecin Chef du CROUS/Z atteste que {dossier?.etudiant?.sexe === "H" ? "Me " : "Mme " } <span className="font-bold">{dossier?.etudiant?.prenom} {dossier?.etudiant?.nom} </span>  {' '}
             {dossier?.etudiant?.sexe === "H" ? "Né " : "Née " } le {format(parseISO(dossier?.etudiant?.dateDeNaissance), "dd/MM/yyyy", {locale: fr})} à {dossier?.etudiant?.lieuDeNaissance} et de numéro de carte d'identité nationale {' '}
-             {dossier?.etudiant?.cni} a {dossier?.etudiant?.sexe === "H" ? "effectué " : "effectuée " } sa visite médicale. <br />
+             <span className="font-bold">{dossier?.etudiant?.cni} </span>  a {dossier?.etudiant?.sexe === "H" ? "effectué " : "effectuée " } sa visite médicale. <br />
              Par conséquent, {dossier?.etudiant?.sexe === "H" ? "il " : "elle " } est {dossier?.etudiant?.sexe === "H" ? "déclaré " : "déclarée " } apte. <br /><br />
              En foi de quoi, la présente attestation lui est délivrée pour servir et valoir ce que de droit.
         </Text>
     </div>
-    <div className="flex items-center justify-end mt-10 mx-20">
+      <div className="flex justify-end mx-10">
+            {dossier?.createdAt && <Text size={18} fw="bold">Ziguinchor, le : {format(parseISO(dossier?.createdAt),'dd-MMMM-yyyy', {locale: fr})}</Text>}
+        </div>
+    <div className="flex items-center justify-end mt-5 mx-20">
     <Text size={22} className="font-roboto">LE MEDECIN CHEF</Text>
     </div>
-    <div className="flex items-center justify-between mt-40">
+    <div className="flex items-center justify-start mt-32">
     <QRCodeSVG value={`/dashbord/etudiants/${dossier?.etudiant?._id}`} fgColor="#25BE45" size={60}/>
-    <div className="flex flex-col">
-            {dossier?.createdAt && <Text size={10}>Ziguinchor, le : {format(parseISO(dossier?.createdAt),'dd-MMMM-yyyy', {locale: fr})}</Text>}
-        </div>
-   
+    
     </div>
     <div className="flex items-center justify-center my-2 mx-5">
     <Text size={12} fw="bold">CENTRE REGIONAL DES OEUVRES UNIVERSITAIRES SOCIALES DE ZIGUINCHOR</Text>
