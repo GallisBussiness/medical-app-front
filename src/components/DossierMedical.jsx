@@ -10,12 +10,16 @@ import { createDoc, getDocByDossier } from "../services/docservice";
 import { showNotification } from "@mantine/notifications";
 import { IMAGE_MIME_TYPE} from '@mantine/dropzone';
 import { env } from "../env";
-import { FaRegFilePdf } from "react-icons/fa";
+import { FaPrint, FaRegFilePdf } from "react-icons/fa";
+import { AttestationPrint } from "./AttestationPrint";
+import ReactToPrint from 'react-to-print';
+import { useRef } from "react";
 
 function DossierMedical({etudiant}) {
 
     const qk = ['get_Dossier',etudiant?._id];
     const qkd = ['get_Docs',etudiant?._id];
+    const attestationRef = useRef();
     const {data: dossier, isLoading: isLoadingDossier } = useQuery(qk, () => getDossierByEtudiant(etudiant?._id));
 
     
@@ -100,6 +104,13 @@ function DossierMedical({etudiant}) {
         <div className="flex  space-x-2">
             <Button className="bg-green-500 hover:bg-green-700" onClick={() => handleUpdateDossier(dossier)}>MODIFIER LE DOSSIER</Button>
             <Button className="bg-amber-500 hover:bg-amber-700" onClick={() => handleAddFile(dossier)}><GiFiles  className="h-6 w-6 text-white"/> AJOUTER UN FICHIER</Button>
+            <ReactToPrint
+                trigger={() => <Button className="bg-blue-500 hover:bg-blue-600" leftIcon={<FaPrint className="text-white mx-1"/>}> IMPRIMER L'ATTESTATION</Button>}
+                content={() => attestationRef.current}
+            />
+            <div className="hidden print-block">
+            <AttestationPrint ref={attestationRef} dossier={dossier}/>
+            </div>
         </div>
     
             </div>

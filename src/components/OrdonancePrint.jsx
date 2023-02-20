@@ -1,4 +1,4 @@
-import { Text } from "@mantine/core";
+import { Divider, Text } from "@mantine/core";
 import { format, parseISO } from "date-fns"
 import { fr } from "date-fns/locale"
 import { Chip } from "primereact/chip";
@@ -31,25 +31,28 @@ return (
             <Text size={8}>------------------</Text>
             <img src="/imgs/drapeau.png" alt="logo" className="h-16 w-16 object-cover"/>
         </div>
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center text-center">
             <Text size={12}>MINISTERE DE L'ENSEIGNEMENT SUPPERIEUR DE LA RECHERCHE ET DE L'INNOVATION</Text>
             <Text size={8}>------------------</Text>
         </div>
        </div>
        <div className="flex flex-col space-y-1">
-       <div className="flex flex-col items-center">
+       <div className="flex flex-col items-center text-center">
             <Text size={12}>CENTRE REGIONAL DES OEUVRE UNIVERSITAIRES SOCIALES DE ZIGUINCHOR</Text>
                         <img src="/imgs/logo_crousz.png" alt="logo" className="h-16 w-16 object-cover"/>
             <Text size={10} >DIVISION MEDICO SOCIALE</Text>
         </div>
-       
-        <Text fw="bold" size={12}>Ziguinchor, le </Text>
        </div>
     </div>
-    <div className="my-2 px-5">
-            <div className="flex items-center justify-center">
-            <Text size={12} fw="bold">TRAITEMENT PRESCRIT</Text>
-            </div>
+    <div className="my-10">
+         <Divider/>
+    <div className="flex items-center justify-center py-2 bg-green-400">
+    <Text size={20} fw="bold" className="font-roboto text-white uppercase">ordonnance</Text>
+    </div>
+    <Divider/>
+    </div>
+   
+    <div className="my-2 px-5 mt-10">
             <DataTable value={consultation?.traitement}
                        size="small"
                       dataKey="medicament"
@@ -62,18 +65,21 @@ return (
                       <Column field="frequence" header="Frequence de prise" body={frequenceTemplate} style={{ minWidth: '4rem' }} />
                   </DataTable>
             </div>
-    <div className="flex flex-col items-center justify-end h-96">
-    <Text size={14} fw="bold">CENTRE REGIONAL DES OEUVRES UNIVERSITAIRES SOCIALES DE ZIGUINCHOR</Text>
-    </div>
-    <div className="flex items-center justify-between my-5 mx-5">
-    <QRCodeSVG value={consultation?.code} fgColor="#25BE45" size={100}/>
+
+            <div className="flex items-center justify-between mt-32">
+            <QRCodeSVG value={consultation?.code} fgColor="#25BE45" size={60}/>
     <div className="flex flex-col">
-            <h1 className="font-bold text-xs">EFFECTUEE PAR : Dr. {consultation?.user?.prenom} {consultation?.user?.nom}</h1>
-            <h1 className="font-bold text-xs">EXERCICE : {new Date().getFullYear()}</h1>
-            {consultation?.dateDeConsultation && <h1 className="font-bold text-xs">DATE : {format(parseISO(consultation?.dateDeConsultation),'dd-MMMM-yyyy H:m:s', {locale: fr})}</h1>}
+    <h1 className="font-bold text-xs">EFFECTUEE PAR : Dr. {consultation?.user?.prenom} {consultation?.user?.nom}</h1>
+    {consultation?.dateDeConsultation && <h1 className="font-bold text-xs">Ziguinchor, le : {format(parseISO(consultation?.dateDeConsultation),'dd-MMMM-yyyy', {locale: fr})}</h1>}
         </div>
     </div>
-
+    <div className="flex items-center justify-center my-2 mx-5">
+    <Text size={12} fw="bold">CENTRE REGIONAL DES OEUVRES UNIVERSITAIRES SOCIALES DE ZIGUINCHOR</Text>
+    </div>
+       <div className="mt-2">
+        <Divider />
+        <Text size={12} fw="bold" className="text-center">Kénia sur la route de l'université - BP 1012 - TEL: 33 990 17 20 - FAX: 33 990 17 35 </Text>
+       </div>
     </div>
    </div> 
 );

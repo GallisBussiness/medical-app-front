@@ -3,7 +3,7 @@ import { Tabs } from '@mantine/core';
 import { FaBookMedical, FaFileMedical, FaRegAddressCard } from 'react-icons/fa';
 
 export function EtudiantTab({dossierComponent,consulationComponent,bulletinComponent}) {
-  const [activeTab, setActiveTab] = useState('dossier');
+  const [activeTab, setActiveTab] = useState('consultation');
 
   return (
     <Tabs value={activeTab} onTabChange={setActiveTab} className="bg-slate-50 min-h-96">

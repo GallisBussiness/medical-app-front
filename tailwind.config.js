@@ -15,6 +15,9 @@ module.exports = {
         'blacky':'#0C0910',
         'danger': '#C1292E',
       },
+      fontFamily: {
+        'roboto': ['"Roboto Serif"', 'serif'],
+      }
     },
   },
   plugins: [],

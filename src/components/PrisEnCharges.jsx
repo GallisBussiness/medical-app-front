@@ -103,7 +103,7 @@ function PrisEnCharges({etudiant}) {
   }
 
   const handleCreateBulletin = () => {
-      CreateBulletinModal({idDossier: Dossier?._id,idAuth: auth?.id}).then(create);
+      CreateBulletinModal({idDossier: Dossier?._id,idAuth: auth?.id}).then(create).catch(console.log);
   }
 
   const handleDelete = async (ev) => {

@@ -11,7 +11,7 @@ import { Button, Select, TextInput } from '@mantine/core';
 const schema = yup.object({
     date: yup.string()
     .required(),
-    examensDemandes: yup.array(),
+    examensDemandes: yup.array().required(),
     service: yup.string(),
     etablissement: yup.string(),
     user: yup.string().required(),

@@ -35,7 +35,7 @@ const schema = yup.object({
 
 
 function CreateEtudiantModal({ isOpen, onResolve, onReject }) {
-    const defaultValues = {nce: '', cni: '', nom: '', prenom: '',sexe: '',dateDeNaissance: new Date().toISOString(),lieuDeNaissance:'',adresse:'',telephone:'',email: '',formation:''};
+    const defaultValues = {nce: '', cni: '', nom: '', prenom: '',sexe: '',dateDeNaissance: new Date().toISOString(),lieuDeNaissance:'',adresse:'',telephone:'',email: 'neant',formation:''};
       const {control, handleSubmit, formState: { errors } } = useForm({
           resolver: yupResolver(schema),
         defaultValues

@@ -21,6 +21,8 @@ import {FaFileCsv, FaFileExcel, FaFilePdf, FaUserGraduate } from 'react-icons/fa
 import { useNavigate } from 'react-router-dom'
 import { ActionIcon, Button } from '@mantine/core'
 import { format, parseISO } from 'date-fns'
+import { createDossier } from '../services/dossier-service';
+import { showNotification } from '@mantine/notifications';
 
 function Etudiants() {
 
@@ -33,6 +35,25 @@ function Etudiants() {
 
     const dt = useRef(null);
     
+
+    const {mutate: createD } = useMutation((data) => createDossier(data), {
+      onSuccess:(_) => {
+          showNotification({
+              title: 'Dossier Crée !',
+              message: 'félicitations, le dossier a bien été créé!',
+              color: "green"
+            })
+          qc.invalidateQueries(qk);
+          navigate('/dashboard/etudiants/' + _.etudiant._id);
+      },
+      onError:(_) => {
+          showNotification({
+              title: 'Dossier non crée!',
+              message: 'désolé, le dossier n\'a pas pu être créé',
+              color: "red"
+            });
+      }
+  })
 
     const cols = [
         { field: 'nce', header: 'NCE' },
@@ -110,7 +131,7 @@ function Etudiants() {
     const {mutate: create} = useMutation((data) => createEtudiant(data), {
         onSuccess: (_) => {
         toast.current.show({severity: 'success', summary: 'Creation Etudiant', detail: 'Création réussie !!'});
-          RemplirDossierModal({etudiant: _._id}).then(console.log).catch((e) => console.log("creation rejected !",e))
+          RemplirDossierModal({etudiant: _}).then(createD).catch((e) => console.log("creation rejected !",e))
          qc.invalidateQueries(qk);
         },
         onError: (_) => {
@@ -254,7 +275,7 @@ function Etudiants() {
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" rowsPerPageOptions={[10,25,50]}
                     dataKey="_id" rowHover selection={selectedEtudiants} onSelectionChange={e => setSelectedEtudiants(e.value)}
                     filters={filters} filterDisplay="menu" loading={isLoading} responsiveLayout="scroll"
-                    globalFilterFields={['nom', 'prenom','telephone','adresse','lieuDeNaissance']} emptyMessage="Aucun Etudiant trouvé"
+                    globalFilterFields={['nom','cni','nce', 'prenom','telephone','lieuDeNaissance']} emptyMessage="Aucun Etudiant trouvé"
                     currentPageReportTemplate="Voir {first} de {last} à {totalRecords} étudiants">
                     <Column selectionMode="multiple" headerStyle={{ width: '2em' }}></Column>
                     <Column field="nce" header="NCE" sortable style={{ minWidth: '6rem' }} />
