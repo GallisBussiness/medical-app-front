@@ -41,7 +41,6 @@ const Login = () => {
 
   const {isLoading, mutate} = useMutation((data) => login(data), {
     onSuccess(data) { 
-      console.log(data);
       toast.current.show({severity: 'success', summary: 'Bienvenu !!!', detail: 'Connexion réussi'});
       if(signIn({token: data?.token,
         expiresIn: 3600,
