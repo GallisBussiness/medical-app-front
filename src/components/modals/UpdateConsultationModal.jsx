@@ -111,7 +111,7 @@ function UpdateConsultationModal({ isOpen, onResolve, onReject,idDossier,idAuth,
             label="Poids" error={errors.poids && errors.poids.message}
             placeholder="entrer le poids"
             rightSection="kg"
-              withAsterisk/>
+            />
              )}/>
             </div>
             <div>
@@ -120,7 +120,7 @@ function UpdateConsultationModal({ isOpen, onResolve, onReject,idDossier,idAuth,
             label="Taille" error={errors.taille && errors.taille.message}
             placeholder="entrer la taille"
             rightSection="cm"
-              withAsterisk/>
+            />
              )}/>
             </div>
             <div>
@@ -128,7 +128,7 @@ function UpdateConsultationModal({ isOpen, onResolve, onReject,idDossier,idAuth,
             <TextInput value={field.value} onChange={field.onChange}
             label="Tension" error={errors.tension && errors.tension.message}
             placeholder="entrer la tension"
-              withAsterisk/>
+            />
              )}/>
             </div>
             <div>
@@ -137,7 +137,7 @@ function UpdateConsultationModal({ isOpen, onResolve, onReject,idDossier,idAuth,
             label="Temperature" error={errors.temperature && errors.temperature.message}
             placeholder="entrer la température"
             rightSection="°C"
-              withAsterisk/>
+            />
              )}/>
             </div>
             <div>
@@ -146,7 +146,7 @@ function UpdateConsultationModal({ isOpen, onResolve, onReject,idDossier,idAuth,
             label="Pouls" error={errors.poule && errors.poule.message}
             placeholder="entrer le pouls"
             rightSection="bpm"
-              withAsterisk/>
+            />
              )}/>
             </div>
             <div>
@@ -154,7 +154,7 @@ function UpdateConsultationModal({ isOpen, onResolve, onReject,idDossier,idAuth,
             <TextInput value={field.value} onChange={field.onChange}
             label="Glycemie" error={errors.glycemie && errors.glycemie.message}
             placeholder="entrer le taux de glycémie"
-              withAsterisk/>
+            />
              )}/>
             </div>
             <div>
@@ -162,7 +162,7 @@ function UpdateConsultationModal({ isOpen, onResolve, onReject,idDossier,idAuth,
             <TextInput value={field.value} onChange={field.onChange}
             label="Corps Cetonique" error={errors.corps_cetonique && errors.corps_cetonique.message}
             placeholder="entrer le corps cétonique"
-              withAsterisk/>
+            />
              )}/>
             </div>
             <div>
@@ -170,7 +170,7 @@ function UpdateConsultationModal({ isOpen, onResolve, onReject,idDossier,idAuth,
             <TextInput value={field.value} onChange={field.onChange}
             label="Autres" error={errors.autres && errors.autres.message}
             placeholder="autres observations ..."
-              withAsterisk/>
+              />
              )}/>
             </div>
             <div>
@@ -178,7 +178,7 @@ function UpdateConsultationModal({ isOpen, onResolve, onReject,idDossier,idAuth,
             <TextInput value={field.value} onChange={field.onChange}
             label="Plaite du jour" error={errors.plainte_du_jour	&& errors.plainte_du_jour.message}
             placeholder="Plaite du jour ..."
-              withAsterisk/>
+              />
              )}/>
             </div>
             <div>
@@ -186,7 +186,7 @@ function UpdateConsultationModal({ isOpen, onResolve, onReject,idDossier,idAuth,
             <TextInput value={field.value} onChange={field.onChange}
             label="Examen" error={errors.examen	&& errors.examen.message}
             placeholder="Examen ..."
-              withAsterisk/>
+              />
              )}/>
             </div>
             <div>
@@ -194,7 +194,7 @@ function UpdateConsultationModal({ isOpen, onResolve, onReject,idDossier,idAuth,
             <TextInput value={field.value} onChange={field.onChange}
             label="Diagnostique" error={errors.diagnostique	&& errors.diagnostique.message}
             placeholder="Diagnostique ..."
-              withAsterisk/>
+              />
              )}/>
             </div>
             <div className="my-2">
@@ -205,7 +205,7 @@ function UpdateConsultationModal({ isOpen, onResolve, onReject,idDossier,idAuth,
             <TextInput value={field.value} onChange={field.onChange}
             label="Bilan" error={errors.bilan && errors.bilan.message}
             placeholder="entrer le bilan"
-              withAsterisk/>
+              />
              )}/>
             </div>
             <div>
@@ -219,7 +219,7 @@ function UpdateConsultationModal({ isOpen, onResolve, onReject,idDossier,idAuth,
             <TextInput value={field.value} onChange={field.onChange}
             label="References" error={errors.reference && errors.reference.message}
             placeholder="References ...."
-              withAsterisk/>
+              />
              )}/>
             </div>
            

@@ -23,8 +23,7 @@ const schema = yup.object({
     .required(),
     lieuDeNaissance: yup.string()
     .required(),
-    adresse: yup.string()
-    .required(),
+    adresse: yup.string(),
     telephone: yup.string()
     .required(),
     email: yup.string(),
@@ -227,7 +226,7 @@ function CreateEtudiantModal({ isOpen, onResolve, onReject }) {
              <TextInput value={field.value} onChange={field.onChange}
              label="Adresse" error={errors.adresse && errors.adresse.message}
              placeholder="Adresse de l'étudiant"
-               withAsterisk/>
+              />
              )}/>
             </div>
             <div>

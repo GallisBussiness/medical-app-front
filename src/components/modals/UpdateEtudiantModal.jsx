@@ -23,8 +23,7 @@ const schema = yup.object({
     .required(),
     lieuDeNaissance: yup.string()
     .required(),
-    adresse: yup.string()
-    .required(),
+    adresse: yup.string(),
     telephone: yup.string()
     .required(),
     email: yup.string(),
