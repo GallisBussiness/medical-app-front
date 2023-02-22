@@ -1,4 +1,4 @@
-import { Button, Grid, Image, LoadingOverlay } from "@mantine/core";
+import { ActionIcon, Button, Card, Grid, Image, LoadingOverlay } from "@mantine/core";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { createDossier, getDossierByEtudiant, updateDossier } from "../services/dossier-service";
 import Dossier from "./Dossier";
@@ -6,14 +6,15 @@ import RemplirDossierModal from "./modals/RemplirDossierModal";
 import UpdateDossierMedical from "./modals/UpdateDossierMedical";
 import { GiFiles } from 'react-icons/gi';
 import AddFiles from "./modals/AddFiles";
-import { createDoc, getDocByDossier } from "../services/docservice";
+import { createDoc, getDocByDossier, removeDoc } from "../services/docservice";
 import { showNotification } from "@mantine/notifications";
 import { IMAGE_MIME_TYPE} from '@mantine/dropzone';
 import { env } from "../env";
-import { FaPrint, FaRegFilePdf } from "react-icons/fa";
+import { FaPrint, FaRegFilePdf, FaTrash } from "react-icons/fa";
 import { AttestationPrint } from "./AttestationPrint";
 import ReactToPrint from 'react-to-print';
 import { useRef } from "react";
+
 
 function DossierMedical({etudiant}) {
 
@@ -41,6 +42,24 @@ function DossierMedical({etudiant}) {
             showNotification({
                 title: 'Dossier non crée!',
                 message: 'désolé, le dossier n\'a pas pu être créé',
+                color: "red"
+              });
+        }
+    })
+
+    const {mutate: DD, isLoading: isLoadingDD } = useMutation((id) => removeDoc(id), {
+        onSuccess:(_) => {
+            showNotification({
+                title: 'Document supprimé avec succés !',
+                message: 'félicitations, le document a bien été supprimé!',
+                color: "green"
+              })
+            qc.invalidateQueries(qkd);
+        },
+        onError:(_) => {
+            showNotification({
+                title: 'Document non supprimé!',
+                message: 'désolé, le document n\'a pas pu être supprimé',
                 color: "red"
               });
         }
@@ -95,9 +114,23 @@ function DossierMedical({etudiant}) {
         AddFiles({dossier}).then(uploads).catch(((e) => console.log(e, "rejected create")))
     }
 
+    const handleDeleteDoc = (id) => DD(id);
+    
+
+
+
+    const WrapperDoc = ({doc}) => {
+        return <Card>
+           <div className="my-2 mx-1 border">
+           {doc.type === IMAGE_MIME_TYPE.join(',') ? <Image src={`${env.baseServerURL}/uploads/docs/${doc.nom}`}/>   : <a  href={`${env.baseServerURL}/uploads/docs/${doc.nom}`}><FaRegFilePdf className="text-red-500 w-10 h-10 inline" /> {doc.nom} </a>  }
+           </div>
+           <div className="flex items-center space-x-3 mx-1"> <ActionIcon onClick={() => handleDeleteDoc(doc._id)}> <FaTrash className="text-red-500 w-6 h-6"/></ActionIcon>  </div>
+        </Card>
+    }
+
   return (
     <>
-    <LoadingOverlay visible={isLoadingDossier || isLoading || isLoadingDocs} overlayBlur={2} />
+    <LoadingOverlay visible={isLoadingDossier || isLoading || isLoadingDocs || isLoadingDD} overlayBlur={2} />
     {dossier ? <div className="flex items-center space-x-2 py-20 mx-5">
         <div className="w-full flex flex-col  items-center justify-between">
         <Dossier dossier={dossier} />
@@ -118,7 +151,7 @@ function DossierMedical({etudiant}) {
         <Grid grow gutter="xs">
         {docs?.map((doc) => (
          <Grid.Col key={doc._id} span={2}>
-           {doc.type === IMAGE_MIME_TYPE.join(',') ? <Image src={`${env.baseServerURL}/uploads/docs/${doc.nom}`}/>  : <a  href={`${env.baseServerURL}/uploads/docs/${doc.nom}`}><FaRegFilePdf className="text-red-500 w-10 h-10 inline" /> {doc.nom} </a> }
+           <WrapperDoc doc={doc} />
         </Grid.Col>
         ))}
     </Grid>

@@ -22,7 +22,7 @@ function Etudiant() {
   return (
     <>
     {data && <> 
-    <UserInfo prenom={data.prenom} nom={data.nom} email={data.email} sexe={data.sexe} telephone={data.telephone}/>
+    <UserInfo prenom={data.prenom} nom={data.nom} email={data.email} sexe={data.sexe} telephone={data.telephone} user={data.user}/>
     <EtudiantTab bulletinComponent={<PrisEnCharges etudiant={data} />} dossierComponent={<DossierMedical etudiant={data}/>} consulationComponent={<Consultations etudiant={data} />} />
     </> }
     <Toast ref={toast} />

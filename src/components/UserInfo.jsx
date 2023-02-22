@@ -8,7 +8,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 
-export function UserInfo({ prenom, nom, telephone, email,sexe }) {
+export function UserInfo({ prenom, nom, telephone, email,sexe,user }) {
   const { classes } = useStyles();
   return (
     <div className="px-5 py-10 bg-slate-50">
@@ -35,6 +35,12 @@ export function UserInfo({ prenom, nom, telephone, email,sexe }) {
             <Text size="md">
               {telephone}
             </Text>
+          </Group>
+          <Group noWrap spacing={10} mt={5}>
+            <Text size="md">Crée Par : </Text>
+            {user ? <Text size="md">
+              {user?.prenom} {user?.nom}
+            </Text> : <Text size="md">Inconnu </Text>}
           </Group>
         </div>
       </Group>

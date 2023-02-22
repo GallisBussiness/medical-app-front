@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { MaskField } from 'react-mask-field';
 import { create } from 'react-modal-promise'
-import { Button, Input, NumberInput, Radio, Select, TextInput } from '@mantine/core';
+import { Button, Input, Radio, Select, TextInput } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import 'dayjs/locale/fr';
 import { parseISO } from 'date-fns';
@@ -29,12 +29,13 @@ const schema = yup.object({
     email: yup.string(),
     formation: yup.string()
     .required(),
+    user: yup.string(),
   }).required();
 
 
 
-function CreateEtudiantModal({ isOpen, onResolve, onReject }) {
-    const defaultValues = {nce: '', cni: '', nom: '', prenom: '',sexe: '',dateDeNaissance: new Date().toISOString(),lieuDeNaissance:'',adresse:'',telephone:'',email: 'neant@zig.univ.sn',formation:''};
+function CreateEtudiantModal({ isOpen, onResolve, onReject,idAuth }) {
+    const defaultValues = {nce: '', cni: '', nom: '', prenom: '',sexe: '',dateDeNaissance: new Date().toISOString(),lieuDeNaissance:'',adresse:'',telephone:'',email: 'neant@zig.univ.sn',formation:'',user: idAuth};
       const {control, handleSubmit, formState: { errors } } = useForm({
           resolver: yupResolver(schema),
         defaultValues
@@ -42,7 +43,6 @@ function CreateEtudiantModal({ isOpen, onResolve, onReject }) {
 
      
     const onCreate = data => {
-
         onResolve(data);
       };
 
@@ -166,7 +166,7 @@ function CreateEtudiantModal({ isOpen, onResolve, onReject }) {
     <form  onSubmit={handleSubmit(onCreate)} method="POST">
            <div>
             <Controller control={control} name="nce" render={({field}) => (
-            <NumberInput label="Numéro carte d'étudiant" error={errors.nce && errors.nce.message} value={field.value} onChange={field.onChange}/>
+            <TextInput label="Numéro carte d'étudiant" error={errors.nce && errors.nce.message} value={field.value} onChange={field.onChange}/>
              )}/>
             </div>
             <div>

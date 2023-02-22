@@ -6,7 +6,7 @@ import { getConsultations } from '../services/consultationservice';
 import { getBulletins } from '../services/bulletinservice';
 import { getEtudiants } from '../services/etudiantservice';
 import { useState } from 'react';
-import { Text } from '@mantine/core';
+import { Loader, Text } from '@mantine/core';
 import StateComponent from './StateComponent';
 import { getMonth, parseISO } from 'date-fns';
 import StateComponentApx from './StateComponentApx';
@@ -30,7 +30,7 @@ function Statistique() {
 
   const qkc = ['get_Consultations']
 
-  const {data: Consultations } = useQuery(qkc, () => getConsultations(), {
+  const {data: Consultations,isLoading: LC } = useQuery(qkc, () => getConsultations(), {
     onSuccess: (_) => {
       const dt = [];
          for(let i = 0; i <= 11; i++){
@@ -97,7 +97,7 @@ function Statistique() {
 
   const qkb = ['get_Bulletins']
 
-  const {data: Bulletins } = useQuery(qkb, () => getBulletins(), {
+  const {data: Bulletins,isLoading: LB } = useQuery(qkb, () => getBulletins(), {
     onSuccess:(_) => {
       const labels = ["HOMMES","FEMMES"];
       const hommes = _.filter(c=> c?.dossier?.etudiant?.sexe === "H");
@@ -117,7 +117,7 @@ setBulletinData({
 
   const qke = ['get_Etudiants']
 
-    const {data: Etudiants } = useQuery(qke, () => getEtudiants());
+    const {data: Etudiants,isLoading } = useQuery(qke, () => getEtudiants());
 
   return (
     <>
@@ -148,7 +148,7 @@ setBulletinData({
     <Link to="/dashboard/allconsultations">
       <div className="flex items-center p-4 bg-amber-500 rounded-lg shadow-xs">
     <div className="p-3 mr-4 bg-white rounded-full">
-     <FaStethoscope className="h-6 w-6 text-black" />
+     {LC ? <Loader /> : <FaStethoscope className="h-6 w-6 text-black" />} 
     </div>
     <div>
       <p className="mb-2 text-2xl font-semibold text-white uppercase">
@@ -164,7 +164,7 @@ setBulletinData({
   <Link to="/dashboard/allbulletins">
   <div className="flex items-center p-4 bg-green-500 rounded-lg shadow-xs ">
     <div className="p-3 mr-4 bg-whity rounded-full">
-     <FaNewspaper className="h-6 w-6 text-blacky"/>
+     {LB ? <Loader /> : <FaNewspaper className="h-6 w-6 text-blacky"/>} 
     </div>
     <div>
       <p className="mb-2 text-2xl font-semibold text-white uppercase">
@@ -181,7 +181,7 @@ setBulletinData({
  <Link to="/dashboard/etudiants">
  <div className="flex items-center p-4 bg-sky-600 rounded-lg shadow-xs">
     <div className="p-3 mr-4 text-blacky bg-whity rounded-full">
-      <FaUserGraduate className="h-6 w-6 text-blacky"/>
+      {isLoading ? <Loader />  : <FaUserGraduate className="h-6 w-6 text-blacky"/>} 
     </div>
     <div>
       <p className="mb-2 text-2xl font-semibold text-white uppercase">
@@ -224,7 +224,7 @@ setBulletinData({
     <StateComponent data={bulletinData} options={basicOptions} />
     </div>
   </div>
-  <div className="mixed-chart w-full my-5">
+        <div className="mixed-chart w-full my-5">
             <StateComponentApx
               options={consByMonthOption}
               data={consultationByMonthData}

@@ -19,13 +19,12 @@ import './datatable.css'
 import { createEtudiant, getEtudiants, removeEtudiant, updateEtudiant } from '../services/etudiantservice'
 import {FaFileCsv, FaFileExcel, FaFilePdf, FaUserGraduate } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom'
-import { ActionIcon, Button } from '@mantine/core'
+import { ActionIcon, Button, LoadingOverlay } from '@mantine/core'
 import { format, parseISO } from 'date-fns'
 import { createDossier } from '../services/dossier-service';
 import { showNotification } from '@mantine/notifications';
 
-function Etudiants() {
-
+function Etudiants({auth}) {
   const [selectedEtudiants, setSelectedEtudiants] = useState(null);
   const qk = ['get_Etudiants']
   const {data: Etudiants, isLoading } = useQuery(qk, () => getEtudiants());
@@ -36,7 +35,7 @@ function Etudiants() {
     const dt = useRef(null);
     
 
-    const {mutate: createD } = useMutation((data) => createDossier(data), {
+    const {mutate: createD,isLoading: loadingdos } = useMutation((data) => createDossier(data), {
       onSuccess:(_) => {
           showNotification({
               title: 'Dossier Crée !',
@@ -128,7 +127,7 @@ function Etudiants() {
 
     
 
-    const {mutate: create} = useMutation((data) => createEtudiant(data), {
+    const {mutate: create, isLoading: loadingC} = useMutation((data) => createEtudiant(data), {
         onSuccess: (_) => {
         toast.current.show({severity: 'success', summary: 'Creation Etudiant', detail: 'Création réussie !!'});
           RemplirDossierModal({etudiant: _}).then(createD).catch((e) => console.log("creation rejected !",e))
@@ -139,7 +138,7 @@ function Etudiants() {
         }
     })
 
-    const {mutate: deleteD} = useMutation((id) => removeEtudiant(id), {
+    const {mutate: deleteD, isLoading: loadingD} = useMutation((id) => removeEtudiant(id), {
         onSuccess: (_) => {
         toast.current.show({severity: 'success', summary: 'Suppréssion Etudiant', detail: 'Suppréssion réussie !!'});
          qc.invalidateQueries(qk);
@@ -149,7 +148,7 @@ function Etudiants() {
         }
     })
 
-    const {mutate: update} = useMutation((data) => updateEtudiant(data._id, data.data), {
+    const {mutate: update, isLoading: loadingU} = useMutation((data) => updateEtudiant(data._id, data.data), {
         onSuccess: (_) => {
             toast.current.show({severity: 'success', summary: 'Mise à jour Etudiant', detail: 'Mis à jour réussie !!'});
             qc.invalidateQueries(qk);
@@ -197,7 +196,7 @@ function Etudiants() {
       navigate(`${d._id}`)
   }
     const handleCreateEtudiant = () => {
-        CreateEtudiantModal().then(create);
+        CreateEtudiantModal({idAuth : auth?._id}).then(create);
     }
 
     const handleDelete = async (event) => {
@@ -242,9 +241,11 @@ function Etudiants() {
 
     const header = renderHeader();
     const dateTemplate = (row) => format(parseISO(row?.dateDeNaissance),'dd-MM-yyyy');
+    const createdTemplate = (row) => row?.createdAt ? format(parseISO(row?.createdAt),'dd-MM-yyyy') : 'neant';
 
   return (
     <>
+    <LoadingOverlay visible={isLoading || loadingC || loadingU || loadingdos || loadingD} overlayBlur={2} />
       <div className="flex flex-wrap bg-whity">
   <div className="w-full px-3 mb-6 lg:mb-0 lg:flex-none">
     <div className="relative flex flex-col h-40 min-w-0 break-words bg-white shadow-soft-xl bg-clip-border">
@@ -278,6 +279,7 @@ function Etudiants() {
                     globalFilterFields={['nom','cni','nce', 'prenom','telephone','lieuDeNaissance']} emptyMessage="Aucun Etudiant trouvé"
                     currentPageReportTemplate="Voir {first} de {last} à {totalRecords} étudiants">
                     <Column selectionMode="multiple" headerStyle={{ width: '2em' }}></Column>
+                    <Column field="createdAt" header="date Création" sortable body={createdTemplate} style={{ minWidth: '6rem' }} />
                     <Column field="nce" header="NCE" sortable style={{ minWidth: '6rem' }} />
                     <Column field="cni" header="CNI" style={{ minWidth: '6rem' }} />
                     <Column field="prenom" header="Prenom" sortable style={{ minWidth: '6rem' }} />

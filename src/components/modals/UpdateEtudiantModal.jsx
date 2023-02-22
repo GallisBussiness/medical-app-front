@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { MaskField } from 'react-mask-field';
 import { create } from 'react-modal-promise'
-import { Button, Input, NumberInput, Radio, Select, TextInput } from '@mantine/core';
+import { Button, Input, Radio, Select, TextInput } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import 'dayjs/locale/fr';
 import { parseISO } from 'date-fns';
@@ -32,7 +32,7 @@ const schema = yup.object({
   }).required();
 
 function UpdateEtudiantModal({ isOpen, onResolve, onReject,etudiant }) {
-  const defaultValues = {_id: etudiant?._id,nce: parseInt(etudiant?.nce), cni: etudiant?.cni ?? '', nom: etudiant?.nom,
+  const defaultValues = {_id: etudiant?._id,nce: etudiant?.nce, cni: etudiant?.cni ?? '', nom: etudiant?.nom,
      prenom: etudiant?.prenom,
      sexe: etudiant?.sexe,dateDeNaissance: etudiant?.dateDeNaissance,lieuDeNaissance: etudiant?.lieuDeNaissance,
      adresse: etudiant?.adresse,telephone: etudiant?.telephone,email: etudiant?.email,formation: etudiant?.formation};
@@ -167,7 +167,7 @@ const onCreate = data => {
         <form  onSubmit={handleSubmit(onCreate)} method="POST">
         <div>
             <Controller control={control} name="nce" render={({field}) => (
-            <NumberInput label="Numéro carte d'étudiant" error={errors.nce && errors.nce.message} value={field.value} onChange={field.onChange}/>
+            <TextInput label="Numéro carte d'étudiant" error={errors.nce && errors.nce.message} value={field.value} onChange={field.onChange}/>
              )}/>
             </div>
             <div>

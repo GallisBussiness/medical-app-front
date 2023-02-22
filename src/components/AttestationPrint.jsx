@@ -37,9 +37,9 @@ export  const AttestationPrint = forwardRef(({dossier},ref) => {
     </div>
     <div className="mx-10 my-24">
         <Text size={20} className="font-roboto">
-            Je sousigné, <span className="font-bold"> DR. Amadou P. K. Koïta</span>, Medecin Chef du CROUS/Z atteste que {dossier?.etudiant?.sexe === "H" ? "Me " : "Mme " } <span className="font-bold">{dossier?.etudiant?.prenom} {dossier?.etudiant?.nom} </span>  {' '}
+            Je soussigné, <span className="font-bold"> DR. Amadou P. K. Koïta</span>, Medecin Chef du CROUS/Z atteste que {dossier?.etudiant?.sexe === "H" ? "Me " : "Mme " } <span className="font-bold">{dossier?.etudiant?.prenom} {dossier?.etudiant?.nom} </span>  {' '}
             {dossier?.etudiant?.sexe === "H" ? "Né " : "Née " } le {format(parseISO(dossier?.etudiant?.dateDeNaissance), "dd/MM/yyyy", {locale: fr})} à {dossier?.etudiant?.lieuDeNaissance} et de numéro de carte d'identité nationale {' '}
-             <span className="font-bold">{dossier?.etudiant?.cni} </span>  a {dossier?.etudiant?.sexe === "H" ? "effectué " : "effectuée " } sa visite médicale. <br />
+             <span className="font-bold">{dossier?.etudiant?.cni} </span>  a effectué  sa visite médicale. <br />
              Par conséquent, {dossier?.etudiant?.sexe === "H" ? "il " : "elle " } est {dossier?.etudiant?.sexe === "H" ? "déclaré " : "déclarée " } apte. <br /><br />
              En foi de quoi, la présente attestation lui est délivrée pour servir et valoir ce que de droit.
         </Text>

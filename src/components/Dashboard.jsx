@@ -124,7 +124,7 @@ const Dashboard = () => {
        <Route path="allbulletins" element={<BulletinsAll/>} />
        <Route path="consultations/:id" element={<Consultation/>} />
        <Route path="pris-en-charges/:id" element={<Bulletin/>} />
-       <Route path="etudiants" element={<Etudiants/>}/>
+       <Route path="etudiants" element={<Etudiants auth={data}/>}/>
        <Route path="etudiants/:id/*" element={<Etudiant/>}/>
       <Route path="*" element={<P404/>}/>
      </Routes>
