@@ -1,5 +1,6 @@
 import { createStyles, Avatar, Text, Group } from '@mantine/core';
-import { FaPhone, FaVoicemail } from 'react-icons/fa';
+import { FaCheck, FaPhone, FaUserGraduate, FaVoicemail } from 'react-icons/fa';
+import { MdNotInterested } from 'react-icons/md';
 
 const useStyles = createStyles((theme) => ({
   name: {
@@ -8,7 +9,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 
-export function UserInfo({ prenom, nom, telephone, email,sexe,user }) {
+export function UserInfo({ prenom, nom, telephone, email,sexe,user,formation,apte }) {
   const { classes } = useStyles();
   return (
     <div className="px-5 py-10 bg-slate-50">
@@ -37,10 +38,21 @@ export function UserInfo({ prenom, nom, telephone, email,sexe,user }) {
             </Text>
           </Group>
           <Group noWrap spacing={10} mt={5}>
+            <FaUserGraduate size={16} className={classes.name} />
+            <Text size="md">
+              {formation}
+            </Text>
+          </Group>
+          <Group noWrap spacing={10} mt={5}>
             <Text size="md">Crée Par : </Text>
             {user ? <Text size="md">
               {user?.prenom} {user?.nom}
             </Text> : <Text size="md">Inconnu </Text>}
+          </Group>
+          <Group noWrap spacing={10} mt={5}>
+            <Text size="md">
+              {apte ? <span><FaCheck  className="h-6 w-6 text-green-500 inline"/> Apte</span> : <span><MdNotInterested className="h-6 w-6 text-red-500 inline"/> Inapte</span> }
+            </Text>
           </Group>
         </div>
       </Group>

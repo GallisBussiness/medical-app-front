@@ -13,7 +13,7 @@ import Consultations from "./Consultations";
 
 
 
-function Etudiant() {
+function Etudiant({auth}) {
     const {id} = useParams()
     const toast = useRef();
     const key = ['get_Etudiant',id]
@@ -22,8 +22,8 @@ function Etudiant() {
   return (
     <>
     {data && <> 
-    <UserInfo prenom={data.prenom} nom={data.nom} email={data.email} sexe={data.sexe} telephone={data.telephone} user={data.user}/>
-    <EtudiantTab bulletinComponent={<PrisEnCharges etudiant={data} />} dossierComponent={<DossierMedical etudiant={data}/>} consulationComponent={<Consultations etudiant={data} />} />
+    <UserInfo prenom={data.prenom} nom={data.nom} email={data.email} sexe={data.sexe} telephone={data.telephone} user={data.user} formation={data.formation} apte={data.apte}/>
+    <EtudiantTab bulletinComponent={<PrisEnCharges etudiant={data} />} dossierComponent={<DossierMedical etudiant={data} auth={auth}/>} consulationComponent={<Consultations etudiant={data} />} />
     </> }
     <Toast ref={toast} />
     </>

@@ -8,14 +8,20 @@ import { getEtudiants } from '../services/etudiantservice';
 import { useState } from 'react';
 import { Loader, Text } from '@mantine/core';
 import StateComponent from './StateComponent';
-import { getMonth, parseISO } from 'date-fns';
+import { getMonth, isWithinInterval, parseISO } from 'date-fns';
 import StateComponentApx from './StateComponentApx';
+import { DateRangePicker } from '@mantine/dates';
 
 function Statistique() {
 
   const [basicData,setBasicData] = useState({})
   const [consultationByMonthData,setConsultationByMonthData] = useState([])
   const [bulletinData,setBulletinData] = useState({});
+  const [filteredState,setFilteredState] = useState({le: 0,lc:0, lb:0});
+  const [range, setRange] = useState([
+    new Date(),
+    new Date(),
+  ]);
    const consByMonthOption = {
     chart: {
       id: "conByMonth"
@@ -118,6 +124,23 @@ setBulletinData({
   const qke = ['get_Etudiants']
 
     const {data: Etudiants,isLoading } = useQuery(qke, () => getEtudiants());
+
+    const handleChangeRange = (v) => {
+      const fd = v.map(d => d !== null ? d : new Date())
+      if(Etudiants !== undefined && Consultations !== undefined && Bulletins!== undefined){
+        const fe = Etudiants?.filter(e =>  e.createdAt !== undefined ? isWithinInterval(parseISO(e.createdAt), { start: fd[0], end: fd[1]})  : false);
+        const fc = Consultations?.filter(c => c.createdAt !== undefined ? isWithinInterval(parseISO(c.createdAt),{ start: fd[0], end: fd[1]} ) : false);
+        const fb = Consultations?.filter(b => b.createdAt !== undefined ? isWithinInterval(parseISO(b.createdAt), { start: fd[0], end: fd[1]}) : false);
+
+       const filtered =  {
+          le : fe.length,
+          lc: fc.length,
+          lb : fb.length
+        }
+        setFilteredState(filtered);
+      }
+      setRange(v);
+    }
 
   return (
     <>
@@ -230,6 +253,66 @@ setBulletinData({
               data={consultationByMonthData}
             />
           </div>
+</div>
+<div className="my-3 flex items-center justify-center">
+   <Text size={28}>Rapport Par Interval de Date</Text>
+   </div>
+<div className="flex flex-col space-y-2 items-center justify-center md:flex-row md:space-x-5 my-10 mx-10">
+<DateRangePicker
+      label="Choisissez un interval de date"
+      placeholder="De de debut et de fin"
+      value={range}
+      onChange={(v) => handleChangeRange(v)}
+    />
+    <Link to="/dashboard/allconsultations">
+      <div className="flex items-center p-4 bg-amber-500 rounded-lg shadow-xs">
+    <div className="p-3 mr-4 bg-white rounded-full">
+     {LC ? <Loader /> : <FaStethoscope className="h-6 w-6 text-black" />} 
+    </div>
+    <div>
+      <p className="mb-2 text-2xl font-semibold text-white uppercase">
+        Consultations
+      </p>
+      <p className="text-2xl font-semibold text-amber-700 bg-white px-3 py-2 rounded-md w-2/3 flex items-center justify-center">
+      {filteredState.lc}
+      </p>
+    </div>
+  </div>
+    </Link>
+  {/* Card */}
+  <Link to="/dashboard/allbulletins">
+  <div className="flex items-center p-4 bg-green-500 rounded-lg shadow-xs ">
+    <div className="p-3 mr-4 bg-whity rounded-full">
+     {LB ? <Loader /> : <FaNewspaper className="h-6 w-6 text-blacky"/>} 
+    </div>
+    <div>
+      <p className="mb-2 text-2xl font-semibold text-white uppercase">
+       bulletins
+      </p>
+      <p className="text-2xl font-semibold  text-green-700 bg-white px-3 py-2 rounded-md w-2/3 flex items-center justify-center">
+      {filteredState.lb}
+      </p>
+    </div>
+  </div>
+  </Link>
+  
+ {/* Card */}
+ <Link to="/dashboard/etudiants">
+ <div className="flex items-center p-4 bg-sky-600 rounded-lg shadow-xs">
+    <div className="p-3 mr-4 text-blacky bg-whity rounded-full">
+      {isLoading ? <Loader />  : <FaUserGraduate className="h-6 w-6 text-blacky"/>} 
+    </div>
+    <div>
+      <p className="mb-2 text-2xl font-semibold text-white uppercase">
+        Etudiants
+      </p>
+      <p className="text-2xl font-semibold  text-sky-700 bg-white px-3 py-2 rounded-md w-2/3 flex items-center justify-center">
+        {filteredState.le}
+      </p>
+    </div>
+  </div>
+ </Link>
+ 
 </div>
     </>
   )

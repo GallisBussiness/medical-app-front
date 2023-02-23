@@ -1,4 +1,4 @@
-import { ActionIcon, Button, Card, Grid, Image, LoadingOverlay } from "@mantine/core";
+import { ActionIcon, Button, Card, Checkbox, Grid, Image, LoadingOverlay } from "@mantine/core";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { createDossier, getDossierByEtudiant, updateDossier } from "../services/dossier-service";
 import Dossier from "./Dossier";
@@ -13,13 +13,15 @@ import { env } from "../env";
 import { FaPrint, FaRegFilePdf, FaTrash } from "react-icons/fa";
 import { AttestationPrint } from "./AttestationPrint";
 import ReactToPrint from 'react-to-print';
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { updateEtudiant } from "../services/etudiantservice";
 
 
-function DossierMedical({etudiant}) {
-
+function DossierMedical({etudiant,auth}) {
+    const [apte, setApte] = useState(false);
     const qk = ['get_Dossier',etudiant?._id];
     const qkd = ['get_Docs',etudiant?._id];
+    const key = ['get_Etudiant',etudiant?._id]
     const attestationRef = useRef();
     const {data: dossier, isLoading: isLoadingDossier } = useQuery(qk, () => getDossierByEtudiant(etudiant?._id));
 
@@ -45,6 +47,24 @@ function DossierMedical({etudiant}) {
                 color: "red"
               });
         }
+    })
+
+    const {mutate: update, isLoading: loadingU} = useMutation((data) => updateEtudiant(data._id, data.data), {
+        onSuccess: (_) => {
+            showNotification({
+                title: 'Mise à  jour etudiant',
+                message: 'félicitations, l\'étudiant est modifié!',
+                color: "green"
+              })
+            qc.invalidateQueries(key);
+           },
+           onError: (_) => {
+            showNotification({
+                title: 'Mise à  jour etudiant',
+                message: 'cet étudiant n\'a pas pu être modifié',
+                color: "red"
+              })
+           }
     })
 
     const {mutate: DD, isLoading: isLoadingDD } = useMutation((id) => removeDoc(id), {
@@ -115,6 +135,11 @@ function DossierMedical({etudiant}) {
     }
 
     const handleDeleteDoc = (id) => DD(id);
+
+    const handleApte = (event) => {
+        setApte(event.currentTarget.checked);
+        update({_id: etudiant?._id, data: { apte: event.currentTarget.checked }});
+    }
     
 
 
@@ -130,22 +155,23 @@ function DossierMedical({etudiant}) {
 
   return (
     <>
-    <LoadingOverlay visible={isLoadingDossier || isLoading || isLoadingDocs || isLoadingDD} overlayBlur={2} />
+    <LoadingOverlay visible={isLoadingDossier || isLoading || isLoadingDocs || isLoadingDD || loadingU} overlayBlur={2} />
     {dossier ? <div className="flex items-center space-x-2 py-20 mx-5">
         <div className="w-full flex flex-col  items-center justify-between">
+        {auth?.role === "admin" && <div className="self-start mx-20"><Checkbox checked={apte} onChange={(event) => handleApte(event)} label="aptitude" size="lg" /> </div>}
         <Dossier dossier={dossier} />
         <div className="flex  space-x-2">
             <Button className="bg-green-500 hover:bg-green-700" onClick={() => handleUpdateDossier(dossier)}>MODIFIER LE DOSSIER</Button>
             <Button className="bg-amber-500 hover:bg-amber-700" onClick={() => handleAddFile(dossier)}><GiFiles  className="h-6 w-6 text-white"/> AJOUTER UN FICHIER</Button>
-            <ReactToPrint
+            {auth?.role === "admin" && <ReactToPrint
                 trigger={() => <Button className="bg-blue-500 hover:bg-blue-600" leftIcon={<FaPrint className="text-white mx-1"/>}> IMPRIMER L'ATTESTATION</Button>}
                 content={() => attestationRef.current}
-            />
+            />}
+            
             <div className="hidden print-block">
             <AttestationPrint ref={attestationRef} dossier={dossier}/>
             </div>
         </div>
-    
             </div>
         <div className="w-1/2 mx-10">
         <Grid grow gutter="xs">
