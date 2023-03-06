@@ -18,7 +18,7 @@ import { updateEtudiant } from "../services/etudiantservice";
 
 
 function DossierMedical({etudiant,auth}) {
-    const [apte, setApte] = useState(false);
+    const [apte, setApte] = useState(etudiant?.apte);
     const qk = ['get_Dossier',etudiant?._id];
     const qkd = ['get_Docs',etudiant?._id];
     const key = ['get_Etudiant',etudiant?._id]

@@ -59,7 +59,6 @@ function Etudiants({auth}) {
         { field: 'ine', header: 'INE' },
         { field: 'prenom', header: 'PRENOM' },
         { field: 'nom', header: 'NOM' },
-        { field: 'dateDeNaissance', header: 'Date De Naissance' },
         { field: 'lieuDeNaissance', header: 'Lieu de Naissance' },
         { field: 'adresse', header: 'ADRESSE' }
     ];
@@ -81,6 +80,17 @@ function Etudiants({auth}) {
           });
       });
   };
+
+  const exportSPdf = () => {
+    import('jspdf').then((jsPDF) => {
+        import('jspdf-autotable').then(() => {
+            const doc = new jsPDF.default(0, 0);
+
+            doc.autoTable(exportColumns, selectedEtudiants);
+            doc.save('etudiants_selection.pdf');
+        });
+    });
+};
 
   const exportExcel = () => {
       import('xlsx').then((xlsx) => {
@@ -177,6 +187,9 @@ function Etudiants({auth}) {
          </ActionIcon>
          <ActionIcon onClick={exportPdf} title="PDF EXPORTS">
           <FaFilePdf className="text-red-500 w-6 h-6"/>
+         </ActionIcon>
+         <ActionIcon onClick={exportSPdf} title="PDF SELECTION EXPORTS">
+          <FaFilePdf className="text-amber-500 w-6 h-6"/>
          </ActionIcon>
          <ActionIcon onClick={() => exportCSV(true)} title="CSV SELECTION EXPORTS">
          <FaFileCsv className="text-sky-500 w-6 h-6"/>
@@ -276,7 +289,7 @@ function Etudiants({auth}) {
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" rowsPerPageOptions={[10,25,50]}
                     dataKey="_id" rowHover selection={selectedEtudiants} onSelectionChange={e => setSelectedEtudiants(e.value)}
                     filters={filters} filterDisplay="menu" loading={isLoading} responsiveLayout="scroll"
-                    globalFilterFields={['nom','cni','nce', 'prenom','telephone','lieuDeNaissance']} emptyMessage="Aucun Etudiant trouvé"
+                    globalFilterFields={['nom','cni','nce', 'prenom','telephone','lieuDeNaissance','adresse']} emptyMessage="Aucun Etudiant trouvé"
                     currentPageReportTemplate="Voir {first} de {last} à {totalRecords} étudiants">
                     <Column selectionMode="multiple" headerStyle={{ width: '2em' }}></Column>
                     <Column field="createdAt" header="date Création" sortable body={createdTemplate} style={{ minWidth: '6rem' }} />
