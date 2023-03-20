@@ -8,6 +8,7 @@ import { EtudiantTab } from "./EtudiantTab";
 import PrisEnCharges from "./PrisEnCharges";
 import DossierMedical from "./DossierMedical";
 import Consultations from "./Consultations";
+import { LoadingOverlay } from "@mantine/core";
 
 
 
@@ -18,9 +19,10 @@ function Etudiant({auth}) {
     const toast = useRef();
     const key = ['get_Etudiant',id]
 
-    const {data} = useQuery(key, () => getEtudiantById(id))
+    const {data,isLoading} = useQuery(key, () => getEtudiantById(id))
   return (
     <>
+    <LoadingOverlay visible={isLoading} overlayBlur={2} />
     {data && <> 
     <UserInfo prenom={data.prenom} nom={data.nom} email={data.email} sexe={data.sexe} telephone={data.telephone} user={data.user} formation={data.formation} apte={data.apte}/>
     <EtudiantTab bulletinComponent={<PrisEnCharges etudiant={data} />} dossierComponent={<DossierMedical etudiant={data} auth={auth}/>} consulationComponent={<Consultations etudiant={data} />} />

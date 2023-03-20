@@ -7,7 +7,7 @@ import { useMutation } from 'react-query'
 import {Controller, useForm } from 'react-hook-form';
 import { Toast } from 'primereact/toast';
 import { login } from '../services/authservice';
-import { Group, PasswordInput, Stack, TextInput,Button, LoadingOverlay } from '@mantine/core';
+import { Group, PasswordInput, Stack, TextInput,Button, LoadingOverlay, BackgroundImage } from '@mantine/core';
 
 const schema = yup.object({
   username: yup.string()
@@ -63,20 +63,11 @@ const Login = () => {
     };
 
   return (
-    <div className="login-page">
+    <BackgroundImage src="/imgs/doctors.jpg" className="h-screen w-full">
       <LoadingOverlay visible={isLoading} overlayBlur={2} />
-      <div>
-  <div className="login-header box-shadow">
-    <div className="container-fluid d-flex justify-content-between align-items-center">
-      <div className="brand-logo">
-        <a href="login.html">
-          <img src="/imgs/logo_crousz.png" className="h-16 w-16" alt="logo" />
-        </a>
-      </div>
-    </div>
-  </div>
-  <div className="flex items-center justify-center">
-        <div className="w-1/2 mx-auto">
+      <div className="h-full w-full md:w-1/2">
+  <div className="h-full flex flex-col">
+        <div className="my-auto">
           <div className="bg-white shadow-md rounded-md border w-8/12 mx-auto p-8">
             <div className="flex items-center justify-center">
               <img src="/imgs/logo_crousz.png" className="h-52 w-60" alt="logo" />
@@ -124,7 +115,7 @@ const Login = () => {
       </div>
 </div>
 <Toast ref={toast} />
-    </div>
+    </BackgroundImage>
   )
 }
 

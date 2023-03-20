@@ -11,6 +11,7 @@ import StateComponent from './StateComponent';
 import { getMonth, isWithinInterval, parseISO } from 'date-fns';
 import StateComponentApx from './StateComponentApx';
 import { DateRangePicker } from '@mantine/dates';
+import SearchComponent from './SearchComponent';
 
 function Statistique() {
 
@@ -166,6 +167,10 @@ setBulletinData({
     </div>
   </div>
 </div>
+<div className="w-5/12 my-5 mx-auto bg-sky-400 p-5 rounded-md shadow-md">
+  <SearchComponent />
+</div>
+
 <div className="flex flex-col space-y-2 items-center justify-center md:flex-row md:space-x-5 mt-10 mx-10">
     {/* Card */}
     <Link to="/dashboard/allconsultations">

@@ -206,7 +206,7 @@ function Etudiants({auth}) {
     }
 
     const handleViewEtudiant = (d) => {
-      navigate(`${d._id}`)
+      navigate(`/dashboard/etudiants/${d._id}`)
   }
     const handleCreateEtudiant = () => {
         CreateEtudiantModal({idAuth : auth?._id}).then(create);
