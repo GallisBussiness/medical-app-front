@@ -38,9 +38,7 @@ export const BulletinPrint = forwardRef(({ bulletin }, ref) => {
           <div className="flex flex-col space-y-1">
             <div className="flex flex-col items-center text-center">
               <div className="flex">
-                <Text size={14} color="red" fw="bold">
-                  N° {bulletin?.numero}
-                </Text>{" "}
+                <Text size={14}>N° _____________</Text>{" "}
                 <Text size={14} color="blue" fw="bold">
                   {" "}
                   /MESRI/CROUSZ/DIR/CSA/DMS

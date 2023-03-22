@@ -9,16 +9,17 @@ import { BulletinPrint } from "./BulletinPrint";
 import ReactToPrint from "react-to-print";
 import { useRef } from "react";
 import { AiFillPrinter } from "react-icons/ai";
-import { Button } from "@mantine/core";
+import { Button, LoadingOverlay } from "@mantine/core";
 
 function Bulletin() {
   const { id } = useParams();
   const key = ["get_Bulletin", id];
-  const { data } = useQuery(key, () => getBulletinById(id));
+  const { data, isLoading } = useQuery(key, () => getBulletinById(id));
   const componentRef = useRef();
 
   return (
     <>
+      <LoadingOverlay visible={isLoading} overlayBlur={2} />
       <div className="bg-white">
         <section className="bg-white">
           <div className="container flex flex-col items-center px-4 py-5 mx-auto text-center">
