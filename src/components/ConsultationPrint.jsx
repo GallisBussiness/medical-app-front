@@ -2,24 +2,11 @@ import { Text } from "@mantine/core";
 import { format, parseISO } from "date-fns"
 import { fr } from "date-fns/locale"
 import { Chip } from "primereact/chip";
-import { Column } from "primereact/column";
-import { DataTable } from "primereact/datatable";
 import { Divider } from 'primereact/divider'
 import { QRCodeSVG } from "qrcode.react"
 import { forwardRef } from "react";
 
 export  const ConsultationPrint = forwardRef(({consultation},ref) => {
-
-    const nombreTemplate = (row) => {
-        return <div>
-            <Chip label={`${row.nombre} X`} className="bg-amber-300"/>
-        </div>
-      }
-      const frequenceTemplate = (row) => {
-        return <div>
-          <Chip label={`Par ${row.frequence}`} className="bg-green-300"/>
-        </div>
-      }
 
   return (
     <div ref={ref}>

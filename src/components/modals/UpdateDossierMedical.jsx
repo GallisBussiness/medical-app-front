@@ -21,10 +21,10 @@ const schema = yup.object({
 
 function UpdateDossierMedical({ isOpen, onResolve, onReject,dossier }) {
     const defaultValues = {_id: dossier?._id,etudiant: dossier?.etudiant?._id,groupe_sanguin: dossier?.groupe_sanguin,  poids: dossier?.poids,
-        taille: dossier?.taille,handicap_particulier: dossier?.handicap_particulier?.split(',') == false ?  [] : [...dossier?.handicap_particulier?.split(',')],
-    maladie_chronique:dossier?.maladie_chronique?.split(',') == false ?  [] : [...dossier?.maladie_chronique?.split(',')],
-    allergies:dossier?.allergies?.split(',') == false ?  [] : [...dossier?.allergies?.split(',')],
-    antecedants_medicaux: dossier?.antecedants_medicaux?.split(',') == false ?  [] : [...dossier?.antecedants_medicaux?.split(',')]
+        taille: dossier?.taille,handicap_particulier: dossier?.handicap_particulier?.split(',') ?  [] : [...dossier?.handicap_particulier?.split(',')],
+    maladie_chronique:dossier?.maladie_chronique?.split(',') ?  [] : [...dossier?.maladie_chronique?.split(',')],
+    allergies:dossier?.allergies?.split(',') ?  [] : [...dossier?.allergies?.split(',')],
+    antecedants_medicaux: dossier?.antecedants_medicaux?.split(',')  ?  [] : [...dossier?.antecedants_medicaux?.split(',')]
 };
 const {control, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema),

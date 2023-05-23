@@ -24,7 +24,7 @@ function UpdateBulletinModal({ isOpen, onResolve, onReject,idDossier,idAuth,bull
     const defaultValues = {
         _id: bulletin?._id,
         date: bulletin?.date,
-        examensDemandes: bulletin?.examensDemandes?.split(',') == false ? [] : [...bulletin?.examensDemandes?.split(',')],
+        examensDemandes: bulletin?.examensDemandes?.split(',') ? [] : [...bulletin?.examensDemandes?.split(',')],
         service: bulletin?.service,
         etablissement: bulletin?.etablissement,
         user: idAuth,

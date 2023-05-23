@@ -366,6 +366,16 @@ function CreateEtudiantModal({ isOpen, onResolve, onReject, idAuth }) {
       group: "UFR SCIENCES ET TECHNOLOGIES",
     },
     {
+      value: "ST MASTER MATHÉMATIQUES PURES NIVEAU 4",
+      label: "ST MASTER MATHÉMATIQUES PURES NIVEAU 4",
+      group: "UFR SCIENCES ET TECHNOLOGIES",
+    },
+    {
+      value: "ST MASTER MATHÉMATIQUES PURES NIVEAU 5",
+      label: "ST MASTER MATHÉMATIQUES PURES NIVEAU 5",
+      group: "UFR SCIENCES ET TECHNOLOGIES",
+    },
+    {
       value: "ST LICENCE INFORMATIQUE NIVEAU 3",
       label: "ST LICENCE INFORMATIQUE NIVEAU 3",
       group: "UFR SCIENCES ET TECHNOLOGIES",

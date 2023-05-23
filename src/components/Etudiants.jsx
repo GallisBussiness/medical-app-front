@@ -18,11 +18,13 @@ import RemplirDossierModal from "./modals/RemplirDossierModal";
 import "./datatable.css";
 import {
   createEtudiant,
-  getEtudiants,
+  getPaginateEtudiants,
   removeEtudiant,
   updateEtudiant,
 } from "../services/etudiantservice";
 import {
+  FaArrowAltCircleLeft,
+  FaArrowAltCircleRight,
   FaFileCsv,
   FaFileExcel,
   FaFilePdf,
@@ -36,8 +38,12 @@ import { showNotification } from "@mantine/notifications";
 
 function Etudiants({ auth }) {
   const [selectedEtudiants, setSelectedEtudiants] = useState(null);
-  const qk = ["get_Etudiants"];
-  const { data: Etudiants, isLoading } = useQuery(qk, () => getEtudiants());
+  const [page, setPage] = useState(1)
+  const qk = ["get_Etudiants",page];
+  const { data: Etudiants, isLoading,isFetching } = useQuery(qk, () => getPaginateEtudiants(page), {
+    keepPreviousData : true,
+  });
+
   const qc = useQueryClient();
   const navigate = useNavigate();
   const toast = useRef();
@@ -304,6 +310,18 @@ function Etudiants({ auth }) {
     });
   };
 
+  const goToNext = () => {
+    if(Etudiants.hasNextPage) {
+      setPage(Etudiants.nextPage)
+    }
+  }
+  
+  const goToPrev = () => {
+    if(Etudiants.hasPrevPage) {
+      setPage(Etudiants.prevPage)
+    }
+  }
+
   const renderHeader = () => {
     return (
       <div className="flex justify-between items-center">
@@ -350,7 +368,7 @@ function Etudiants({ auth }) {
   return (
     <>
       <LoadingOverlay
-        visible={isLoading || loadingC || loadingU || loadingdos || loadingD}
+        visible={isLoading || loadingC || loadingU || loadingdos || loadingD || isFetching}
         overlayBlur={2}
       />
       <div className="flex flex-wrap bg-whity">
@@ -390,7 +408,7 @@ function Etudiants({ auth }) {
             right={rightToolbarTemplate}
           ></Toolbar>
           <DataTable
-            value={Etudiants}
+            value={Etudiants?.docs}
             paginator
             className="p-datatable-customers"
             header={header}
@@ -484,6 +502,9 @@ function Etudiants({ auth }) {
             />
           </DataTable>
         </div>
+      </div>
+      <div className="flex items-center justify-center space-x-4 py-5 my-2">
+            <Button className="bg-sky-800" disabled={!Etudiants?.hasPrevPage} onClick={goToPrev}> <FaArrowAltCircleLeft className="h-6 w-6"/> PRECEDANT</Button><Button className="bg-sky-800" disabled={!Etudiants?.hasNextPage} onClick={goToNext}>SUIVANT <FaArrowAltCircleRight className="h-6 w-6"/></Button>
       </div>
       <Toast ref={toast} />
       <ConfirmPopup />
