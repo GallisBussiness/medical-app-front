@@ -1,5 +1,5 @@
 import { Text } from "@mantine/core";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Divider } from "primereact/divider";
 import { QRCodeSVG } from "qrcode.react";
@@ -160,7 +160,7 @@ export const BulletinPrint = forwardRef(({ bulletin }, ref) => {
             {bulletin?.date && (
               <Text size={10}>
                 Ziguinchor, le :{" "}
-                {format(parseISO(bulletin?.date), "dd-MMMM-yyyy", {
+                {format(new Date(), "dd-MMMM-yyyy", {
                   locale: fr,
                 })}
               </Text>

@@ -45,7 +45,7 @@ export  const AttestationPrint = forwardRef(({dossier},ref) => {
         </Text>
     </div>
       <div className="flex justify-end mx-10">
-            {dossier?.createdAt && <Text size={18} fw="bold">Ziguinchor, le : {format(parseISO(dossier?.createdAt),'dd-MMMM-yyyy', {locale: fr})}</Text>}
+            {dossier?.createdAt && <Text size={18} fw="bold">Ziguinchor, le : {format(new Date(),'dd-MMMM-yyyy', {locale: fr})}</Text>}
         </div>
     <div className="flex items-center justify-end mt-5 mx-20">
     <Text size={22} className="font-roboto">LE MEDECIN CHEF</Text>

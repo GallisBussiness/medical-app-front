@@ -18,13 +18,12 @@ import RemplirDossierModal from "./modals/RemplirDossierModal";
 import "./datatable.css";
 import {
   createEtudiant,
-  getPaginateEtudiants,
+  getEtudiants,
+  // getPaginateEtudiants,
   removeEtudiant,
   updateEtudiant,
 } from "../services/etudiantservice";
 import {
-  FaArrowAltCircleLeft,
-  FaArrowAltCircleRight,
   FaFileCsv,
   FaFileExcel,
   FaFilePdf,
@@ -38,11 +37,8 @@ import { showNotification } from "@mantine/notifications";
 
 function Etudiants({ auth }) {
   const [selectedEtudiants, setSelectedEtudiants] = useState(null);
-  const [page, setPage] = useState(1)
-  const qk = ["get_Etudiants",page];
-  const { data: Etudiants, isLoading,isFetching } = useQuery(qk, () => getPaginateEtudiants(page), {
-    keepPreviousData : true,
-  });
+  const qk = ["get_Etudiants"];
+  const { data: Etudiants, isLoading } = useQuery(qk, () => getEtudiants());
 
   const qc = useQueryClient();
   const navigate = useNavigate();
@@ -310,17 +306,6 @@ function Etudiants({ auth }) {
     });
   };
 
-  const goToNext = () => {
-    if(Etudiants.hasNextPage) {
-      setPage(Etudiants.nextPage)
-    }
-  }
-  
-  const goToPrev = () => {
-    if(Etudiants.hasPrevPage) {
-      setPage(Etudiants.prevPage)
-    }
-  }
 
   const renderHeader = () => {
     return (
@@ -362,13 +347,11 @@ function Etudiants({ auth }) {
   const header = renderHeader();
   const dateTemplate = (row) =>
     format(parseISO(row?.dateDeNaissance), "dd-MM-yyyy");
-  const createdTemplate = (row) =>
-    row?.createdAt ? format(parseISO(row?.createdAt), "dd-MM-yyyy") : "neant";
 
   return (
     <>
       <LoadingOverlay
-        visible={isLoading || loadingC || loadingU || loadingdos || loadingD || isFetching}
+        visible={isLoading || loadingC || loadingU || loadingdos || loadingD }
         overlayBlur={2}
       />
       <div className="flex flex-wrap bg-whity">
@@ -408,7 +391,7 @@ function Etudiants({ auth }) {
             right={rightToolbarTemplate}
           ></Toolbar>
           <DataTable
-            value={Etudiants?.docs}
+            value={Etudiants}
             paginator
             className="p-datatable-customers"
             header={header}
@@ -440,13 +423,6 @@ function Etudiants({ auth }) {
               selectionMode="multiple"
               headerStyle={{ width: "2em" }}
             ></Column>
-            <Column
-              field="createdAt"
-              header="date Création"
-              sortable
-              body={createdTemplate}
-              style={{ minWidth: "6rem" }}
-            />
             <Column
               field="nce"
               header="NCE"
@@ -502,9 +478,6 @@ function Etudiants({ auth }) {
             />
           </DataTable>
         </div>
-      </div>
-      <div className="flex items-center justify-center space-x-4 py-5 my-2">
-            <Button className="bg-sky-800" disabled={!Etudiants?.hasPrevPage} onClick={goToPrev}> <FaArrowAltCircleLeft className="h-6 w-6"/> PRECEDANT</Button><Button className="bg-sky-800" disabled={!Etudiants?.hasNextPage} onClick={goToNext}>SUIVANT <FaArrowAltCircleRight className="h-6 w-6"/></Button>
       </div>
       <Toast ref={toast} />
       <ConfirmPopup />

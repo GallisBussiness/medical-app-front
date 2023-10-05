@@ -267,7 +267,7 @@ export  const ConsultationPrint = forwardRef(({consultation},ref) => {
     <QRCodeSVG value={consultation?.code} fgColor="#25BE45" size={60}/>
     <div className="flex flex-col">
     <h1 className="font-bold text-xs">EFFECTUEE PAR : Dr. {consultation?.user?.prenom} {consultation?.user?.nom}</h1>
-            {consultation?.dateDeConsultation && <h1 className="font-bold text-xs">Ziguinchor, le : {format(parseISO(consultation?.dateDeConsultation),'dd-MMMM-yyyy', {locale: fr})}</h1>}
+            {consultation?.dateDeConsultation && <h1 className="font-bold text-xs">Ziguinchor, le : {format(new Date(),'dd-MMMM-yyyy', {locale: fr})}</h1>}
         </div>
    
     </div>
